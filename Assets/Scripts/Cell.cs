@@ -32,7 +32,7 @@ public class Cell
 
     public void DestroyCell()
     {
-        Object.Destroy(_instance);
+        Object.Destroy(_instance, 0.1f);
         Tile = null;
         _entropyModifier = Random.Range(0, 0.02f);
         IsCollapsed = false;
@@ -56,8 +56,8 @@ public class Cell
             }
         }
 
-        return entropy + _entropyModifier;
-        //return entropy;
+        //return entropy + _entropyModifier;
+        return entropy;
     }
 
     public void NotifyNeighbours(Cell[,] parentGrid)

@@ -15,11 +15,24 @@ MonoBehaviour:
   _prefab: {fileID: 4472053277742726088, guid: 3aa2ec046698a8b419416c146885ee1c, type: 3}
   _upNeighbors:
   - {fileID: 11400000, guid: 55df3e737b82cfc4fb7526521fa59bc2, type: 2}
+  - {fileID: 11400000, guid: 658a0665d1846074dbd3663538fdf927, type: 2}
+  - {fileID: 11400000, guid: 38feee10a28fefb4eb46d8870ade6d1d, type: 2}
   _downNeighbors:
+  - {fileID: 11400000, guid: d1ccb5624eb9fa6449223106081c633f, type: 2}
   - {fileID: 11400000, guid: 63a9e2ad0b19b154ab8e17e2f41afeb1, type: 2}
+  - {fileID: 11400000, guid: 38feee10a28fefb4eb46d8870ade6d1d, type: 2}
   _rightNeighbors:
+  - {fileID: 11400000, guid: 55df3e737b82cfc4fb7526521fa59bc2, type: 2}
   - {fileID: 11400000, guid: 63a9e2ad0b19b154ab8e17e2f41afeb1, type: 2}
   _leftNeighbors:
   - {fileID: 11400000, guid: d1ccb5624eb9fa6449223106081c633f, type: 2}
-  Weight: 0.0011111111
+  - {fileID: 11400000, guid: 658a0665d1846074dbd3663538fdf927, type: 2}
+  - {fileID: 11400000, guid: 38feee10a28fefb4eb46d8870ade6d1d, type: 2}
+  Weight: 0.0001
   RotationInDegrees: 0
+  AllowForRoatationVariants: 1
+  AllowSelfConnection: 0
+  TopConnection: 1
+  BottomConnection: 0
+  LeftConnection: 1
+  RightConnection: 0

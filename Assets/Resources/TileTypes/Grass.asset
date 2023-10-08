@@ -14,19 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 8942790826304068907, guid: c66464ead78e48647b69db6b67aad0fd, type: 3}
   _upNeighbors:
-  - {fileID: 11400000}
   - {fileID: 11400000, guid: d1ccb5624eb9fa6449223106081c633f, type: 2}
+  - {fileID: 11400000}
   - {fileID: 11400000, guid: ef59fa047f1ce9147884f0ac4144c8fc, type: 2}
   _downNeighbors:
-  - {fileID: 11400000}
   - {fileID: 11400000, guid: d1ccb5624eb9fa6449223106081c633f, type: 2}
+  - {fileID: 11400000}
   - {fileID: 11400000, guid: 38feee10a28fefb4eb46d8870ade6d1d, type: 2}
   _rightNeighbors:
-  - {fileID: 11400000}
   - {fileID: 11400000, guid: 55df3e737b82cfc4fb7526521fa59bc2, type: 2}
+  - {fileID: 11400000}
   _leftNeighbors:
+  - {fileID: 11400000, guid: 55df3e737b82cfc4fb7526521fa59bc2, type: 2}
   - {fileID: 11400000}
   - {fileID: 11400000, guid: ef59fa047f1ce9147884f0ac4144c8fc, type: 2}
-  - {fileID: 11400000, guid: 55df3e737b82cfc4fb7526521fa59bc2, type: 2}
-  Weight: 0.91777134
+  Weight: 0.9
   RotationInDegrees: 0
+  AllowForRoatationVariants: 0
+  AllowSelfConnection: 1
+  TopConnection: 0
+  BottomConnection: 0
+  LeftConnection: 0
+  RightConnection: 0

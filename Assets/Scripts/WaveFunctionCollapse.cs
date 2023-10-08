@@ -8,6 +8,11 @@ using static UnityEngine.ParticleSystem;
 
 public class WaveFunctionCollapse : MonoBehaviour
 {
+    [Header("Settings")]
+    [SerializeField] 
+    private bool RegenerateConnections;
+
+    [Header("Grid Size")]
     [SerializeField]
     private int _gridSizeX = 0;
 
@@ -18,11 +23,9 @@ public class WaveFunctionCollapse : MonoBehaviour
 
     private List<Cell> _emptyCells;
 
+    [Header("Cells")]
     [SerializeField]
-    private Sprite _patternImage;
-
-    [SerializeField]
-    private List<Color2Tile> _colorTiles;
+    private List<Tile> _startingTiles;
 
     private Tile _generationFailure;
 
@@ -42,22 +45,29 @@ public class WaveFunctionCollapse : MonoBehaviour
                 _emptyCells.Add(grid[x, y]);
             }
         }
-
-        List<Tile> allPossibleTiles = new List<Tile>();
-       
+      
         _generationFailure = Resources.Load<Tile>("TileTypes/ErrorTile/Error");
 
-        foreach (Color2Tile colorTile in _colorTiles)
+
+        PatternExtractor patternExtractor = new PatternExtractor(_startingTiles);
+
+        if (RegenerateConnections)
         {
-            allPossibleTiles.Add(colorTile.tile);
+            foreach (Tile tile in _startingTiles) tile.Clear();
+
+            patternExtractor.GenerateRotationVariants();
+
+
         }
 
-        PatternExtractor patternExtractor = new PatternExtractor(_patternImage, _colorTiles);
+        patternExtractor.Extract();
+
+
 
         Cell startingCell = grid[Random.Range(0, _gridSizeX), Random.Range(0, _gridSizeY)];
 
         startingCell.Collapse(grid);
-        
+
         Instantiate(startingCell.Tile.GetPrfab(), new Vector3(startingCell._position.x, 0, startingCell._position.y), Quaternion.identity, gameObject.transform);
 
         _emptyCells.Remove(startingCell);

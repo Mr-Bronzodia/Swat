@@ -456,22 +456,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 707fa51d1e95cc5499d9e8004c4e5255, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RegenerateConnections: 0
   _gridSizeX: 35
   _gridSizeY: 35
-  _patternImage: {fileID: 21300000, guid: c49d6a1006fa7cb43b1c76ac73572a7b, type: 3}
-  _colorTiles:
-  - color: {r: 0.0764062, g: 0.9528302, b: 0.18169296, a: 1}
-    tile: {fileID: 11400000, guid: 63a9e2ad0b19b154ab8e17e2f41afeb1, type: 2}
-  - color: {r: 0.9339623, g: 0.61337405, b: 0.048460312, a: 1}
-    tile: {fileID: 11400000, guid: ef59fa047f1ce9147884f0ac4144c8fc, type: 2}
-  - color: {r: 0.4811321, g: 0.46978465, b: 0.46978465, a: 1}
-    tile: {fileID: 11400000, guid: d1ccb5624eb9fa6449223106081c633f, type: 2}
-  - color: {r: 0.5660378, g: 0.06140977, b: 0.06140977, a: 1}
-    tile: {fileID: 11400000, guid: 38feee10a28fefb4eb46d8870ade6d1d, type: 2}
-  - color: {r: 0.6886792, g: 0.6724368, b: 0.6724368, a: 1}
-    tile: {fileID: 11400000, guid: 55df3e737b82cfc4fb7526521fa59bc2, type: 2}
-  - color: {r: 0.6698113, g: 0.009478444, b: 0.48868036, a: 1}
-    tile: {fileID: 11400000, guid: 658a0665d1846074dbd3663538fdf927, type: 2}
+  _startingTiles:
+  - {fileID: 11400000, guid: 63a9e2ad0b19b154ab8e17e2f41afeb1, type: 2}
+  - {fileID: 11400000, guid: ef59fa047f1ce9147884f0ac4144c8fc, type: 2}
+  - {fileID: 11400000, guid: 2bea174c4646fdf41a4fddd5a662ffba, type: 2}
+  - {fileID: 11400000, guid: 8bd0fb73d3b41154ba5586396e799cdb, type: 2}
+  - {fileID: 11400000, guid: fceaaabb492b37d4ba07458a8190f1ea, type: 2}
+  - {fileID: 11400000, guid: d1ccb5624eb9fa6449223106081c633f, type: 2}
+  - {fileID: 11400000, guid: 38feee10a28fefb4eb46d8870ade6d1d, type: 2}
+  - {fileID: 11400000, guid: a0a62e81ea187f84e904c935e8e53195, type: 2}
+  - {fileID: 11400000, guid: 04835a5f06941264fb6577206bed2bca, type: 2}
+  - {fileID: 11400000, guid: f4e2a1de02baa864981926a377e9fa4e, type: 2}
+  - {fileID: 11400000, guid: 55df3e737b82cfc4fb7526521fa59bc2, type: 2}
+  - {fileID: 11400000, guid: 658a0665d1846074dbd3663538fdf927, type: 2}
 --- !u!4 &1532554251
 Transform:
   m_ObjectHideFlags: 0

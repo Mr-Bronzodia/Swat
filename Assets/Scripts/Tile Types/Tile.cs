@@ -27,6 +27,13 @@ public class Tile : ScriptableObject
 
     public float RotationInDegrees = 0;
 
+    public bool AllowForRoatationVariants;
+    public bool AllowSelfConnection;
+    public bool TopConnection;
+    public bool BottomConnection;
+    public bool LeftConnection;
+    public bool RightConnection;
+
 
     public void Clear()
     {
@@ -34,12 +41,17 @@ public class Tile : ScriptableObject
         _downNeighbors.Clear();
         _rightNeighbors.Clear();
         _leftNeighbors.Clear();
-        Weight = 0f;
+        //Weight = 0f;
     }
 
     public GameObject GetPrfab()
     {
         return _prefab;
+    }
+
+    public void SetPrefab(GameObject prefab)
+    {
+        _prefab = prefab;
     }
 
     public void AddWeight(float amount)

@@ -10,12 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 78a6a72259359c2478b1c4356adbbce7, type: 3}
-  m_Name: soy
+  m_Name: RoadCurve90
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 0}
+  _prefab: {fileID: 4472053277742726088, guid: 3aa2ec046698a8b419416c146885ee1c, type: 3}
   _upNeighbors: []
   _downNeighbors: []
   _rightNeighbors: []
   _leftNeighbors: []
-  Weight: 0
-  RotationInDegrees: 0
+  Weight: 0.0001
+  RotationInDegrees: 90
+  AllowForRoatationVariants: 0
+  AllowSelfConnection: 0
+  TopConnection: 1
+  BottomConnection: 0
+  LeftConnection: 0
+  RightConnection: 1

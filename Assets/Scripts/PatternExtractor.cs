@@ -5,76 +5,137 @@ using Unity.VisualScripting;
 using UnityEditor.PackageManager.UI;
 using UnityEditor;
 using UnityEngine;
+using System.IO;
 
 public class PatternExtractor 
 {
-    Sprite _patternMap;
-    List<Color2Tile> _translationList;
+    private List<Tile> _protoTiles;
 
-    Dictionary<string, Tile> _tileDictionary;
-
-    public PatternExtractor(Sprite patternMap, List<Color2Tile> translationList)
+    public PatternExtractor(List<Tile> protoTiles)
     {
-        _patternMap = patternMap;
-        _translationList = translationList;
-        _tileDictionary = new Dictionary<string, Tile>();
+        _protoTiles = protoTiles;
+    }
 
-        foreach (Color2Tile translation in translationList)
+    public void GenerateRotationVariants()
+    {
+        List<Tile> newTiles = new List<Tile>();
+
+        foreach (Tile tile in _protoTiles)
         {
-            _tileDictionary[UnityEngine.ColorUtility.ToHtmlStringRGB(translation.color)] = translation.tile;  
-            translation.tile.Clear();
+            if (!tile.AllowForRoatationVariants) continue;
+
+            for (int i = 1; i <= 3; i++)
+            {
+                Tile rotationVariant = ScriptableObject.CreateInstance<Tile>();
+                string path = "Assets/Resources/TileTypes/" + tile.name + (i * 90) + ".asset";
+
+                rotationVariant.SetPrefab(tile.GetPrfab());
+
+                rotationVariant.AddWeight(tile.GetTileWeight());
+
+                rotationVariant.RotationInDegrees = i * 90.0f;
+
+                rotationVariant.AllowForRoatationVariants = false;
+                rotationVariant.AllowSelfConnection = tile.AllowSelfConnection;
+
+                switch (i * 90.0f)
+                {
+                    case 90:
+                        if (tile.TopConnection) rotationVariant.RightConnection = true;
+                        if (tile.RightConnection) rotationVariant.BottomConnection = true;
+                        if (tile.BottomConnection) rotationVariant.LeftConnection = true;
+                        if (tile.LeftConnection) rotationVariant.TopConnection = true;
+                        break;
+                    case 180:
+                        if (tile.TopConnection) rotationVariant.BottomConnection = true;
+                        if (tile.RightConnection) rotationVariant.LeftConnection = true;
+                        if (tile.BottomConnection) rotationVariant.TopConnection = true;
+                        if (tile.LeftConnection) rotationVariant.RightConnection = true;
+                        break;
+                    case 270:
+                        if (tile.TopConnection) rotationVariant.LeftConnection = true;
+                        if (tile.LeftConnection) rotationVariant.BottomConnection = true;
+                        if (tile.BottomConnection) rotationVariant.RightConnection = true;
+                        if (tile.RightConnection) rotationVariant.TopConnection = true;
+                        break;
+                }
+
+                AssetDatabase.CreateAsset(rotationVariant, path);
+                newTiles.Add(rotationVariant);
+            }
+
         }
 
-        Texture2D texture = _patternMap.texture;
-
-        float pixelWeight  = 1.0f / (texture.width * texture.height);
-
-        Tile soy = ScriptableObject.CreateInstance<Tile>();
-
-        string path = "Assets/Resources/TileTypes/soy.asset";
-        AssetDatabase.CreateAsset(soy, path);
+        _protoTiles = _protoTiles.Concat(newTiles).ToList();
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
+    }
 
-
-        for (int i  = 0; i < texture.width; i++)
+    public void Extract()
+    {
+        foreach (Tile tile in _protoTiles)
         {
-            for (int j = 0; j < texture.height; j++)
+
+            foreach (Tile other in _protoTiles)
             {
-                Color inspectedPixel = texture.GetPixel(i, j);
-                string interactedHEX = UnityEngine.ColorUtility.ToHtmlStringRGB(inspectedPixel);
 
+                Debug.Log(tile.name + " " + other.name);
 
-                //Right
-                if (i + 1 < texture.width)
+                if (other == tile && !tile.AllowSelfConnection) continue;
+
+                //Top Connection Match
+                if (tile.TopConnection && other.BottomConnection)
                 {
-                    //if (!_tileDictionary.ContainsKey(texture.GetPixel(i + 1, j))) continue;
-                    _tileDictionary[interactedHEX].AddNeighbors(Sides.Right, _tileDictionary[UnityEngine.ColorUtility.ToHtmlStringRGB(texture.GetPixel(i + 1, j))]);
+                    tile.AddNeighbors(Sides.Up, other);
+                    other.AddNeighbors(Sides.Down, tile);
                 }
 
-                //Left
-                if (i - 1 > 0)
+                if (!tile.TopConnection && !other.BottomConnection)
                 {
-                    //if (!_tileDictionary.ContainsKey(texture.GetPixel(i - 1, j))) continue;
-                    _tileDictionary[interactedHEX].AddNeighbors(Sides.Left, _tileDictionary[UnityEngine.ColorUtility.ToHtmlStringRGB(texture.GetPixel(i - 1, j))]);
+                    tile.AddNeighbors(Sides.Up, other);
+                    other.AddNeighbors(Sides.Down, tile);
                 }
 
-                //Up
-                if (j + 1 < texture.height)
+                //Bottom Connection Match
+                if (tile.BottomConnection && other.TopConnection)
                 {
-                    //if (!_tileDictionary.ContainsKey(texture.GetPixel(i, j + 1))) continue;
-                    _tileDictionary[interactedHEX].AddNeighbors(Sides.Up, _tileDictionary[UnityEngine.ColorUtility.ToHtmlStringRGB(texture.GetPixel(i, j + 1))]);
+                    tile.AddNeighbors(Sides.Down, other);
+                    other.AddNeighbors(Sides.Up, tile);
                 }
 
-                //Down
-                if (j - 1  > 0)
+                if (!tile.BottomConnection && !other.TopConnection)
                 {
-                    //if (!_tileDictionary.ContainsKey(texture.GetPixel(i, j - 1))) continue;
-                    _tileDictionary[interactedHEX].AddNeighbors(Sides.Down, _tileDictionary[UnityEngine.ColorUtility.ToHtmlStringRGB(texture.GetPixel(i, j - 1))]);
+                    tile.AddNeighbors(Sides.Down, other);
+                    other.AddNeighbors(Sides.Up, tile);
                 }
 
-                _tileDictionary[interactedHEX].AddWeight(pixelWeight);
 
+                //Right Connection Match
+                if (tile.RightConnection && other.LeftConnection)
+                {
+                    tile.AddNeighbors(Sides.Right, other);
+                    other.AddNeighbors(Sides.Left, tile);
+                }
+
+                if (!tile.RightConnection && !other.LeftConnection)
+                {
+                    tile.AddNeighbors(Sides.Right, other);
+                    other.AddNeighbors(Sides.Left, tile);
+                }
+
+                //Left Connection Match
+                if(tile.LeftConnection && other.RightConnection)
+                {
+                    tile.AddNeighbors(Sides.Left, other);
+                    other.AddNeighbors(Sides.Right, tile);
+                }
+
+
+                if (!tile.LeftConnection && !other.RightConnection)
+                {
+                    tile.AddNeighbors(Sides.Left, other);
+                    other.AddNeighbors(Sides.Right, tile);
+                }
             }
         }
     }
