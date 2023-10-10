@@ -10,10 +10,16 @@ using System.IO;
 public class PatternExtractor 
 {
     private List<Tile> _protoTiles;
+    private Tile fillTile;
 
     public PatternExtractor(List<Tile> protoTiles)
     {
         _protoTiles = protoTiles;
+
+        foreach (Tile tile in _protoTiles)
+        {
+            if (!tile.TopConnection && !tile.BottomConnection && !tile.RightConnection && !tile.LeftConnection)  fillTile = tile;
+        }
     }
 
     public void GenerateRotationVariants()
@@ -73,13 +79,12 @@ public class PatternExtractor
 
     public void Extract()
     {
+
         foreach (Tile tile in _protoTiles)
         {
 
             foreach (Tile other in _protoTiles)
             {
-
-                Debug.Log(tile.name + " " + other.name);
 
                 if (other == tile && !tile.AllowSelfConnection) continue;
 
@@ -90,10 +95,16 @@ public class PatternExtractor
                     other.AddNeighbors(Sides.Down, tile);
                 }
 
-                if (!tile.TopConnection && !other.BottomConnection)
+                //if (!tile.TopConnection && !other.BottomConnection)
+                //{
+                //    tile.AddNeighbors(Sides.Up, other);
+                //    other.AddNeighbors(Sides.Down, tile);
+                //}
+
+                if (!tile.TopConnection)
                 {
-                    tile.AddNeighbors(Sides.Up, other);
-                    other.AddNeighbors(Sides.Down, tile);
+                    tile.AddNeighbors(Sides.Up, fillTile);
+                    fillTile.AddNeighbors(Sides.Down, tile);
                 }
 
                 //Bottom Connection Match
@@ -103,10 +114,16 @@ public class PatternExtractor
                     other.AddNeighbors(Sides.Up, tile);
                 }
 
-                if (!tile.BottomConnection && !other.TopConnection)
+                //if (!tile.BottomConnection && !other.TopConnection)
+                //{
+                //    tile.AddNeighbors(Sides.Down, other);
+                //    other.AddNeighbors(Sides.Up, tile);
+                //}
+
+                if (!tile.BottomConnection)
                 {
-                    tile.AddNeighbors(Sides.Down, other);
-                    other.AddNeighbors(Sides.Up, tile);
+                    tile.AddNeighbors(Sides.Down, fillTile);
+                    fillTile.AddNeighbors(Sides.Up, tile);
                 }
 
 
@@ -117,24 +134,37 @@ public class PatternExtractor
                     other.AddNeighbors(Sides.Left, tile);
                 }
 
-                if (!tile.RightConnection && !other.LeftConnection)
+                //if (!tile.RightConnection && !other.LeftConnection)
+                //{
+                //    tile.AddNeighbors(Sides.Right, other);
+                //    other.AddNeighbors(Sides.Left, tile);
+                //}
+
+
+                if (!tile.RightConnection)
                 {
-                    tile.AddNeighbors(Sides.Right, other);
-                    other.AddNeighbors(Sides.Left, tile);
+                    tile.AddNeighbors(Sides.Right, fillTile);
+                    fillTile.AddNeighbors(Sides.Left, tile);
                 }
 
                 //Left Connection Match
-                if(tile.LeftConnection && other.RightConnection)
+                if (tile.LeftConnection && other.RightConnection)
                 {
                     tile.AddNeighbors(Sides.Left, other);
                     other.AddNeighbors(Sides.Right, tile);
                 }
 
 
-                if (!tile.LeftConnection && !other.RightConnection)
+                //if (!tile.LeftConnection && !other.RightConnection)
+                //{
+                //    tile.AddNeighbors(Sides.Left, other);
+                //    other.AddNeighbors(Sides.Right, tile);
+                //}
+
+                if (!tile.LeftConnection)
                 {
-                    tile.AddNeighbors(Sides.Left, other);
-                    other.AddNeighbors(Sides.Right, tile);
+                    tile.AddNeighbors(Sides.Left, fillTile);
+                    fillTile.AddNeighbors(Sides.Right, tile);
                 }
             }
         }

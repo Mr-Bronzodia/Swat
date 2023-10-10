@@ -14,18 +14,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 4877850536626372840, guid: a3afb3b10fe084c46bd969163c8ec56c, type: 3}
   _upNeighbors:
-  - {fileID: 11400000, guid: 55df3e737b82cfc4fb7526521fa59bc2, type: 2}
+  - {fileID: 11400000, guid: 8bd0fb73d3b41154ba5586396e799cdb, type: 2}
+  - {fileID: 11400000, guid: fceaaabb492b37d4ba07458a8190f1ea, type: 2}
   - {fileID: 11400000, guid: 38feee10a28fefb4eb46d8870ade6d1d, type: 2}
+  - {fileID: 11400000, guid: a0a62e81ea187f84e904c935e8e53195, type: 2}
+  - {fileID: 11400000, guid: f4e2a1de02baa864981926a377e9fa4e, type: 2}
+  - {fileID: 11400000, guid: 55df3e737b82cfc4fb7526521fa59bc2, type: 2}
   _downNeighbors:
+  - {fileID: 11400000, guid: ef59fa047f1ce9147884f0ac4144c8fc, type: 2}
+  - {fileID: 11400000, guid: 2bea174c4646fdf41a4fddd5a662ffba, type: 2}
+  - {fileID: 11400000, guid: a0a62e81ea187f84e904c935e8e53195, type: 2}
+  - {fileID: 11400000, guid: 04835a5f06941264fb6577206bed2bca, type: 2}
+  - {fileID: 11400000, guid: f4e2a1de02baa864981926a377e9fa4e, type: 2}
   - {fileID: 11400000, guid: 55df3e737b82cfc4fb7526521fa59bc2, type: 2}
-  - {fileID: 11400000, guid: ef59fa047f1ce9147884f0ac4144c8fc, type: 2}
   _rightNeighbors:
-  - {fileID: 11400000, guid: d1ccb5624eb9fa6449223106081c633f, type: 2}
   - {fileID: 11400000, guid: ef59fa047f1ce9147884f0ac4144c8fc, type: 2}
-  - {fileID: 11400000, guid: 38feee10a28fefb4eb46d8870ade6d1d, type: 2}
-  _leftNeighbors:
+  - {fileID: 11400000, guid: fceaaabb492b37d4ba07458a8190f1ea, type: 2}
   - {fileID: 11400000, guid: d1ccb5624eb9fa6449223106081c633f, type: 2}
   - {fileID: 11400000, guid: 38feee10a28fefb4eb46d8870ade6d1d, type: 2}
+  - {fileID: 11400000, guid: a0a62e81ea187f84e904c935e8e53195, type: 2}
+  - {fileID: 11400000, guid: 04835a5f06941264fb6577206bed2bca, type: 2}
+  _leftNeighbors:
+  - {fileID: 11400000, guid: 2bea174c4646fdf41a4fddd5a662ffba, type: 2}
+  - {fileID: 11400000, guid: 8bd0fb73d3b41154ba5586396e799cdb, type: 2}
+  - {fileID: 11400000, guid: d1ccb5624eb9fa6449223106081c633f, type: 2}
+  - {fileID: 11400000, guid: 38feee10a28fefb4eb46d8870ade6d1d, type: 2}
+  - {fileID: 11400000, guid: 04835a5f06941264fb6577206bed2bca, type: 2}
+  - {fileID: 11400000, guid: f4e2a1de02baa864981926a377e9fa4e, type: 2}
   Weight: 0.0001
   RotationInDegrees: 0
   AllowForRoatationVariants: 0

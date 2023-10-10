@@ -56,8 +56,6 @@ public class WaveFunctionCollapse : MonoBehaviour
             foreach (Tile tile in _startingTiles) tile.Clear();
 
             patternExtractor.GenerateRotationVariants();
-
-
         }
 
         patternExtractor.Extract();
