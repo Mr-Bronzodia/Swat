@@ -1,4 +1,5 @@
 using Microsoft.Unity.VisualStudio.Editor;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class WaveFunctionCollapse : MonoBehaviour
     [Header("Settings")]
     [SerializeField] 
     private bool RegenerateConnections;
+    [SerializeField]
+    private bool GenerateTileVariants;
 
     [Header("Grid Size")]
     [SerializeField]
@@ -19,7 +22,7 @@ public class WaveFunctionCollapse : MonoBehaviour
     [SerializeField]
     private int _gridSizeY = 0;
 
-    private Cell[,] grid;
+    private Cell[,] _grid;
 
     private List<Cell> _emptyCells;
 
@@ -29,20 +32,22 @@ public class WaveFunctionCollapse : MonoBehaviour
 
     private Tile _generationFailure;
 
+    public Action OnAllCellsCollapsed;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-        grid = new Cell[_gridSizeX, _gridSizeY];
+        _grid = new Cell[_gridSizeX, _gridSizeY];
         _emptyCells = new List<Cell>();
 
         for (int x = 0;  x < _gridSizeX; x++)
         {
             for (int y = 0;  y < _gridSizeY; y++)
             {
-                grid[x, y] = new Cell(new Vector2(x,y));
-                _emptyCells.Add(grid[x, y]);
+                _grid[x, y] = new Cell(new Vector2(x,y));
+                _emptyCells.Add(_grid[x, y]);
             }
         }
       
@@ -51,20 +56,19 @@ public class WaveFunctionCollapse : MonoBehaviour
 
         PatternExtractor patternExtractor = new PatternExtractor(_startingTiles);
 
+        if (GenerateTileVariants) patternExtractor.GenerateRotationVariants();
+
         if (RegenerateConnections)
         {
             foreach (Tile tile in _startingTiles) tile.Clear();
 
-            patternExtractor.GenerateRotationVariants();
+            patternExtractor.Extract();
         }
 
-        patternExtractor.Extract();
 
+        Cell startingCell = _grid[UnityEngine.Random.Range(0, _gridSizeX), UnityEngine.Random.Range(0, _gridSizeY)];
 
-
-        Cell startingCell = grid[Random.Range(0, _gridSizeX), Random.Range(0, _gridSizeY)];
-
-        startingCell.Collapse(grid);
+        startingCell.Collapse(_grid);
 
         Instantiate(startingCell.Tile.GetPrfab(), new Vector3(startingCell._position.x, 0, startingCell._position.y), Quaternion.identity, gameObject.transform);
 
@@ -81,37 +85,37 @@ public class WaveFunctionCollapse : MonoBehaviour
         {
             for (int y = 0; y < _gridSizeY; y++)
             {
-                if (grid[x, y].Tile == _generationFailure)
+                if (_grid[x, y].Tile == _generationFailure)
                 {
-                    grid[x, y].DestroyCell();
-                    _emptyCells.Add(grid[x, y]);
+                    _grid[x, y].DestroyCell();
+                    _emptyCells.Add(_grid[x, y]);
 
                     //Right
                     if (x + 1 < _gridSizeX)
                     {
-                        grid[x + 1, y].DestroyCell();
-                        _emptyCells.Add(grid[x + 1, y]);
+                        _grid[x + 1, y].DestroyCell();
+                        _emptyCells.Add(_grid[x + 1, y]);
                     }
 
                     //Left
                     if (x - 1 >= 0) 
                     {
-                        grid[x - 1, y].DestroyCell();
-                        _emptyCells.Add(grid[x - 1, y]);
+                        _grid[x - 1, y].DestroyCell();
+                        _emptyCells.Add(_grid[x - 1, y]);
                     }
 
                     //Up
                     if (y + 1 < _gridSizeY)
                     {
-                        grid[x, y + 1].DestroyCell();
-                        _emptyCells.Add(grid[x, y + 1]);
+                        _grid[x, y + 1].DestroyCell();
+                        _emptyCells.Add(_grid[x, y + 1]);
                     }
 
                     //Down
                     if (y - 1 >= 0)
                     {
-                        grid[x, y - 1].DestroyCell();
-                        _emptyCells.Add(grid[x, y - 1]);
+                        _grid[x, y - 1].DestroyCell();
+                        _emptyCells.Add(_grid[x, y - 1]);
                     }
 
 
@@ -126,7 +130,12 @@ public class WaveFunctionCollapse : MonoBehaviour
         {
             StartCoroutine(SpawnCells());
         }
+        else
+        {
+            OnAllCellsCollapsed?.Invoke();
+        }
     }
+
 
     IEnumerator SpawnCells()
     {
@@ -137,7 +146,7 @@ public class WaveFunctionCollapse : MonoBehaviour
 
             Cell currentCell = _emptyCells[0];
 
-            currentCell.Collapse(grid);
+            currentCell.Collapse(_grid);
 
             currentCell.AddInstance(Instantiate(currentCell.Tile.GetPrfab(), new Vector3(currentCell._position.x, 0, currentCell._position.y), Quaternion.Euler(new Vector3(0, currentCell.Tile.RotationInDegrees, 0)), gameObject.transform));
        
@@ -148,6 +157,12 @@ public class WaveFunctionCollapse : MonoBehaviour
 
         StartCoroutine(DestroyFailures());
     }
+
+    public Cell[,] GetGrid()
+    {
+        return _grid;
+    }
+
 
     // Update is called once per frame
     void Update()

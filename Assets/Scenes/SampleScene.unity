@@ -437,6 +437,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1532554251}
   - component: {fileID: 1532554250}
+  - component: {fileID: 1532554252}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -457,6 +458,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RegenerateConnections: 0
+  GenerateTileVariants: 0
   _gridSizeX: 35
   _gridSizeY: 35
   _startingTiles:
@@ -487,6 +489,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1532554252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1532554249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01e5d71ad66a4b40ad4612aea34552e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _minPlotSize: {x: 4, y: 4}
+  _maximumPlotSize: {x: 10, y: 10}
+  _tileToReplace: {fileID: 11400000, guid: 63a9e2ad0b19b154ab8e17e2f41afeb1, type: 2}
+  _roadTiles:
+  - {fileID: 11400000, guid: d1ccb5624eb9fa6449223106081c633f, type: 2}
+  - {fileID: 11400000, guid: 55df3e737b82cfc4fb7526521fa59bc2, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
