@@ -60,6 +60,11 @@ public class Cell
         return entropy;
     }
 
+    public override string ToString()
+    {
+        return "Position(" + _position.x + ":" + _position.y + ") Tile(" + Tile + ")";
+    }
+
     public void NotifyNeighbours(Cell[,] parentGrid)
     {
         //Top

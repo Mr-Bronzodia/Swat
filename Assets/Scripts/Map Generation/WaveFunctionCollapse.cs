@@ -152,7 +152,7 @@ public class WaveFunctionCollapse : MonoBehaviour
        
             _emptyCells.Remove(currentCell);
 
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.005f);
         }
 
         StartCoroutine(DestroyFailures());

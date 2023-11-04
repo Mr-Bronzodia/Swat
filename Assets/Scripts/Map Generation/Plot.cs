@@ -4,5 +4,10 @@ using UnityEngine;
 
 public class Plot 
 {
-    public Bounds PlotBounds { get; set; }
+
+
+    public Plot()
+    {
+
+    }
 }

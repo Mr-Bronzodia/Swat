@@ -459,8 +459,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RegenerateConnections: 0
   GenerateTileVariants: 0
-  _gridSizeX: 35
-  _gridSizeY: 35
+  _gridSizeX: 40
+  _gridSizeY: 40
   _startingTiles:
   - {fileID: 11400000, guid: 63a9e2ad0b19b154ab8e17e2f41afeb1, type: 2}
   - {fileID: 11400000, guid: ef59fa047f1ce9147884f0ac4144c8fc, type: 2}
@@ -507,6 +507,7 @@ MonoBehaviour:
   _roadTiles:
   - {fileID: 11400000, guid: d1ccb5624eb9fa6449223106081c633f, type: 2}
   - {fileID: 11400000, guid: 55df3e737b82cfc4fb7526521fa59bc2, type: 2}
+  _plotTile: {fileID: 11400000, guid: 084a46b231cb4d34bb39b378a28dd287, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
