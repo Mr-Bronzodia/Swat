@@ -27,7 +27,7 @@ public class Tile : ScriptableObject
 
     public float RotationInDegrees = 0;
 
-    public bool AllowForRoatationVariants;
+    public bool AllowForRotationVariants;
     public bool AllowSelfConnection;
     public bool TopConnection;
     public bool BottomConnection;
@@ -35,6 +35,10 @@ public class Tile : ScriptableObject
     public bool RightConnection;
 
 
+    ///<summary>
+    ///Clears connection setting for a tile.
+    ///This will change the asset permanently.
+    ///</summary>
     public void Clear()
     {
         _upNeighbors.Clear();
@@ -44,26 +48,49 @@ public class Tile : ScriptableObject
         //Weight = 0f;
     }
 
-    public GameObject GetPrfab()
+
+    ///<summary>
+    ///Returns prefab associated with the tile
+    ///</summary>
+    public GameObject GetPrefab()
     {
         return _prefab;
     }
 
+    ///<summary>
+    ///Sets prefab for a tile.
+    ///This will change the asset permanently.
+    ///</summary>
     public void SetPrefab(GameObject prefab)
     {
         _prefab = prefab;
     }
 
+
+    ///<summary>
+    ///Adds amount to tile weight 
+    ///This will change the asset permanently.
+    ///</summary>
     public void AddWeight(float amount)
     {
         Weight += amount;
     }
 
+    ///<summary>
+    ///Returns tile weight.
+    ///Weight is a likelihood the tile is selected during the collapse of the cell
+    ///</summary>
     public float GetTileWeight()
     {
         return Weight;
     }
 
+    ///<summary>
+    ///Adds possible neighbour connection to a tile if its not already there.
+    ///This will change the asset permanently 
+    ///</summary>
+    ///<param name="side">Which side to add the neighbour to.</param>
+    ///<param name="Neighbors">Tile type</param>
     public void AddNeighbors(Sides side,Tile Neighbors)
     {
         switch (side)
@@ -86,7 +113,9 @@ public class Tile : ScriptableObject
 
         }
     }
-
+    ///<summary>
+    ///Returns all possible neighbours connections for this tile.
+    ///</summary>
     public List<Tile> GetNeighbors(Sides side)
     {
         List<Tile> result = new List<Tile>();

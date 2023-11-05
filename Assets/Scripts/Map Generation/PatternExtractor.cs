@@ -16,34 +16,39 @@ public class PatternExtractor
     {
         _protoTiles = protoTiles;
 
+        //Tile with all closed connection is assumed to be fill tile e.g grass
         foreach (Tile tile in _protoTiles)
         {
             if (!tile.TopConnection && !tile.BottomConnection && !tile.RightConnection && !tile.LeftConnection)  fillTile = tile;
         }
     }
 
+    ///<summary>
+    ///Generates rotation variants of the tile up to 270 degrees and generates connections based on proto tile. This will create 3 new assets in Assets/Resources/TileTypes/.
+    ///</summary>
     public void GenerateRotationVariants()
     {
         List<Tile> newTiles = new List<Tile>();
 
         foreach (Tile tile in _protoTiles)
         {
-            if (!tile.AllowForRoatationVariants) continue;
+            if (!tile.AllowForRotationVariants) continue;
 
             for (int i = 1; i <= 3; i++)
             {
                 Tile rotationVariant = ScriptableObject.CreateInstance<Tile>();
                 string path = "Assets/Resources/TileTypes/" + tile.name + (i * 90) + ".asset";
 
-                rotationVariant.SetPrefab(tile.GetPrfab());
+                rotationVariant.SetPrefab(tile.GetPrefab());
 
                 rotationVariant.AddWeight(tile.GetTileWeight());
 
                 rotationVariant.RotationInDegrees = i * 90.0f;
 
-                rotationVariant.AllowForRoatationVariants = false;
+                rotationVariant.AllowForRotationVariants = false;
                 rotationVariant.AllowSelfConnection = tile.AllowSelfConnection;
 
+                //Copies connection according to proto tile
                 switch (i * 90.0f)
                 {
                     case 90:
@@ -77,6 +82,9 @@ public class PatternExtractor
         AssetDatabase.Refresh();
     }
 
+    /// <summary>
+    /// Adds every possible connection based on open ports.
+    /// </summary>
     public void Extract()
     {
 

@@ -36,9 +36,9 @@ public class WaveFunctionCollapse : MonoBehaviour
 
 
 
-    // Start is called before the first frame update
     void Start()
     {
+        //Initializes empty cell grid
         _grid = new Cell[_gridSizeX, _gridSizeY];
         _emptyCells = new List<Cell>();
 
@@ -65,12 +65,12 @@ public class WaveFunctionCollapse : MonoBehaviour
             patternExtractor.Extract();
         }
 
-
+        //Collapses first cell to start the propagation. Cell position is random 
         Cell startingCell = _grid[UnityEngine.Random.Range(0, _gridSizeX), UnityEngine.Random.Range(0, _gridSizeY)];
 
         startingCell.Collapse(_grid);
 
-        Instantiate(startingCell.Tile.GetPrfab(), new Vector3(startingCell._position.x, 0, startingCell._position.y), Quaternion.identity, gameObject.transform);
+        Instantiate(startingCell.Tile.GetPrefab(), new Vector3(startingCell._position.x, 0, startingCell._position.y), Quaternion.identity, gameObject.transform);
 
         _emptyCells.Remove(startingCell);
 
@@ -79,6 +79,10 @@ public class WaveFunctionCollapse : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Looks for error tiles, destroys them replacing them and their neighbours. 
+    /// </summary>
+    /// <returns></returns>
     IEnumerator DestroyFailures()
     {
         for (int x = 0; x < _gridSizeX; x++)
@@ -128,27 +132,32 @@ public class WaveFunctionCollapse : MonoBehaviour
 
         if (_emptyCells.Count > 0)
         {
-            StartCoroutine(SpawnCells());
+            StartCoroutine(SpawnCells()); // Regenerates destroyed cells 
         }
         else
         {
-            OnAllCellsCollapsed?.Invoke();
+            OnAllCellsCollapsed?.Invoke(); // no error tiles detected. Generation is finished.
         }
     }
 
+
+    /// <summary>
+    /// Spawns cells from lowest entropy to highest. Cell is collapsed based on their weight. High weight = more likely to collapse into. 
+    /// </summary>
+    /// <returns></returns>
 
     IEnumerator SpawnCells()
     {
 
         while (_emptyCells.Count > 0)
         {
-            _emptyCells.Sort((x, y) => x.GetCellEntropy().CompareTo(y.GetCellEntropy()));
+            _emptyCells.Sort((x, y) => x.GetCellEntropy().CompareTo(y.GetCellEntropy())); //sorts cells based on their entropy. Potential performance concern 
 
             Cell currentCell = _emptyCells[0];
 
             currentCell.Collapse(_grid);
 
-            currentCell.AddInstance(Instantiate(currentCell.Tile.GetPrfab(), new Vector3(currentCell._position.x, 0, currentCell._position.y), Quaternion.Euler(new Vector3(0, currentCell.Tile.RotationInDegrees, 0)), gameObject.transform));
+            currentCell.AddInstance(Instantiate(currentCell.Tile.GetPrefab(), new Vector3(currentCell._position.x, 0, currentCell._position.y), Quaternion.Euler(new Vector3(0, currentCell.Tile.RotationInDegrees, 0)), gameObject.transform));
        
             _emptyCells.Remove(currentCell);
 
@@ -158,6 +167,10 @@ public class WaveFunctionCollapse : MonoBehaviour
         StartCoroutine(DestroyFailures());
     }
 
+    /// <summary>
+    /// Returns world grid.
+    /// </summary>
+    /// <returns></returns>
     public Cell[,] GetGrid()
     {
         return _grid;

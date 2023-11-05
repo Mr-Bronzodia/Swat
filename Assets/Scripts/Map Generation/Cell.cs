@@ -30,6 +30,9 @@ public class Cell
         _entropyModifier = Random.Range(0, 0.02f);
     }
 
+    ///<summary>
+    ///Uncollapses the cell and removes instance form the game.
+    ///</summary>
     public void DestroyCell()
     {
         Object.Destroy(_instance, 0.1f);
@@ -39,11 +42,17 @@ public class Cell
         PossibleTiles = Resources.LoadAll<Tile>("TileTypes").ToList();
     }
 
+    ///<summary>
+    ///Adds instance to a cell. Does not create the instance to the game
+    ///</summary>
     public void AddInstance(GameObject instance)
     {
         _instance = instance;
     }
 
+    ///<summary>
+    ///Calculates and returns cell Shannon entropy.
+    ///</summary>
     public float GetCellEntropy()
     {
         float entropy = 0.0f;
@@ -60,14 +69,20 @@ public class Cell
         return entropy;
     }
 
+    ///<summary>
+    ///Returns string with cell information in human readable form 
+    ///</summary>
     public override string ToString()
     {
-        return "Position(" + _position.x + ":" + _position.y + ") Tile(" + Tile + ")";
+        return "Position(" + _position.x + ":" + _position.y + ") Tile(" + Tile.name + ")";
     }
 
+    ///<summary>
+    ///Updates cell neighbours with which tiles they collapse into.
+    ///</summary>
     public void NotifyNeighbours(Cell[,] parentGrid)
     {
-        //Top
+        //Top neighbour update
         if (_position.y + 1 < parentGrid.GetLength(1))
         {
             if (!parentGrid[(int)_position.x, (int)_position.y + 1].IsCollapsed)
@@ -77,7 +92,7 @@ public class Cell
             }
         }
 
-        //Bottom
+        //Bottom neighbour update
         if (_position.y - 1 > 0)
         {
             if (!parentGrid[(int)_position.x, (int)_position.y - 1].IsCollapsed)
@@ -88,7 +103,7 @@ public class Cell
             }
         }
 
-        //Right
+        //Right neighbour update
         if (_position.x + 1 < parentGrid.GetLength(0))
         {
             if (!parentGrid[(int)_position.x + 1, (int)_position.y].IsCollapsed)
@@ -99,7 +114,7 @@ public class Cell
             }
         }
 
-        //Left
+        //Left neighbour update
         if (_position.x - 1 > 0)
         {
 
@@ -115,11 +130,15 @@ public class Cell
 
     }
 
+    ///<summary>
+    ///Collapses the cell with the tile based on probability. 
+    ///</summary>
     public void Collapse(Cell[,] parentGrid)
     {
         List<Tile> collapsePossibilities = PossibleTiles;
         if (IsCollapsed) return;
 
+        //Checking neighbours to see how the cell can collapse
         //Top
         if (_position.y + 1 < parentGrid.GetLength(1))
         {
@@ -161,7 +180,7 @@ public class Cell
 
         if (collapsePossibilities.Count > 0)
         {
-
+            //Calculating probability 
             float max_prabability = 0.0f;
             foreach (Tile tile in collapsePossibilities)
             {
@@ -186,6 +205,7 @@ public class Cell
         }
         else
         {
+            //No possible tile to collapse. Spawns error tile to be dealt with later. 
             Tile = Resources.Load<Tile>("TileTypes/ErrorTile/Error");
         }
         
