@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Plot 
 {
-
+    public Bounds bounds;
 
     public Plot()
     {
