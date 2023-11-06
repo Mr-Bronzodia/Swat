@@ -68,6 +68,7 @@ public class WaveFunctionCollapse : MonoBehaviour
         //Collapses first cell to start the propagation. Cell position is random 
         Cell startingCell = _grid[UnityEngine.Random.Range(0, _gridSizeX), UnityEngine.Random.Range(0, _gridSizeY)];
 
+
         startingCell.Collapse(_grid);
 
         Instantiate(startingCell.Tile.GetPrefab(), new Vector3(startingCell._position.x, 0, startingCell._position.y), Quaternion.identity, gameObject.transform);

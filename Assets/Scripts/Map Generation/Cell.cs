@@ -74,7 +74,7 @@ public class Cell
     ///</summary>
     public override string ToString()
     {
-        return "Position(" + _position.x + ":" + _position.y + ") Tile(" + Tile.name + ")";
+        return "Position(" + _position.x + ":" + _position.y + ") Tile(" + Tile + ")";
     }
 
     ///<summary>

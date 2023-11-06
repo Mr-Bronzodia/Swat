@@ -39,6 +39,9 @@ public class HouseGenerator : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Finds contiguous roads to create rectangular plots for house generations. 
+    /// </summary>
     public void FindSuitablePlotPosition()
     {
         _cellGrid = _waveFunctionCollapse.GetGrid();
@@ -84,41 +87,66 @@ public class HouseGenerator : MonoBehaviour
             }
         }
 
-        Plot newHorizontalPlot = new Plot();
+        Plot southPlot = new Plot();
+        Plot northPlot = new Plot();
         foreach ((int, Cell) soyLet in horizontalRoads)
         {
 
             if (soyLet.Item1 == 0)
             {
-                if (newHorizontalPlot.bounds != null && newHorizontalPlot.bounds.extents.magnitude > 1) _plots.Add(newHorizontalPlot);
+                if (southPlot.bounds != null && southPlot.bounds.extents.magnitude > 1) _plots.Add(southPlot);
+                if (northPlot.bounds != null && northPlot.bounds.extents.magnitude > 1) _plots.Add(northPlot);
 
-                newHorizontalPlot = new Plot();
-                newHorizontalPlot.bounds = new Bounds(new Vector3(soyLet.Item2._position.x, 0, soyLet.Item2._position.y), Vector3.one);
+
+                southPlot = new Plot();
+                northPlot = new Plot();
+
+                if (soyLet.Item2._position.y + 1 <= _cellGrid.GetLength(1)) northPlot.bounds = new Bounds(new Vector3(soyLet.Item2._position.x, 0, soyLet.Item2._position.y + 1), Vector3.one);
+                if (soyLet.Item2._position.y - 1 >= 0) southPlot.bounds = new Bounds(new Vector3(soyLet.Item2._position.x, 0, soyLet.Item2._position.y - 1), Vector3.one);
+
             }
 
-            if (soyLet.Item1 > 0) newHorizontalPlot.bounds.Encapsulate(new Vector3(soyLet.Item2._position.x, 0, soyLet.Item2._position.y));
+            if (soyLet.Item1 > 0)
+            {
+                if (northPlot.bounds.extents.magnitude > 0) northPlot.bounds.Encapsulate(new Vector3(soyLet.Item2._position.x, 0, soyLet.Item2._position.y + 1));
+                if (southPlot.bounds.extents.magnitude > 0) southPlot.bounds.Encapsulate(new Vector3(soyLet.Item2._position.x, 0, soyLet.Item2._position.y - 1));
+            }
 
         }
 
-
-        Plot newVerticalPlot = new Plot();
+        Plot westPlot = new Plot();
+        Plot eastPlot = new Plot();
         foreach ((int, Cell) soyLet in verticalRoads)
         {
 
             if (soyLet.Item1 == 0)
             {
-                if (newHorizontalPlot.bounds != null && newHorizontalPlot.bounds.extents.magnitude > 1) _plots.Add(newHorizontalPlot);
+                if (westPlot.bounds != null && westPlot.bounds.extents.magnitude > 1) _plots.Add(westPlot);
+                if (eastPlot.bounds != null && eastPlot.bounds.extents.magnitude > 1) _plots.Add(eastPlot);
 
-                newHorizontalPlot = new Plot();
-                newHorizontalPlot.bounds = new Bounds(new Vector3(soyLet.Item2._position.x, 0, soyLet.Item2._position.y), Vector3.one);
+                westPlot = new Plot();
+                eastPlot = new Plot();
+
+                if (soyLet.Item2._position.x + 1 <= _cellGrid.GetLength(0)) eastPlot.bounds = new Bounds(new Vector3(soyLet.Item2._position.x + 1, 0, soyLet.Item2._position.y), Vector3.one);
+                if (soyLet.Item2._position.x - 1 >= 0) westPlot.bounds = new Bounds(new Vector3(soyLet.Item2._position.x - 1, 0, soyLet.Item2._position.y), Vector3.one);
             }
 
-            if (soyLet.Item1 > 0) newHorizontalPlot.bounds.Encapsulate(new Vector3(soyLet.Item2._position.x, 0, soyLet.Item2._position.y));
+            if (soyLet.Item1 > 0)
+            {
+
+                if (westPlot.bounds.extents.magnitude > 0) westPlot.bounds.Encapsulate(new Vector3(soyLet.Item2._position.x - 1, 0, soyLet.Item2._position.y));
+                if (eastPlot.bounds.extents.magnitude > 0) eastPlot.bounds.Encapsulate(new Vector3(soyLet.Item2._position.x + 1, 0, soyLet.Item2._position.y));
+            }
 
         }
 
+        Debug.Log(_plots.Count);
     }
 
+    /// <summary>
+    /// Draws bounds.
+    /// Thanks to https://gist.github.com/unitycoder/58f4b5d80f423d29e35c814a9556f9d9
+    /// </summary>
     void DrawBounds(Bounds b, float delay = 0)
     {
         // bottom
@@ -162,5 +190,7 @@ public class HouseGenerator : MonoBehaviour
         {
             DrawBounds(plot.bounds);
         }
+
+        
     }
 }
