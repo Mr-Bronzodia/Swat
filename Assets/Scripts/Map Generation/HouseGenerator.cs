@@ -91,11 +91,43 @@ public class HouseGenerator : MonoBehaviour
         Plot northPlot = new Plot();
         foreach ((int, Cell) soyLet in horizontalRoads)
         {
-
+            // TODO: Refactor into spearte function 
             if (soyLet.Item1 == 0)
             {
-                if (southPlot.bounds != null && southPlot.bounds.extents.magnitude > 1) _plots.Add(southPlot);
-                if (northPlot.bounds != null && northPlot.bounds.extents.magnitude > 1) _plots.Add(northPlot);
+                if (southPlot.bounds != null && southPlot.bounds.extents.magnitude > 1)
+                {
+                    bool isOverlapping = false;
+
+                    foreach (Plot plot in _plots)
+                    {
+                        if (plot.bounds.Intersects(southPlot.bounds))
+                        {
+                            isOverlapping = true;
+                            break;
+                        }
+                    }
+
+                    if (!isOverlapping) _plots.Add(southPlot); 
+
+
+                }
+                if (northPlot.bounds != null && northPlot.bounds.extents.magnitude > 1)
+                {
+
+                    bool isOverlapping = false;
+
+                    foreach (Plot plot in _plots)
+                    {
+                        if (plot.bounds.Intersects(northPlot.bounds))
+                        {
+                            isOverlapping = true;
+                            break;
+                        }
+                    }
+
+                    if (!isOverlapping) _plots.Add(northPlot);
+                }
+
 
 
                 southPlot = new Plot();
@@ -121,8 +153,37 @@ public class HouseGenerator : MonoBehaviour
 
             if (soyLet.Item1 == 0)
             {
-                if (westPlot.bounds != null && westPlot.bounds.extents.magnitude > 1) _plots.Add(westPlot);
-                if (eastPlot.bounds != null && eastPlot.bounds.extents.magnitude > 1) _plots.Add(eastPlot);
+                if (westPlot.bounds != null && westPlot.bounds.extents.magnitude > 1)
+                {
+                    bool isOverlapping = false;
+
+                    foreach (Plot plot in _plots)
+                    {
+                        if (plot.bounds.Intersects(westPlot.bounds))
+                        {
+                            isOverlapping = true;
+                            break;
+                        }
+                    }
+
+                    if (!isOverlapping) _plots.Add(westPlot);
+                }
+                if (eastPlot.bounds != null && eastPlot.bounds.extents.magnitude > 1)
+                {
+
+                    bool isOverlapping = false;
+
+                    foreach (Plot plot in _plots)
+                    {
+                        if (plot.bounds.Intersects(eastPlot.bounds))
+                        {
+                            isOverlapping = true;
+                            break;
+                        }
+                    }
+
+                    if (!isOverlapping) _plots.Add(eastPlot);
+                }
 
                 westPlot = new Plot();
                 eastPlot = new Plot();
@@ -140,7 +201,8 @@ public class HouseGenerator : MonoBehaviour
 
         }
 
-        Debug.Log(_plots.Count);
+
+
     }
 
     /// <summary>

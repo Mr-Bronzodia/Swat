@@ -459,8 +459,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RegenerateConnections: 0
   GenerateTileVariants: 0
-  _gridSizeX: 40
-  _gridSizeY: 40
+  _gridSizeX: 30
+  _gridSizeY: 30
   _startingTiles:
   - {fileID: 11400000, guid: 63a9e2ad0b19b154ab8e17e2f41afeb1, type: 2}
   - {fileID: 11400000, guid: ef59fa047f1ce9147884f0ac4144c8fc, type: 2}
