@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(WaveFunctionCollapse))]
@@ -98,16 +99,13 @@ public class HouseGenerator : MonoBehaviour
                 {
                     bool isOverlapping = false;
 
-                    foreach (Plot plot in _plots)
-                    {
-                        if (plot.bounds.Intersects(southPlot.bounds))
-                        {
-                            isOverlapping = true;
-                            break;
-                        }
-                    }
 
-                    if (!isOverlapping) _plots.Add(southPlot); 
+                    if (!isOverlapping)
+                    {
+                        _plots.Add(southPlot);
+                        southPlot.side = Sides.Down;
+
+                    }
 
 
                 }
@@ -116,16 +114,11 @@ public class HouseGenerator : MonoBehaviour
 
                     bool isOverlapping = false;
 
-                    foreach (Plot plot in _plots)
+                    if (!isOverlapping)
                     {
-                        if (plot.bounds.Intersects(northPlot.bounds))
-                        {
-                            isOverlapping = true;
-                            break;
-                        }
+                        _plots.Add(northPlot);
+                        northPlot.side = Sides.Up;
                     }
-
-                    if (!isOverlapping) _plots.Add(northPlot);
                 }
 
 
@@ -157,38 +150,29 @@ public class HouseGenerator : MonoBehaviour
                 {
                     bool isOverlapping = false;
 
-                    foreach (Plot plot in _plots)
-                    {
-                        if (plot.bounds.Intersects(westPlot.bounds))
-                        {
-                            isOverlapping = true;
-                            break;
-                        }
-                    }
 
-                    if (!isOverlapping) _plots.Add(westPlot);
+                    if (!isOverlapping)
+                    {
+                        _plots.Add(westPlot);
+                        westPlot.side = Sides.Left;
+                    }
                 }
                 if (eastPlot.bounds != null && eastPlot.bounds.extents.magnitude > 1)
                 {
 
                     bool isOverlapping = false;
 
-                    foreach (Plot plot in _plots)
+                    if (!isOverlapping)
                     {
-                        if (plot.bounds.Intersects(eastPlot.bounds))
-                        {
-                            isOverlapping = true;
-                            break;
-                        }
+                        _plots.Add(eastPlot);
+                        eastPlot.side = Sides.Right;
                     }
-
-                    if (!isOverlapping) _plots.Add(eastPlot);
                 }
 
                 westPlot = new Plot();
                 eastPlot = new Plot();
 
-                if (soyLet.Item2._position.x + 1 <= _cellGrid.GetLength(0)) eastPlot.bounds = new Bounds(new Vector3(soyLet.Item2._position.x + 1, 0, soyLet.Item2._position.y), Vector3.one);
+                if (soyLet.Item2._position.x + 1 < _cellGrid.GetLength(0)) eastPlot.bounds = new Bounds(new Vector3(soyLet.Item2._position.x + 1, 0, soyLet.Item2._position.y), Vector3.one);
                 if (soyLet.Item2._position.x - 1 >= 0) westPlot.bounds = new Bounds(new Vector3(soyLet.Item2._position.x - 1, 0, soyLet.Item2._position.y), Vector3.one);
             }
 
@@ -201,9 +185,19 @@ public class HouseGenerator : MonoBehaviour
 
         }
 
-
+        foreach (Plot plotX in _plots)
+        {
+            foreach (Plot plotY in _plots)
+            {
+                if (plotX.bounds.Intersects(plotY.bounds))
+                {
+                    plotX.bounds.Encapsulate(plotY.bounds);
+                }
+            }
+        }
 
     }
+
 
     /// <summary>
     /// Draws bounds.
@@ -251,8 +245,31 @@ public class HouseGenerator : MonoBehaviour
         foreach (Plot plot in _plots)
         {
             DrawBounds(plot.bounds);
+
+            Gizmos.color = Color.white;
+
+            switch (plot.side)
+            {
+                case Sides.Left:
+                    Gizmos.color = Color.red;
+                    break;
+                case Sides.Right:
+                    Gizmos.color = Color.blue;
+                    break;
+                case Sides.Up:
+                    Gizmos.color = Color.yellow;
+                    break;
+                case Sides.Down:
+                    Gizmos.color = Color.green;
+                    break;
+
+            }
+
+            
+            Gizmos.DrawSphere(plot.bounds.center, .2f);
+            Gizmos.color = Color.white;
         }
 
-        
+
     }
 }
