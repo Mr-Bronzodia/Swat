@@ -47,12 +47,11 @@ public class HouseGenerator : MonoBehaviour
     {
         _cellGrid = _waveFunctionCollapse.GetGrid();
 
-        List<Cell> roadCells = new List<Cell>();
+        List<(int, Cell)> verticalRoads = new List<(int Index, Cell Cell)>();
+        List<(int, Cell)> horizontalRoads = new List<(int Index, Cell Cell)>();
 
-        List<(int, Cell)> verticalRoads = new List<(int, Cell)>();
-        List<(int, Cell)> horizontalRoads = new List<(int, Cell)>();
-
-        for (int i = 0; i < _cellGrid.GetLength(0); i++)
+        
+        for (int i = 0; i < _cellGrid.GetLength(0); i++) //Row major scan for continuous roads
         {
             int continuous = 0;
 
@@ -67,11 +66,10 @@ public class HouseGenerator : MonoBehaviour
 
                 verticalRoads.Add((continuous, _cellGrid[i, j]));
                 continuous++;
-                roadCells.Add(_cellGrid[i, j]);
             }
         }
 
-        for (int j = 0; j < _cellGrid.GetLength(1); j++)
+        for (int j = 0; j < _cellGrid.GetLength(1); j++) //Column major scan for continuous roads
         {
             int continuous = 0;
 
@@ -90,112 +88,72 @@ public class HouseGenerator : MonoBehaviour
 
         Plot southPlot = new Plot();
         Plot northPlot = new Plot();
-        foreach ((int, Cell) soyLet in horizontalRoads)
+
+        foreach ((int Index, Cell Cell) roadSegment in horizontalRoads) //Creates plots above and below horizontal roads according to their length 
         {
-            // TODO: Refactor into spearte function 
-            if (soyLet.Item1 == 0)
+            if (roadSegment.Index == 0) // New segment began checks if old one should be added to list
             {
-                if (southPlot.bounds != null && southPlot.bounds.extents.magnitude > 1)
+                if (southPlot.isValid())
                 {
-                    bool isOverlapping = false;
-
-
-                    if (!isOverlapping)
-                    {
-                        _plots.Add(southPlot);
-                        southPlot.side = Sides.Down;
-
-                    }
-
-
+                    _plots.Add(southPlot);
+                    southPlot.side = Sides.Down;
                 }
-                if (northPlot.bounds != null && northPlot.bounds.extents.magnitude > 1)
+                if (northPlot.isValid())
                 {
-
-                    bool isOverlapping = false;
-
-                    if (!isOverlapping)
-                    {
-                        _plots.Add(northPlot);
-                        northPlot.side = Sides.Up;
-                    }
+                    _plots.Add(northPlot);
+                    northPlot.side = Sides.Up;
                 }
-
 
 
                 southPlot = new Plot();
                 northPlot = new Plot();
 
-                if (soyLet.Item2._position.y + 1 <= _cellGrid.GetLength(1)) northPlot.bounds = new Bounds(new Vector3(soyLet.Item2._position.x, 0, soyLet.Item2._position.y + 1), Vector3.one);
-                if (soyLet.Item2._position.y - 1 >= 0) southPlot.bounds = new Bounds(new Vector3(soyLet.Item2._position.x, 0, soyLet.Item2._position.y - 1), Vector3.one);
+                if (roadSegment.Cell.Index.y + 1 < _cellGrid.GetLength(1)) northPlot.bounds = new Bounds(_cellGrid[roadSegment.Cell.Index.x, roadSegment.Cell.Index.y + 1].GetWorldSpacePosition(), Vector3.one);
+                if (roadSegment.Cell.Index.y - 1 >= 0) southPlot.bounds = new Bounds(_cellGrid[roadSegment.Cell.Index.x, roadSegment.Cell.Index.y - 1].GetWorldSpacePosition(), Vector3.one);
 
             }
 
-            if (soyLet.Item1 > 0)
+            if (roadSegment.Index > 0)
             {
-                if (northPlot.bounds.extents.magnitude > 0) northPlot.bounds.Encapsulate(new Vector3(soyLet.Item2._position.x, 0, soyLet.Item2._position.y + 1));
-                if (southPlot.bounds.extents.magnitude > 0) southPlot.bounds.Encapsulate(new Vector3(soyLet.Item2._position.x, 0, soyLet.Item2._position.y - 1));
+                if (northPlot.bounds.extents.magnitude > 0) northPlot.bounds.Encapsulate(_cellGrid[roadSegment.Cell.Index.x, roadSegment.Cell.Index.y + 1].GetWorldSpacePosition());
+                if (southPlot.bounds.extents.magnitude > 0) southPlot.bounds.Encapsulate(_cellGrid[roadSegment.Cell.Index.x, roadSegment.Cell.Index.y - 1].GetWorldSpacePosition());
             }
 
         }
 
         Plot westPlot = new Plot();
         Plot eastPlot = new Plot();
-        foreach ((int, Cell) soyLet in verticalRoads)
+        foreach ((int Index, Cell Cell) roadSegment in verticalRoads) //Creates plots left and right vertical roads according to their length 
         {
 
-            if (soyLet.Item1 == 0)
+            if (roadSegment.Index == 0)
             {
-                if (westPlot.bounds != null && westPlot.bounds.extents.magnitude > 1)
+                if (westPlot.isValid())
                 {
-                    bool isOverlapping = false;
-
-
-                    if (!isOverlapping)
-                    {
-                        _plots.Add(westPlot);
-                        westPlot.side = Sides.Left;
-                    }
+                    _plots.Add(westPlot);
+                    westPlot.side = Sides.Left;
                 }
-                if (eastPlot.bounds != null && eastPlot.bounds.extents.magnitude > 1)
+                if (eastPlot.isValid())
                 {
-
-                    bool isOverlapping = false;
-
-                    if (!isOverlapping)
-                    {
-                        _plots.Add(eastPlot);
-                        eastPlot.side = Sides.Right;
-                    }
+                    _plots.Add(eastPlot);
+                    eastPlot.side = Sides.Right;
                 }
 
                 westPlot = new Plot();
                 eastPlot = new Plot();
 
-                if (soyLet.Item2._position.x + 1 < _cellGrid.GetLength(0)) eastPlot.bounds = new Bounds(new Vector3(soyLet.Item2._position.x + 1, 0, soyLet.Item2._position.y), Vector3.one);
-                if (soyLet.Item2._position.x - 1 >= 0) westPlot.bounds = new Bounds(new Vector3(soyLet.Item2._position.x - 1, 0, soyLet.Item2._position.y), Vector3.one);
+                if (roadSegment.Cell.Index.x + 1 < _cellGrid.GetLength(0)) eastPlot.bounds = new Bounds(_cellGrid[roadSegment.Cell.Index.x + 1, roadSegment.Cell.Index.y].GetWorldSpacePosition(), Vector3.one);
+                if (roadSegment.Cell.Index.x - 1 >= 0) westPlot.bounds = new Bounds(_cellGrid[roadSegment.Cell.Index.x - 1, roadSegment.Cell.Index.y].GetWorldSpacePosition(), Vector3.one);
             }
 
-            if (soyLet.Item1 > 0)
+            if (roadSegment.Index > 0)
             {
 
-                if (westPlot.bounds.extents.magnitude > 0) westPlot.bounds.Encapsulate(new Vector3(soyLet.Item2._position.x - 1, 0, soyLet.Item2._position.y));
-                if (eastPlot.bounds.extents.magnitude > 0) eastPlot.bounds.Encapsulate(new Vector3(soyLet.Item2._position.x + 1, 0, soyLet.Item2._position.y));
+                if (westPlot.bounds.extents.magnitude > 0) westPlot.bounds.Encapsulate(_cellGrid[roadSegment.Cell.Index.x - 1, roadSegment.Cell.Index.y].GetWorldSpacePosition());
+                if (eastPlot.bounds.extents.magnitude > 0) eastPlot.bounds.Encapsulate(_cellGrid[roadSegment.Cell.Index.x + 1, roadSegment.Cell.Index.y].GetWorldSpacePosition());
             }
 
         }
-
-        foreach (Plot plotX in _plots)
-        {
-            foreach (Plot plotY in _plots)
-            {
-                if (plotX.bounds.Intersects(plotY.bounds))
-                {
-                    plotX.bounds.Encapsulate(plotY.bounds);
-                }
-            }
-        }
-
     }
 
 

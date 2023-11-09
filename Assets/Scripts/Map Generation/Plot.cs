@@ -11,4 +11,13 @@ public class Plot
     {
 
     }
+
+    public bool isValid()
+    {
+        if (this.bounds == null) return false;
+
+        if (this.bounds.extents.magnitude < 1) return false;
+
+        return true;
+    }
 }

@@ -34,6 +34,9 @@ public class WaveFunctionCollapse : MonoBehaviour
 
     public Action OnAllCellsCollapsed;
 
+    [SerializeField]
+    public Vector2 size;
+
 
 
     void Start()
@@ -41,15 +44,19 @@ public class WaveFunctionCollapse : MonoBehaviour
         //Initializes empty cell grid
         _grid = new Cell[_gridSizeX, _gridSizeY];
         _emptyCells = new List<Cell>();
+        //size = new Vector2(2, 2);
 
         for (int x = 0;  x < _gridSizeX; x++)
         {
             for (int y = 0;  y < _gridSizeY; y++)
             {
-                _grid[x, y] = new Cell(new Vector2(x,y));
+                _grid[x, y] = new Cell(new Vector2Int(x,y), size);
+                _grid[x, y] = new Cell(new Vector2Int(x,y), size);
                 _emptyCells.Add(_grid[x, y]);
             }
         }
+
+
       
         _generationFailure = Resources.Load<Tile>("TileTypes/ErrorTile/Error");
 
@@ -71,7 +78,7 @@ public class WaveFunctionCollapse : MonoBehaviour
 
         startingCell.Collapse(_grid);
 
-        Instantiate(startingCell.Tile.GetPrefab(), new Vector3(startingCell._position.x, 0, startingCell._position.y), Quaternion.identity, gameObject.transform);
+        Instantiate(startingCell.Tile.GetPrefab(), new Vector3(startingCell.Index.x * size.x, 0, startingCell.Index.y * size.y), Quaternion.identity, gameObject.transform);
 
         _emptyCells.Remove(startingCell);
 
@@ -158,7 +165,7 @@ public class WaveFunctionCollapse : MonoBehaviour
 
             currentCell.Collapse(_grid);
 
-            currentCell.AddInstance(Instantiate(currentCell.Tile.GetPrefab(), new Vector3(currentCell._position.x, 0, currentCell._position.y), Quaternion.Euler(new Vector3(0, currentCell.Tile.RotationInDegrees, 0)), gameObject.transform));
+            currentCell.AddInstance(Instantiate(currentCell.Tile.GetPrefab(), new Vector3(currentCell.Index.x * size.x, 0, currentCell.Index.y * size.y), Quaternion.Euler(new Vector3(0, currentCell.Tile.RotationInDegrees, 0)), gameObject.transform));
        
             _emptyCells.Remove(currentCell);
 

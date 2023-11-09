@@ -15,7 +15,9 @@ public class Cell
 
     public Tile Tile { get; private set; } = null;
 
-    public Vector2 _position;
+    public Vector2Int Index { get; private set; }
+
+    private Vector2 _size;
 
     float _entropyModifier;
 
@@ -23,10 +25,11 @@ public class Cell
 
 
 
-    public Cell(Vector2 position)
+    public Cell(Vector2Int index, Vector2 size)
     {
         PossibleTiles = Resources.LoadAll<Tile>("TileTypes").ToList();
-        _position = position;
+        Index = index;
+        _size = size;
         _entropyModifier = Random.Range(0, 0.02f);
     }
 
@@ -41,6 +44,8 @@ public class Cell
         IsCollapsed = false;
         PossibleTiles = Resources.LoadAll<Tile>("TileTypes").ToList();
     }
+
+
 
     ///<summary>
     ///Adds instance to a cell. Does not create the instance to the game
@@ -69,12 +74,19 @@ public class Cell
         return entropy;
     }
 
+    public Vector3 GetWorldSpacePosition()
+    {
+        Vector3 worldSpacePosition = new Vector3(Index.x * _size.x, 0, Index.y * _size.y);
+
+        return worldSpacePosition; 
+    }
+
     ///<summary>
     ///Returns string with cell information in human readable form 
     ///</summary>
     public override string ToString()
     {
-        return "Position(" + _position.x + ":" + _position.y + ") Tile(" + Tile + ")";
+        return "Position(" + Index.x + ":" + Index.y + ") Tile(" + Tile + ")";
     }
 
     ///<summary>
@@ -83,46 +95,46 @@ public class Cell
     public void NotifyNeighbours(Cell[,] parentGrid)
     {
         //Top neighbour update
-        if (_position.y + 1 < parentGrid.GetLength(1))
+        if (Index.y + 1 < parentGrid.GetLength(1))
         {
-            if (!parentGrid[(int)_position.x, (int)_position.y + 1].IsCollapsed)
+            if (!parentGrid[Index.x, Index.y + 1].IsCollapsed)
             {
-                parentGrid[(int)_position.x, (int)_position.y + 1].PossibleTiles = Tile.GetNeighbors(Sides.Up).ToList();
-                Debug.DrawLine(new Vector3(_position.x, 0, _position.y), new Vector3(_position.x, 0, _position.y + 1), Color.green, 0.5f, false);
+                parentGrid[Index.x, Index.y + 1].PossibleTiles = Tile.GetNeighbors(Sides.Up).ToList();
+                Debug.DrawLine(GetWorldSpacePosition(), parentGrid[Index.x, Index.y + 1].GetWorldSpacePosition(), Color.green, 0.5f, false);
             }
         }
 
         //Bottom neighbour update
-        if (_position.y - 1 > 0)
+        if (Index.y - 1 > 0)
         {
-            if (!parentGrid[(int)_position.x, (int)_position.y - 1].IsCollapsed)
+            if (!parentGrid[Index.x, Index.y - 1].IsCollapsed)
             {
-                parentGrid[(int)_position.x, (int)_position.y - 1].PossibleTiles = Tile.GetNeighbors(Sides.Down).ToList();
-                Debug.DrawLine(new Vector3(_position.x, 0, _position.y), new Vector3(_position.x, 0, _position.y - 1), Color.green, 0.5f, false);
+                parentGrid[Index.x, Index.y - 1].PossibleTiles = Tile.GetNeighbors(Sides.Down).ToList();
+                Debug.DrawLine(GetWorldSpacePosition() , parentGrid[Index.x, Index.y - 1].GetWorldSpacePosition(), Color.green, 0.5f, false);
 
             }
         }
 
         //Right neighbour update
-        if (_position.x + 1 < parentGrid.GetLength(0))
+        if (Index.x + 1 < parentGrid.GetLength(0))
         {
-            if (!parentGrid[(int)_position.x + 1, (int)_position.y].IsCollapsed)
+            if (!parentGrid[Index.x + 1, Index.y].IsCollapsed)
             {
-                parentGrid[(int)_position.x + 1, (int)_position.y].PossibleTiles = Tile.GetNeighbors(Sides.Right).ToList();
-                Debug.DrawLine(new Vector3(_position.x, 0, _position.y), new Vector3(_position.x + 1, 0, _position.y), Color.green, 0.5f, false);
+                parentGrid[Index.x + 1, Index.y].PossibleTiles = Tile.GetNeighbors(Sides.Right).ToList();
+                Debug.DrawLine(GetWorldSpacePosition(), parentGrid[Index.x + 1, Index.y].GetWorldSpacePosition(), Color.green, 0.5f, false);
 
             }
         }
 
         //Left neighbour update
-        if (_position.x - 1 > 0)
+        if (Index.x - 1 > 0)
         {
 
-            if (!parentGrid[(int)_position.x - 1, (int)_position.y].IsCollapsed)
+            if (!parentGrid[Index.x - 1, Index.y].IsCollapsed)
             {
 
-                parentGrid[(int)_position.x - 1, (int)_position.y].PossibleTiles = Tile.GetNeighbors(Sides.Left).ToList();
-                Debug.DrawLine(new Vector3(_position.x, 0, _position.y), new Vector3(_position.x - 1, 0, _position.y), Color.green, 0.5f, false);
+                parentGrid[Index.x - 1, Index.y].PossibleTiles = Tile.GetNeighbors(Sides.Left).ToList();
+                Debug.DrawLine(GetWorldSpacePosition(), parentGrid[Index.x - 1, Index.y].GetWorldSpacePosition(), Color.green, 0.5f, false);
 
             }
 
@@ -140,39 +152,39 @@ public class Cell
 
         //Checking neighbours to see how the cell can collapse
         //Top
-        if (_position.y + 1 < parentGrid.GetLength(1))
+        if (Index.y + 1 < parentGrid.GetLength(1))
         {
-            if (parentGrid[(int)_position.x, (int)_position.y + 1].IsCollapsed)
+            if (parentGrid[Index.x, Index.y + 1].IsCollapsed)
             {
-                collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[(int)_position.x, (int)_position.y + 1].Tile.GetNeighbors(Sides.Down)).ToList();
+                collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x, Index.y + 1].Tile.GetNeighbors(Sides.Down)).ToList();
             }
         }
 
         //Bottom
-        if (_position.y - 1 > 0)
+        if (Index.y - 1 > 0)
         {
-            if (parentGrid[(int)_position.x, (int)_position.y - 1].IsCollapsed)
+            if (parentGrid[Index.x, Index.y - 1].IsCollapsed)
             {
-                collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[(int)_position.x, (int)_position.y - 1].Tile.GetNeighbors(Sides.Up)).ToList();
+                collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x, Index.y - 1].Tile.GetNeighbors(Sides.Up)).ToList();
             }
         }
 
         //Right
-        if (_position.x + 1 < parentGrid.GetLength(0))
+        if (Index.x + 1 < parentGrid.GetLength(0))
         {
-            if (parentGrid[(int)_position.x + 1, (int)_position.y].IsCollapsed)
+            if (parentGrid[Index.x + 1, Index.y].IsCollapsed)
             {
-                collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[(int)_position.x + 1, (int)_position.y].Tile.GetNeighbors(Sides.Left)).ToList();
+                collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x + 1, Index.y].Tile.GetNeighbors(Sides.Left)).ToList();
             }
         }
 
         //Left
-        if (_position.x - 1 > 0)
+        if (Index.x - 1 > 0)
         {
 
-            if (parentGrid[(int)_position.x - 1, (int)_position.y].IsCollapsed)
+            if (parentGrid[Index.x - 1, Index.y].IsCollapsed)
             {
-                collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[(int)_position.x - 1, (int)_position.y].Tile.GetNeighbors(Sides.Right)).ToList();
+                collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x - 1, Index.y].Tile.GetNeighbors(Sides.Right)).ToList();
             }
 
         }
