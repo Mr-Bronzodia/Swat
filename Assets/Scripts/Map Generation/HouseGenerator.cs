@@ -14,7 +14,7 @@ public class HouseGenerator : MonoBehaviour
     [SerializeField]
     private Vector2Int _minPlotSize;
     [SerializeField]
-    private Vector2Int _maximumPlotSize;
+    private Vector2Int _maxPlotSize;
     [SerializeField]
     private Tile _tileToReplace;
     [SerializeField]
@@ -55,14 +55,14 @@ public class HouseGenerator : MonoBehaviour
         {
             int continuous = 0;
 
+
             for (int j = 0; j < _cellGrid.GetLength(1); j++)
             {
-                if (!_roadTiles.Contains(_cellGrid[i, j].Tile))
+                if (!_roadTiles.Contains(_cellGrid[i, j].Tile)) // is not road anymore
                 {
                     continuous = 0;
                     continue;
                 }
-
 
                 verticalRoads.Add((continuous, _cellGrid[i, j]));
                 continuous++;
@@ -86,74 +86,99 @@ public class HouseGenerator : MonoBehaviour
             }
         }
 
-        Plot southPlot = new Plot();
-        Plot northPlot = new Plot();
+        Plot plotA = new Plot(_cellGrid, _maxPlotSize);
+        Plot plotB = new Plot(_cellGrid, _maxPlotSize);
 
-        foreach ((int Index, Cell Cell) roadSegment in horizontalRoads) //Creates plots above and below horizontal roads according to their length 
+        foreach ((int Index, Cell Cell) segment in verticalRoads)
         {
-            if (roadSegment.Index == 0) // New segment began checks if old one should be added to list
+            if (segment.Index == 0)
             {
-                if (southPlot.isValid())
+                if (plotA.Height > 1)
                 {
-                    _plots.Add(southPlot);
-                    southPlot.side = Sides.Down;
+                    _plots.Add(plotA);
+                    plotA.side = Sides.Left;
                 }
-                if (northPlot.isValid())
+                if (plotB.Height > 1)
                 {
-                    _plots.Add(northPlot);
-                    northPlot.side = Sides.Up;
+                    _plots.Add(plotB);
+                    plotB.side = Sides.Right;
                 }
 
-
-                southPlot = new Plot();
-                northPlot = new Plot();
-
-                if (roadSegment.Cell.Index.y + 1 < _cellGrid.GetLength(1)) northPlot.bounds = new Bounds(_cellGrid[roadSegment.Cell.Index.x, roadSegment.Cell.Index.y + 1].GetWorldSpacePosition(), Vector3.one);
-                if (roadSegment.Cell.Index.y - 1 >= 0) southPlot.bounds = new Bounds(_cellGrid[roadSegment.Cell.Index.x, roadSegment.Cell.Index.y - 1].GetWorldSpacePosition(), Vector3.one);
-
+                if (segment.Cell.Index.x - 1 > 0)
+                {
+                    plotA = new Plot(_cellGrid, _maxPlotSize);
+                    plotA.StartingCell = _cellGrid[segment.Cell.Index.x - 1, segment.Cell.Index.y];
+                }
+                
+                if (segment.Cell.Index.x + 1 < _cellGrid.GetLength(0))
+                {
+                    plotB = new Plot(_cellGrid, _maxPlotSize);
+                    plotB.StartingCell = _cellGrid[segment.Cell.Index.x + 1, segment.Cell.Index.y];
+                }
+                
             }
-
-            if (roadSegment.Index > 0)
+            else
             {
-                if (northPlot.bounds.extents.magnitude > 0) northPlot.bounds.Encapsulate(_cellGrid[roadSegment.Cell.Index.x, roadSegment.Cell.Index.y + 1].GetWorldSpacePosition());
-                if (southPlot.bounds.extents.magnitude > 0) southPlot.bounds.Encapsulate(_cellGrid[roadSegment.Cell.Index.x, roadSegment.Cell.Index.y - 1].GetWorldSpacePosition());
+                plotA.Height++;
+                plotB.Height++;
             }
 
         }
 
-        Plot westPlot = new Plot();
-        Plot eastPlot = new Plot();
-        foreach ((int Index, Cell Cell) roadSegment in verticalRoads) //Creates plots left and right vertical roads according to their length 
+        plotA = new Plot(_cellGrid, _maxPlotSize);
+        plotB = new Plot(_cellGrid, _maxPlotSize);
+
+
+        foreach ((int Index, Cell Cell) segment in horizontalRoads)
         {
-
-            if (roadSegment.Index == 0)
+            if (segment.Index == 0)
             {
-                if (westPlot.isValid())
+                if (plotA.Width > 1)
                 {
-                    _plots.Add(westPlot);
-                    westPlot.side = Sides.Left;
+                    _plots.Add(plotA);
+                    plotA.side = Sides.Down;
                 }
-                if (eastPlot.isValid())
+                if (plotB.Width > 1)
                 {
-                    _plots.Add(eastPlot);
-                    eastPlot.side = Sides.Right;
+                    _plots.Add(plotB);
+                    plotB.side = Sides.Up;
                 }
 
-                westPlot = new Plot();
-                eastPlot = new Plot();
+                if (segment.Cell.Index.y - 1 > 0)
+                {
+                    plotA = new Plot(_cellGrid, _maxPlotSize);
+                    plotA.StartingCell = _cellGrid[segment.Cell.Index.x, segment.Cell.Index.y - 1];
+                }
 
-                if (roadSegment.Cell.Index.x + 1 < _cellGrid.GetLength(0)) eastPlot.bounds = new Bounds(_cellGrid[roadSegment.Cell.Index.x + 1, roadSegment.Cell.Index.y].GetWorldSpacePosition(), Vector3.one);
-                if (roadSegment.Cell.Index.x - 1 >= 0) westPlot.bounds = new Bounds(_cellGrid[roadSegment.Cell.Index.x - 1, roadSegment.Cell.Index.y].GetWorldSpacePosition(), Vector3.one);
+                if (segment.Cell.Index.y + 1 < _cellGrid.GetLength(1))
+                {
+                    plotB = new Plot(_cellGrid, _maxPlotSize);
+                    plotB.StartingCell = _cellGrid[segment.Cell.Index.x, segment.Cell.Index.y + 1];
+                }
             }
-
-            if (roadSegment.Index > 0)
+            else
             {
-
-                if (westPlot.bounds.extents.magnitude > 0) westPlot.bounds.Encapsulate(_cellGrid[roadSegment.Cell.Index.x - 1, roadSegment.Cell.Index.y].GetWorldSpacePosition());
-                if (eastPlot.bounds.extents.magnitude > 0) eastPlot.bounds.Encapsulate(_cellGrid[roadSegment.Cell.Index.x + 1, roadSegment.Cell.Index.y].GetWorldSpacePosition());
+                plotA.Width++;
+                plotB.Width++;
             }
 
         }
+
+        List<Plot> toRemove = new List<Plot>();
+
+        foreach (Plot plot in _plots)
+        {
+            plot.Grow(_tileToReplace);
+
+            if (plot.GetArea() < _minPlotSize.x * _minPlotSize.y) toRemove.Add(plot);
+        }
+
+
+        foreach (Plot plot in toRemove)
+        {
+            _plots.Remove(plot);
+        }
+
     }
 
 
@@ -202,30 +227,23 @@ public class HouseGenerator : MonoBehaviour
 
         foreach (Plot plot in _plots)
         {
+            //
+
+            if (plot.StartingCell == null) continue;
+            if (plot.EndingCell == null) continue;
+            if (plot.SideCell == null) continue;
+
+            Gizmos.color = Color.white;
+            Gizmos.DrawSphere(plot.StartingCell.GetWorldSpacePosition(), .2f);
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(plot.EndingCell.GetWorldSpacePosition(), .2f);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(plot.SideCell.GetWorldSpacePosition(), .2f);
+
+            Gizmos.color = Color.white;
+
             DrawBounds(plot.bounds);
 
-            Gizmos.color = Color.white;
-
-            switch (plot.side)
-            {
-                case Sides.Left:
-                    Gizmos.color = Color.red;
-                    break;
-                case Sides.Right:
-                    Gizmos.color = Color.blue;
-                    break;
-                case Sides.Up:
-                    Gizmos.color = Color.yellow;
-                    break;
-                case Sides.Down:
-                    Gizmos.color = Color.green;
-                    break;
-
-            }
-
-            
-            Gizmos.DrawSphere(plot.bounds.center, .2f);
-            Gizmos.color = Color.white;
         }
 
 

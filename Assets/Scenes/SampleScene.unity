@@ -571,7 +571,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _minPlotSize: {x: 4, y: 4}
-  _maximumPlotSize: {x: 15, y: 15}
+  _maxPlotSize: {x: 10, y: 10}
   _tileToReplace: {fileID: 11400000, guid: 63a9e2ad0b19b154ab8e17e2f41afeb1, type: 2}
   _roadTiles:
   - {fileID: 11400000, guid: d1ccb5624eb9fa6449223106081c633f, type: 2}
