@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -58,13 +58,13 @@ public class HouseGenerator : MonoBehaviour
 
             for (int j = 0; j < _cellGrid.GetLength(1); j++)
             {
-                if (!_roadTiles.Contains(_cellGrid[i, j].Tile)) // is not road anymore
+                if (!_roadTiles.Contains(_cellGrid[i, j].Tile)) // tile is not a road anymore, break the segment
                 {
                     continuous = 0;
                     continue;
                 }
 
-                verticalRoads.Add((continuous, _cellGrid[i, j]));
+                verticalRoads.Add((continuous, _cellGrid[i, j])); //tile is a road and it a part of bigger road segment 
                 continuous++;
             }
         }
@@ -89,19 +89,21 @@ public class HouseGenerator : MonoBehaviour
         Plot plotA = new Plot(_cellGrid, _maxPlotSize);
         Plot plotB = new Plot(_cellGrid, _maxPlotSize);
 
-        foreach ((int Index, Cell Cell) segment in verticalRoads)
+        foreach ((int Index, Cell Cell) segment in verticalRoads) // loop over road segments and create plots on both sides - plotA | plotB
         {
             if (segment.Index == 0)
             {
                 if (plotA.Height > 1)
-                {
-                    _plots.Add(plotA);
+                {  
                     plotA.side = Sides.Left;
+                    plotA.Grow(_tileToReplace);
+                    if (plotA.IsValid(_minPlotSize)) CheckOverlap(plotA);
                 }
                 if (plotB.Height > 1)
                 {
-                    _plots.Add(plotB);
                     plotB.side = Sides.Right;
+                    plotB.Grow(_tileToReplace);
+                    if (plotB.IsValid(_minPlotSize)) CheckOverlap(plotB);
                 }
 
                 if (segment.Cell.Index.x - 1 > 0)
@@ -129,19 +131,21 @@ public class HouseGenerator : MonoBehaviour
         plotB = new Plot(_cellGrid, _maxPlotSize);
 
 
-        foreach ((int Index, Cell Cell) segment in horizontalRoads)
+        foreach ((int Index, Cell Cell) segment in horizontalRoads) // loop over road segments and create plots on both sides - ▼plotA --- ▲plotB
         {
             if (segment.Index == 0)
             {
                 if (plotA.Width > 1)
-                {
-                    _plots.Add(plotA);
+                { 
                     plotA.side = Sides.Down;
+                    plotA.Grow(_tileToReplace);
+                    if (plotA.IsValid(_minPlotSize)) CheckOverlap(plotA);
                 }
                 if (plotB.Width > 1)
-                {
-                    _plots.Add(plotB);
+                {    
                     plotB.side = Sides.Up;
+                    plotB.Grow(_tileToReplace);
+                    if (plotB.IsValid(_minPlotSize)) CheckOverlap(plotB);
                 }
 
                 if (segment.Cell.Index.y - 1 > 0)
@@ -164,21 +168,43 @@ public class HouseGenerator : MonoBehaviour
 
         }
 
-        List<Plot> toRemove = new List<Plot>();
 
         foreach (Plot plot in _plots)
         {
-            plot.Grow(_tileToReplace);
-
-            if (plot.GetArea() < _minPlotSize.x * _minPlotSize.y) toRemove.Add(plot);
+            plot.CreateGrid();
         }
 
+    }
 
-        foreach (Plot plot in toRemove)
+    /// <summary>
+    /// Checks if plot overlaps any other plot on the grid.<br/>
+    /// If there is no overlap the function adds plot to the list.<br/>
+    /// If the plot overlaps and is smaller than other; the plot it discarded.<br/>
+    /// If the plot is bigger the other then other is discarded.<br/>
+    /// </summary>
+
+    private void CheckOverlap(Plot plot)
+    {
+        List<Plot> smallerPlots = new List<Plot>();
+
+        foreach(Plot other in _plots)
         {
-            _plots.Remove(plot);
+            if (other == plot) continue;
+
+            if (other.bounds.Intersects(plot.bounds))
+            {
+                if (other.GetArea() > plot.GetArea()) return;
+
+                smallerPlots.Add(other);
+            }
         }
 
+        foreach (Plot other in smallerPlots)
+        {
+            _plots.Remove(other);
+        }
+
+        _plots.Add(plot);
     }
 
 
@@ -233,19 +259,25 @@ public class HouseGenerator : MonoBehaviour
             if (plot.EndingCell == null) continue;
             if (plot.SideCell == null) continue;
 
-            Gizmos.color = Color.white;
-            Gizmos.DrawSphere(plot.StartingCell.GetWorldSpacePosition(), .2f);
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(plot.EndingCell.GetWorldSpacePosition(), .2f);
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawSphere(plot.SideCell.GetWorldSpacePosition(), .2f);
-
-            Gizmos.color = Color.white;
-
             DrawBounds(plot.bounds);
 
         }
+        Gizmos.color = Color.blue;
 
+        foreach (Plot plot in _plots)
+        {
+            if (plot.PlotGrid == null) continue;
 
+            Gizmos.color = plot.DEBUGCOLOR;
+            for (int x = 0; x < plot.PlotGrid.GetLength(0); x++)
+            {
+                for (int y = 0; y < plot.PlotGrid.GetLength(1); y++)
+                {
+                    Gizmos.DrawSphere(plot.PlotGrid[x, y].GetWorldSpacePosition(), 0.2f);
+                }
+            }
+
+            Gizmos.color = Color.white;
+        }
     }
 }

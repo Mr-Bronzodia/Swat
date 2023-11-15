@@ -159,7 +159,7 @@ public class WaveFunctionCollapse : MonoBehaviour
 
         while (_emptyCells.Count > 0)
         {
-            _emptyCells.Sort((x, y) => x.GetCellEntropy().CompareTo(y.GetCellEntropy())); //sorts cells based on their entropy. Potential performance concern 
+            _emptyCells.Sort((x, y) => x.GetCellEntropy().CompareTo(y.GetCellEntropy())); //sorts cells based on their entropy. Potential performance concern // 92% of time spent here 
 
             Cell currentCell = _emptyCells[0];
 
