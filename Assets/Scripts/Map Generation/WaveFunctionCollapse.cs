@@ -183,11 +183,4 @@ public class WaveFunctionCollapse : MonoBehaviour
     {
         return _grid;
     }
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

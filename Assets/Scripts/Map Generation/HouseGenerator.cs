@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -21,6 +22,8 @@ public class HouseGenerator : MonoBehaviour
     private List<Tile> _roadTiles;
     [SerializeField]
     private Tile _plotTile;
+
+    public Action OnPlotGenerated;
 
 
     private void OnEnable()
@@ -174,6 +177,13 @@ public class HouseGenerator : MonoBehaviour
             plot.CreateGrid();
         }
 
+        OnPlotGenerated?.Invoke();
+
+    }
+
+    public List<Plot> GetPlots()
+    {
+        return _plots;
     }
 
     /// <summary>
@@ -251,22 +261,25 @@ public class HouseGenerator : MonoBehaviour
 
         if (_plots.Count == 0) return;
 
-        foreach (Plot plot in _plots)
-        {
-            //
+        //foreach (Plot plot in _plots)
+        //{
+        //    //
 
-            if (plot.StartingCell == null) continue;
-            if (plot.EndingCell == null) continue;
-            if (plot.SideCell == null) continue;
+        //    if (plot.StartingCell == null) continue;
+        //    if (plot.EndingCell == null) continue;
+        //    if (plot.SideCell == null) continue;
 
-            DrawBounds(plot.bounds);
+        //    DrawBounds(plot.bounds);
 
-        }
+        //}
         Gizmos.color = Color.blue;
 
         foreach (Plot plot in _plots)
         {
-            if (plot.PlotGrid == null) continue;
+            if (plot.PlotGrid == null)
+            {
+                continue;
+            }
 
             Gizmos.color = plot.DEBUGCOLOR;
             for (int x = 0; x < plot.PlotGrid.GetLength(0); x++)
