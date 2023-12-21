@@ -11,12 +11,6 @@ public class InteriorGenerator : MonoBehaviour
     [SerializeField]
     GameObject _wall;
 
-    Vector3 _test;
-    Vector3 _test1;
-    Vector3 _test2;
-    Vector3 _test3;
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -31,16 +25,21 @@ public class InteriorGenerator : MonoBehaviour
         float wallLenght = _wall.GetComponent<MeshRenderer>().bounds.size.z;
         float wallHeight = _wall.GetComponent<MeshRenderer>().bounds.size.y;
 
-        _test = topLeft;
-        _test1 = bottomLeft;
-        _test2 = topRight;
-        _test3 = bottomRight;
+        TreeMapNode root = new TreeMapNode(RoomTypes.Root, 100f);
+        TreeMapNode privateArea = new TreeMapNode(RoomTypes.PrivateArea, 40f);
+        TreeMapNode publicArea = new TreeMapNode(RoomTypes.PublicArea, 60f);
 
-        InstantiateWalls(bottomLeft, topLeft, wallLenght, wallHeight,Quaternion.Euler(0f, 0f, 0f), _wall);
-        InstantiateWalls(bottomRight, topRight, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
+        root.Children.Add(privateArea);
+        root.Children.Add(publicArea);
 
-        InstantiateWalls(topLeft, topRight, wallLenght, wallHeight, Quaternion.Euler(0f, 90f, 0f), _wall);
-        InstantiateWalls(bottomLeft, bottomRight, wallLenght, wallHeight, Quaternion.Euler(0f, 90f, 0f), _wall);
+
+        //InstantiateWalls(bottomLeft, topLeft, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
+        //InstantiateWalls(bottomRight, topRight, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
+
+        //InstantiateWalls(topLeft, topRight, wallLenght, wallHeight, Quaternion.Euler(0f, 90f, 0f), _wall);
+        //InstantiateWalls(bottomLeft, bottomRight, wallLenght, wallHeight, Quaternion.Euler(0f, 90f, 0f), _wall);
+
+
     }
 
     private void InstantiateWalls(Vector3 start, Vector3 end, float wallLenght, float wallHeight, Quaternion rotation, GameObject wallPrefab)
@@ -97,14 +96,6 @@ public class InteriorGenerator : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.white;
-        if (_test != null) Gizmos.DrawSphere(_test, 0.2f);
-        Gizmos.color = Color.red;
-        if (_test1 != null) Gizmos.DrawSphere(_test1, 0.2f);
-        Gizmos.color = Color.green;
-        if (_test2 != null) Gizmos.DrawSphere(_test2, 0.2f);
-        Gizmos.color = Color.blue;
-        if (_test3 != null) Gizmos.DrawSphere(_test3, 0.2f);
-        Gizmos.color = Color.white;
+
     }
 }
