@@ -10,6 +10,7 @@ public class TreeMapNode
 
     public List<TreeMapNode> Children;
 
+
     public TreeMapNode(RoomTypes roomType, float aspectRatio)
     {
         RoomType = roomType;

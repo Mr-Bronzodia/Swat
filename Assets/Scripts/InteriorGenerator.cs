@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
@@ -10,6 +11,8 @@ public class InteriorGenerator : MonoBehaviour
 
     [SerializeField]
     GameObject _wall;
+
+    Dictionary<TreeMapNode, Bounds> _rooms;
 
     // Start is called before the first frame update
     void Start()
@@ -28,10 +31,17 @@ public class InteriorGenerator : MonoBehaviour
         TreeMapNode root = new TreeMapNode(RoomTypes.Root, 100f);
         TreeMapNode privateArea = new TreeMapNode(RoomTypes.PrivateArea, 40f);
         TreeMapNode publicArea = new TreeMapNode(RoomTypes.PublicArea, 60f);
+        TreeMapNode bedRoom = new TreeMapNode(RoomTypes.Bedroom, 50f);
+        TreeMapNode bathRoom = new TreeMapNode(RoomTypes.Bathroom, 50f);
 
-        root.Children.Add(privateArea);
         root.Children.Add(publicArea);
+        root.Children.Add(privateArea);
 
+        SquerifiedTreeMap treemap = new SquerifiedTreeMap();
+
+        _rooms = treemap.GenerateTreeMap(root, _collider.bounds);
+
+        //Debug.Log(_rooms.Count);
 
         //InstantiateWalls(bottomLeft, topLeft, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
         //InstantiateWalls(bottomRight, topRight, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
@@ -88,6 +98,41 @@ public class InteriorGenerator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Draws bounds.
+    /// Thanks to https://gist.github.com/unitycoder/58f4b5d80f423d29e35c814a9556f9d9
+    /// </summary>
+    void DrawBounds(Bounds b, float delay = 0)
+    {
+        // bottom
+        var p1 = new Vector3(b.min.x, b.min.y, b.min.z);
+        var p2 = new Vector3(b.max.x, b.min.y, b.min.z);
+        var p3 = new Vector3(b.max.x, b.min.y, b.max.z);
+        var p4 = new Vector3(b.min.x, b.min.y, b.max.z);
+
+        Debug.DrawLine(p1, p2, Color.blue, delay);
+        Debug.DrawLine(p2, p3, Color.red, delay);
+        Debug.DrawLine(p3, p4, Color.yellow, delay);
+        Debug.DrawLine(p4, p1, Color.magenta, delay);
+
+        // top
+        var p5 = new Vector3(b.min.x, b.max.y, b.min.z);
+        var p6 = new Vector3(b.max.x, b.max.y, b.min.z);
+        var p7 = new Vector3(b.max.x, b.max.y, b.max.z);
+        var p8 = new Vector3(b.min.x, b.max.y, b.max.z);
+
+        Debug.DrawLine(p5, p6, Color.blue, delay);
+        Debug.DrawLine(p6, p7, Color.red, delay);
+        Debug.DrawLine(p7, p8, Color.yellow, delay);
+        Debug.DrawLine(p8, p5, Color.magenta, delay);
+
+        // sides
+        Debug.DrawLine(p1, p5, Color.white, delay);
+        Debug.DrawLine(p2, p6, Color.gray, delay);
+        Debug.DrawLine(p3, p7, Color.green, delay);
+        Debug.DrawLine(p4, p8, Color.cyan, delay);
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -96,6 +141,13 @@ public class InteriorGenerator : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if (_rooms == null) return;
 
+        foreach (KeyValuePair<TreeMapNode, Bounds> room in _rooms)
+        {
+            Handles.Label(room.Value.center, room.Key.RoomType.ToString());
+            Gizmos.DrawSphere(room.Value.center, .1f);
+            DrawBounds(room.Value);
+        }
     }
 }
