@@ -28,20 +28,31 @@ public class InteriorGenerator : MonoBehaviour
         float wallLenght = _wall.GetComponent<MeshRenderer>().bounds.size.z;
         float wallHeight = _wall.GetComponent<MeshRenderer>().bounds.size.y;
 
-        TreeMapNode root = new TreeMapNode(RoomTypes.Root, 100f);
-        TreeMapNode privateArea = new TreeMapNode(RoomTypes.PrivateArea, 40f);
-        TreeMapNode publicArea = new TreeMapNode(RoomTypes.PublicArea, 60f);
-        TreeMapNode bedRoom = new TreeMapNode(RoomTypes.Bedroom, 50f);
-        TreeMapNode bathRoom = new TreeMapNode(RoomTypes.Bathroom, 50f);
+        TreeMapNode root = new TreeMapNode(RoomTypes.Root, _collider.bounds.size.x, _collider.size.z);
+        TreeMapNode privateArea = new TreeMapNode(RoomTypes.PrivateArea, _collider.bounds.size.x, _collider.size.z * .4f);
+        TreeMapNode publcArea = new TreeMapNode(RoomTypes.PublicArea, _collider.bounds.size.x, _collider.size.z * .6f);
 
-        root.Children.Add(publicArea);
         root.Children.Add(privateArea);
+        root.Children.Add(publcArea);
 
-        SquerifiedTreeMap treemap = new SquerifiedTreeMap();
+        TreeMapNode livingroom = new TreeMapNode(RoomTypes.Livingroom, publcArea.width * 0.5f, publcArea.height * 0.5f);
+        TreeMapNode bathroom = new TreeMapNode(RoomTypes.Bathroom, publcArea.width * 0.3f, publcArea.height * 0.3f);
+        TreeMapNode storage = new TreeMapNode(RoomTypes.StorageArea, publcArea.width * 0.2f, publcArea.height * 0.2f);
 
-        _rooms = treemap.GenerateTreeMap(root, _collider.bounds);
+        publcArea.Children.Add(livingroom);
+        publcArea.Children.Add(bathroom);
+        publcArea.Children.Add(storage);
 
-        //Debug.Log(_rooms.Count);
+        SquerifiedTreeMap treeMap = new SquerifiedTreeMap(root, _collider.bounds);
+
+        _rooms = treeMap.GenerateTreemap();
+
+        Debug.Log(_rooms.Count);
+
+        foreach (KeyValuePair<TreeMapNode, Bounds> room in _rooms)
+        {
+            Debug.Log(room.Key + " " + room.Value);
+        }
 
         //InstantiateWalls(bottomLeft, topLeft, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
         //InstantiateWalls(bottomRight, topRight, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
@@ -133,21 +144,21 @@ public class InteriorGenerator : MonoBehaviour
         Debug.DrawLine(p4, p8, Color.cyan, delay);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnDrawGizmos()
     {
         if (_rooms == null) return;
 
         foreach (KeyValuePair<TreeMapNode, Bounds> room in _rooms)
         {
-            Handles.Label(room.Value.center, room.Key.RoomType.ToString());
-            Gizmos.DrawSphere(room.Value.center, .1f);
+            if (room.Value.size.x < 0 || room.Value.size.z < 0) continue;
+
             DrawBounds(room.Value);
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(room.Value.center, 0.2f);
+            Gizmos.color = Color.white;
+
+            Vector3 offset = new Vector3(-0.7f, 0, 0.5f);
+            Handles.Label(room.Value.center + offset, room.Key.RoomType.ToString());
         }
     }
 }
