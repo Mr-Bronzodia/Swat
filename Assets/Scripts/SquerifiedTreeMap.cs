@@ -31,43 +31,38 @@ public class SquerifiedTreeMap
 
     private void RecursiveSquarify(TreeMapNode parentNode, Bounds parentBounds, List<TreeMapNode>childList, Dictionary<TreeMapNode, Bounds>currentRow, Dictionary<TreeMapNode, Bounds> rooms)
     {
-        //if (!rooms.ContainsKey(parentNode)) rooms.Add(parentNode, parentBounds);
 
         if (childList.Count > 0)
         {
-            parentNode.Children.Sort((x, y) => y.size.CompareTo(x.size));
+            Debug.Log(parentNode.Children[0].RoomType);
 
-            if (ShouldContinueRow(currentRow, childList[0].size, childList[childList.Count - 1].size, GetLenghtOfShorterSide(parentBounds)))
+            if (ShouldContinueRow(currentRow, childList[0].Size, childList[childList.Count - 1].Size, GetLenghtOfShorterSide(parentBounds)))
             {
-                currentRow.Add(childList[0], new Bounds(Vector3.zero, new Vector3(childList[0].width, 0, childList[0].height)));
+                currentRow.Add(childList[0], new Bounds(Vector3.zero, Vector3.zero));
                 childList.RemoveAt(0);
                 RecursiveSquarify(parentNode, parentBounds, childList, currentRow, rooms);
             }
             else
             {
-                Debug.Log(parentBounds);
                 PlaceRow(parentNode, ref parentBounds, currentRow, rooms);
-                Debug.Log(parentBounds);
                 currentRow.Clear();
                 RecursiveSquarify(parentNode, parentBounds, childList, currentRow, rooms);
             }
         }
         else
         {
-            Debug.Log(parentBounds);
             PlaceRow(parentNode, ref parentBounds, currentRow, rooms);
-            Debug.Log(parentBounds);
         }
     }
 
     private void PlaceRow(TreeMapNode parent, ref Bounds parentBounds, Dictionary<TreeMapNode, Bounds> currentRow, Dictionary<TreeMapNode, Bounds> rooms)
     {
-        bool horizontalSplit = parent.width >= parent.height;
+        bool horizontalSplit = parentBounds.size.x >= parentBounds.size.z;
 
         float totalSize = 0;
         foreach (KeyValuePair<TreeMapNode, Bounds> room in currentRow)
         {
-            totalSize += room.Key.size;
+            totalSize += room.Key.Size;
         }
 
         float proportion = totalSize / GetLenghtOfShorterSide(parentBounds);
@@ -76,19 +71,22 @@ public class SquerifiedTreeMap
 
         foreach (KeyValuePair<TreeMapNode, Bounds> room in currentRow)
         {
-            float rectangleWidth = room.Key.size / proportion;
+            float rectangleWidth = room.Key.Size / proportion;
             Vector3 roomCentre;
             Vector3 roomSize;
 
             if (horizontalSplit)
             {
-                roomSize = new Vector3(rectangleWidth, parentBounds.size.y, parentBounds.size.z);
-                roomCentre = new Vector3(parentBounds.min.x + offset + rectangleWidth / 2f, parentBounds.center.y, parentBounds.center.z);
+                Debug.Log("Horizontal - " + room.Key.RoomType);
+
+                roomSize = new Vector3(proportion, parentBounds.size.y, rectangleWidth);
+                roomCentre = new Vector3(parentBounds.min.x + roomSize.x / 2, parentBounds.center.y, parentBounds.min.z + (roomSize.z / 2) + offset);
             }
             else
             {
-                roomSize = new Vector3(parentBounds.size.x, parentBounds.size.y, rectangleWidth);
-                roomCentre = new Vector3(parentBounds.center.x, parentBounds.center.y, parentBounds.min.z + offset + rectangleWidth / 2f);
+                Debug.Log("Vertical - " + room.Key.RoomType);
+                roomSize = new Vector3(rectangleWidth, parentBounds.size.y, proportion);
+                roomCentre = new Vector3(parentBounds.min.x + (roomSize.x / 2) + offset, parentBounds.center.y, parentBounds.min.z + roomSize.z / 2f);
             }
 
             rooms.Add(room.Key, new Bounds(roomCentre, roomSize));
@@ -113,18 +111,15 @@ public class SquerifiedTreeMap
         float totalArea = 0;
         foreach(KeyValuePair<TreeMapNode, Bounds> room in currentRow)
         {
-            totalArea += room.Key.size;
+            totalArea += room.Key.Size;
         }
 
-        float currentStepWorstAspectRatio = CalculateHighestAspectRatio(currentRow.ElementAt(0).Key.size, currentRow.ElementAt(currentRow.Count - 1).Key.size, totalArea, parentShortestSideLength);
+        float currentStepWorstAspectRatio = CalculateHighestAspectRatio(currentRow.ElementAt(0).Key.Size, currentRow.ElementAt(currentRow.Count - 1).Key.Size, totalArea, parentShortestSideLength);
 
         totalArea += largestChildSize;
 
         float nextStepWorstAspectRatio = CalculateHighestAspectRatio(largestChildSize, smallestChildSize, totalArea, parentShortestSideLength);
 
-        Debug.Log("currentStep: " + currentStepWorstAspectRatio);
-        Debug.Log("nextStep: " + nextStepWorstAspectRatio);
-        Debug.Log("Shoud: " + (currentStepWorstAspectRatio >= nextStepWorstAspectRatio));
 
         return currentStepWorstAspectRatio >= nextStepWorstAspectRatio;
     }
@@ -141,6 +136,7 @@ public class SquerifiedTreeMap
 
     private float GetLenghtOfShorterSide(Bounds bounds)
     {
+        Debug.Log(MathF.Min(bounds.size.x, bounds.size.z));
         return MathF.Min(bounds.size.x, bounds.size.z);
     }
 }

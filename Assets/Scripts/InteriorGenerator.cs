@@ -29,19 +29,14 @@ public class InteriorGenerator : MonoBehaviour
         float wallHeight = _wall.GetComponent<MeshRenderer>().bounds.size.y;
 
         TreeMapNode root = new TreeMapNode(RoomTypes.Root, _collider.bounds.size.x, _collider.size.z);
-        TreeMapNode privateArea = new TreeMapNode(RoomTypes.PrivateArea, _collider.bounds.size.x * .4f, _collider.size.z);
-        TreeMapNode publcArea = new TreeMapNode(RoomTypes.PublicArea, _collider.bounds.size.x * .4f, _collider.size.z);
 
-        root.Children.Add(privateArea);
-        root.Children.Add(publcArea);
+        TreeMapNode k = new TreeMapNode(RoomTypes.Kitchen, 5f, 5f);
+        TreeMapNode bt = new TreeMapNode(RoomTypes.Bathroom, 5f, 5f);
+        TreeMapNode b = new TreeMapNode(RoomTypes.Bedroom, 10f, 5f);
 
-        TreeMapNode livingroom = new TreeMapNode(RoomTypes.Livingroom, publcArea.width * 0.5f, publcArea.height * 0.5f);
-        TreeMapNode bathroom = new TreeMapNode(RoomTypes.Bathroom, publcArea.width * 0.3f, publcArea.height * 0.3f);
-        TreeMapNode storage = new TreeMapNode(RoomTypes.StorageArea, publcArea.width * 0.2f, publcArea.height * 0.2f);
-
-        publcArea.Children.Add(livingroom);
-        publcArea.Children.Add(bathroom);
-        publcArea.Children.Add(storage);
+        root.Children.Add(bt);
+        root.Children.Add(b);
+        root.Children.Add(k);
 
         SquerifiedTreeMap treeMap = new SquerifiedTreeMap(root, _collider.bounds);
 

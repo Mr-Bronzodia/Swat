@@ -6,11 +6,11 @@ public class TreeMapNode
 {
     public RoomTypes RoomType { get; set; }
 
-    public float width;
+    public float Width;
 
-    public float height;
+    public float Height;
 
-    public float size;
+    public float Size;
 
     public List<TreeMapNode> Children;
 
@@ -19,14 +19,9 @@ public class TreeMapNode
     {
         RoomType = roomType;
         Children = new List<TreeMapNode>();
-        this.width = width;
-        this.height = height;
-        size = width * height;
-    }
-
-    public float GetShorterSide()
-    {
-        return Mathf.Min(width, height);
+        Width = width;
+        Height = height;
+        Size = width * height;
     }
 
     public override string ToString()
