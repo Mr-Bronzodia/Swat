@@ -29,8 +29,8 @@ public class InteriorGenerator : MonoBehaviour
         float wallHeight = _wall.GetComponent<MeshRenderer>().bounds.size.y;
 
         TreeMapNode root = new TreeMapNode(RoomTypes.Root, _collider.bounds.size.x, _collider.size.z);
-        TreeMapNode privateArea = new TreeMapNode(RoomTypes.PrivateArea, _collider.bounds.size.x, _collider.size.z * .4f);
-        TreeMapNode publcArea = new TreeMapNode(RoomTypes.PublicArea, _collider.bounds.size.x, _collider.size.z * .6f);
+        TreeMapNode privateArea = new TreeMapNode(RoomTypes.PrivateArea, _collider.bounds.size.x * .4f, _collider.size.z);
+        TreeMapNode publcArea = new TreeMapNode(RoomTypes.PublicArea, _collider.bounds.size.x * .4f, _collider.size.z);
 
         root.Children.Add(privateArea);
         root.Children.Add(publcArea);
@@ -47,12 +47,12 @@ public class InteriorGenerator : MonoBehaviour
 
         _rooms = treeMap.GenerateTreemap();
 
-        Debug.Log(_rooms.Count);
+        //Debug.Log(_rooms.Count);
 
-        foreach (KeyValuePair<TreeMapNode, Bounds> room in _rooms)
-        {
-            Debug.Log(room.Key + " " + room.Value);
-        }
+        //foreach (KeyValuePair<TreeMapNode, Bounds> room in _rooms)
+        //{
+        //    Debug.Log(room.Key + " " + room.Value);
+        //}
 
         //InstantiateWalls(bottomLeft, topLeft, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
         //InstantiateWalls(bottomRight, topRight, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
