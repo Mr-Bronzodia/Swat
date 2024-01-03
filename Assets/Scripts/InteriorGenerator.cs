@@ -14,6 +14,9 @@ public class InteriorGenerator : MonoBehaviour
 
     Dictionary<TreeMapNode, Bounds> _rooms;
 
+    [SerializeField]
+    private bool _shouldRandomizeChildren;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,14 +43,7 @@ public class InteriorGenerator : MonoBehaviour
 
         SquerifiedTreeMap treeMap = new SquerifiedTreeMap(root, _collider.bounds);
 
-        _rooms = treeMap.GenerateTreemap();
-
-        //Debug.Log(_rooms.Count);
-
-        //foreach (KeyValuePair<TreeMapNode, Bounds> room in _rooms)
-        //{
-        //    Debug.Log(room.Key + " " + room.Value);
-        //}
+        _rooms = treeMap.GenerateTreemap(_shouldRandomizeChildren);
 
         //InstantiateWalls(bottomLeft, topLeft, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
         //InstantiateWalls(bottomRight, topRight, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
@@ -66,8 +62,6 @@ public class InteriorGenerator : MonoBehaviour
 
         float reminder = (structureLenght % wallLenght) / wallLenght;
 
-        Debug.Log("Rotation:" + rotation.eulerAngles);
-
         for (int i = 0; i < numWalls; i++)
         {
             if (rotation.eulerAngles.y > 85f)
@@ -83,8 +77,6 @@ public class InteriorGenerator : MonoBehaviour
             
             
         }
-
-        Debug.Log("Reminder: " + reminder);
 
         if (reminder == 0) return;
 

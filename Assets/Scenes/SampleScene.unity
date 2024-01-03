@@ -477,6 +477,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _wall: {fileID: 8796488441946716364, guid: 77195107d098f8a449f34fb264bd226d, type: 3}
+  _shouldRandomizeChildren: 1
 --- !u!65 &739563586
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -496,7 +497,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 15.3, y: 0, z: 23.7}
+  m_Size: {x: 10, y: 0, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &739563587
 Transform:

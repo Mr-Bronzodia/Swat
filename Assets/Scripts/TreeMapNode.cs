@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class TreeMapNode 
@@ -22,6 +24,36 @@ public class TreeMapNode
         Width = width;
         Height = height;
         Size = width * height;
+    }
+
+    public void SortChildren()
+    {
+        this.Children.Sort((x, y) => y.Size.CompareTo(x.Size));
+    }
+
+    public void RandomizeChildren()
+    {
+        SortChildren();
+
+        bool allowedToSwap = true;
+        for (int i = 0; i <= Children.Count - 2; i++)
+        {
+            if (!allowedToSwap)
+            {
+                allowedToSwap = true; 
+                continue;
+            }
+
+            float rand = Random.Range(0f, 1f);
+
+            if (rand < .5f) continue;
+
+            TreeMapNode leftTmp = Children[i];
+            TreeMapNode rightTmp = Children[i + 1];
+            Children[i] = rightTmp;
+            Children[i + 1] = leftTmp;
+            allowedToSwap = false;
+        }
     }
 
     public override string ToString()
