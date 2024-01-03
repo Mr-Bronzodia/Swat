@@ -21,18 +21,19 @@ public class SquerifiedTreeMap
     }
 
     /// <summary>
-    /// Generates Squerified TreeMap based on root node. Root node children should be sorted from bigges to smalles. 
+    /// Generates Squerified TreeMap based on root node.
     /// </summary>
     /// <returns>Dictionary of room and their bounding boxes</returns>
-    public Dictionary<TreeMapNode, Bounds> GenerateTreemap(bool randomizeChildren)
+    public Dictionary<TreeMapNode, Bounds> GenerateTreemap(bool randomizeChildren, float chance = .5f)
     {
         Dictionary<TreeMapNode, Bounds> rooms = new Dictionary<TreeMapNode, Bounds>();
         Dictionary<TreeMapNode, Bounds> currentRow = new Dictionary<TreeMapNode, Bounds>();
 
         _root.SortChildren();
-        if (randomizeChildren) _root.RandomizeChildren();
+        if (randomizeChildren) _root.RandomizeChildren(chance);
 
         RecursiveSquarify(_root, _rootBounds, _root.Children, currentRow, rooms);
+
         return rooms;
     }
 
@@ -41,7 +42,6 @@ public class SquerifiedTreeMap
     /// </summary>
     private void RecursiveSquarify(TreeMapNode parentNode, Bounds parentBounds, List<TreeMapNode>childList, Dictionary<TreeMapNode, Bounds>currentRow, Dictionary<TreeMapNode, Bounds> rooms)
     {
-
         if (childList.Count > 0)
         {
 
@@ -86,6 +86,7 @@ public class SquerifiedTreeMap
             float rectangleWidth = room.Key.Size / proportion;
             Vector3 roomCentre;
             Vector3 roomSize;
+            Bounds newRoomBounds;
 
             if (horizontalSplit)
             {
@@ -98,7 +99,11 @@ public class SquerifiedTreeMap
                 roomCentre = new Vector3(parentBounds.min.x + (roomSize.x / 2) + offset, parentBounds.center.y, parentBounds.min.z + roomSize.z / 2f);
             }
 
-            rooms.Add(room.Key, new Bounds(roomCentre, roomSize));
+            newRoomBounds = new Bounds(roomCentre, roomSize);
+            rooms.Add(room.Key, newRoomBounds);
+
+            RecursiveSquarify(room.Key, newRoomBounds, room.Key.Children, new Dictionary<TreeMapNode, Bounds>(), rooms);
+
             offset += rectangleWidth;
         }
 
@@ -121,10 +126,7 @@ public class SquerifiedTreeMap
         if (currentRow.Count == 0) return true;
 
         float totalArea = 0;
-        foreach(KeyValuePair<TreeMapNode, Bounds> room in currentRow)
-        {
-            totalArea += room.Key.Size;
-        }
+        foreach(KeyValuePair<TreeMapNode, Bounds> room in currentRow) totalArea += room.Key.Size;
 
         float currentStepWorstAspectRatio = CalculateHighestAspectRatio(currentRow.ElementAt(0).Key.Size, currentRow.ElementAt(currentRow.Count - 1).Key.Size, totalArea, parentShortestSideLength);
 
@@ -139,14 +141,12 @@ public class SquerifiedTreeMap
     /// <summary>
     /// Return aspec ratio of current row given biggest and smallest bounds. 
     /// </summary>
-    private float CalculateHighestAspectRatio(float biggestArea, float smallestArea, float totalArea, float parentShortestSideLength)
+    private float CalculateHighestAspectRatio(float rPlus, float rMinus, float totalArea, float parentShorterSideLength)
     {
-        float biggerRatio = (MathF.Pow(parentShortestSideLength,2) * biggestArea) / MathF.Pow(totalArea,2);
-        float smallerRation = MathF.Pow(totalArea, 2) / (MathF.Pow(parentShortestSideLength, 2) * smallestArea);
+        float biggerRatio = (MathF.Pow(parentShorterSideLength,2) * rPlus) / MathF.Pow(totalArea,2);
+        float smallerRation = MathF.Pow(totalArea, 2) / (MathF.Pow(parentShorterSideLength, 2) * rMinus);
 
         return Math.Max(biggerRatio, smallerRation);
-
-
     }
 
     /// <summary>

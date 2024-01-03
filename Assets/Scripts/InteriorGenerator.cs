@@ -37,9 +37,16 @@ public class InteriorGenerator : MonoBehaviour
         TreeMapNode bt = new TreeMapNode(RoomTypes.Bathroom, 5f, 5f);
         TreeMapNode b = new TreeMapNode(RoomTypes.Bedroom, 10f, 5f);
 
+        TreeMapNode o = new TreeMapNode(RoomTypes.Office, 2f, 2f);
+        TreeMapNode s = new TreeMapNode(RoomTypes.StorageArea, .5f, .5f);
+
         root.Children.Add(bt);
         root.Children.Add(b);
         root.Children.Add(k);
+
+        b.Children.Add(o);
+
+        o.Children.Add(s);
 
         SquerifiedTreeMap treeMap = new SquerifiedTreeMap(root, _collider.bounds);
 

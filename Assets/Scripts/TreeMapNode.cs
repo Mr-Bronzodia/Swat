@@ -26,12 +26,19 @@ public class TreeMapNode
         Size = width * height;
     }
 
+    /// <summary>
+    /// Sorts children by size
+    /// </summary>
     public void SortChildren()
     {
         this.Children.Sort((x, y) => y.Size.CompareTo(x.Size));
     }
 
-    public void RandomizeChildren()
+    /// <summary>
+    /// Swaps children with right neighbour based on chance. Children are only allowed to swap places once to prevent extreme aspect ratio. 
+    /// </summary>
+    /// <param name="chance">chance between 0-1.</param>
+    public void RandomizeChildren(float chance)
     {
         SortChildren();
 
@@ -46,7 +53,7 @@ public class TreeMapNode
 
             float rand = Random.Range(0f, 1f);
 
-            if (rand < .5f) continue;
+            if (rand < chance) continue;
 
             TreeMapNode leftTmp = Children[i];
             TreeMapNode rightTmp = Children[i + 1];
