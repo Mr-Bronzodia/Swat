@@ -12,7 +12,7 @@ public class InteriorGenerator : MonoBehaviour
     [SerializeField]
     GameObject _wall;
 
-    Dictionary<TreeMapNode, Bounds> _rooms;
+    List<Room> _rooms;
 
     [SerializeField]
     private bool _shouldRandomizeChildren;
@@ -37,7 +37,8 @@ public class InteriorGenerator : MonoBehaviour
         TreeMapNode bt = new TreeMapNode(RoomTypes.Bathroom, 5f, 5f);
         TreeMapNode b = new TreeMapNode(RoomTypes.Bedroom, 10f, 5f);
 
-        TreeMapNode o = new TreeMapNode(RoomTypes.Office, 2f, 2f);
+        TreeMapNode o = new TreeMapNode(RoomTypes.Office, 1f, 1f);
+
         TreeMapNode s = new TreeMapNode(RoomTypes.StorageArea, .5f, .5f);
 
         root.Children.Add(bt);
@@ -48,10 +49,18 @@ public class InteriorGenerator : MonoBehaviour
 
         o.Children.Add(s);
 
+
         SquerifiedTreeMap treeMap = new SquerifiedTreeMap(root, _collider.bounds);
 
         _rooms = treeMap.GenerateTreemap(_shouldRandomizeChildren);
 
+
+
+
+        //foreach (KeyValuePair<TreeMapNode, Bounds> room in _rooms)
+        //{
+        //    GetNeighberingRoom(room.Key, _rooms);
+        //}
         //InstantiateWalls(bottomLeft, topLeft, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
         //InstantiateWalls(bottomRight, topRight, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
 
@@ -60,6 +69,7 @@ public class InteriorGenerator : MonoBehaviour
 
 
     }
+
 
     private void InstantiateWalls(Vector3 start, Vector3 end, float wallLenght, float wallHeight, Quaternion rotation, GameObject wallPrefab)
     {
@@ -142,17 +152,28 @@ public class InteriorGenerator : MonoBehaviour
     {
         if (_rooms == null) return;
 
-        foreach (KeyValuePair<TreeMapNode, Bounds> room in _rooms)
+        foreach (Room room in _rooms)
         {
-            if (room.Value.size.x < 0 || room.Value.size.z < 0) continue;
+            if (room.Bounds.size.x < 0 || room.Bounds.size.z < 0) continue;
 
-            DrawBounds(room.Value);
+            DrawBounds(room.Bounds);
             Gizmos.color = Color.red;
-            Gizmos.DrawSphere(room.Value.center, 0.2f);
+            Gizmos.DrawSphere(room.Bounds.center, 0.2f);
             Gizmos.color = Color.white;
 
             Vector3 offset = new Vector3(-0.7f, 0, 0.5f);
-            Handles.Label(room.Value.center + offset, room.Key.RoomType.ToString());
+            Handles.Label(room.Bounds.center + offset, room.RoomType.ToString());
+        }
+
+        for (int i = 0; i < _rooms.Count; i++)
+        {
+            for (int j = 0; j < _rooms.Count; j++)
+            {
+                if (_rooms[i].IsAdjusted(_rooms[j]))
+                {
+                    Gizmos.DrawLine(_rooms[i].Bounds.center, _rooms[j].Bounds.center);
+                }
+            }
         }
     }
 }

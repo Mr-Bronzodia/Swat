@@ -13,6 +13,8 @@ public class SquerifiedTreeMap
 {
     private TreeMapNode _root;
     private Bounds _rootBounds;
+    private bool _randomizeChildren;
+    private float _randomizeChance;
 
     public SquerifiedTreeMap(TreeMapNode root, Bounds rootBounds) 
     {
@@ -24,13 +26,16 @@ public class SquerifiedTreeMap
     /// Generates Squerified TreeMap based on root node.
     /// </summary>
     /// <returns>Dictionary of room and their bounding boxes</returns>
-    public Dictionary<TreeMapNode, Bounds> GenerateTreemap(bool randomizeChildren, float chance = .5f)
+    public List<Room> GenerateTreemap(bool randomizeChildren, float chance = .5f)
     {
-        Dictionary<TreeMapNode, Bounds> rooms = new Dictionary<TreeMapNode, Bounds>();
+        List<Room> rooms = new List<Room>();
         Dictionary<TreeMapNode, Bounds> currentRow = new Dictionary<TreeMapNode, Bounds>();
 
+        _randomizeChance = chance;
+        _randomizeChildren = randomizeChildren;
+
         _root.SortChildren();
-        if (randomizeChildren) _root.RandomizeChildren(chance);
+        if (_randomizeChildren) _root.RandomizeChildren(_randomizeChance);
 
         RecursiveSquarify(_root, _rootBounds, _root.Children, currentRow, rooms);
 
@@ -40,7 +45,7 @@ public class SquerifiedTreeMap
     /// <summary>
     /// Splits parent rectangle vertically and horizontally based on children size
     /// </summary>
-    private void RecursiveSquarify(TreeMapNode parentNode, Bounds parentBounds, List<TreeMapNode>childList, Dictionary<TreeMapNode, Bounds>currentRow, Dictionary<TreeMapNode, Bounds> rooms)
+    private void RecursiveSquarify(TreeMapNode parentNode, Bounds parentBounds, List<TreeMapNode>childList, Dictionary<TreeMapNode, Bounds>currentRow, List<Room> rooms)
     {
         if (childList.Count > 0)
         {
@@ -67,7 +72,7 @@ public class SquerifiedTreeMap
     /// <summary>
     /// Place row in place. Shrinks parent to be outside of current row bounds.
     /// </summary>
-    private void PlaceRow(TreeMapNode parent, ref Bounds parentBounds, Dictionary<TreeMapNode, Bounds> currentRow, Dictionary<TreeMapNode, Bounds> rooms)
+    private void PlaceRow(TreeMapNode parent, ref Bounds parentBounds, Dictionary<TreeMapNode, Bounds> currentRow, List<Room> rooms)
     {
         bool horizontalSplit = parentBounds.size.x >= parentBounds.size.z;
 
@@ -100,7 +105,11 @@ public class SquerifiedTreeMap
             }
 
             newRoomBounds = new Bounds(roomCentre, roomSize);
-            rooms.Add(room.Key, newRoomBounds);
+            Room newRoom = new Room(room.Key.RoomType, room.Key.Width, room.Key.Height, newRoomBounds);
+            rooms.Add(newRoom);
+
+            room.Key.SortChildren();
+            if (_randomizeChildren) room.Key.RandomizeChildren(_randomizeChance);
 
             RecursiveSquarify(room.Key, newRoomBounds, room.Key.Children, new Dictionary<TreeMapNode, Bounds>(), rooms);
 

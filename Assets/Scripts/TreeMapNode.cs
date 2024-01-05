@@ -27,7 +27,7 @@ public class TreeMapNode
     }
 
     /// <summary>
-    /// Sorts children by size
+    /// Sorts children by size in descending order
     /// </summary>
     public void SortChildren()
     {
@@ -43,7 +43,7 @@ public class TreeMapNode
         SortChildren();
 
         bool allowedToSwap = true;
-        for (int i = 0; i <= Children.Count - 2; i++)
+        for (int i = 0; i < Children.Count - 1; i++)
         {
             if (!allowedToSwap)
             {
