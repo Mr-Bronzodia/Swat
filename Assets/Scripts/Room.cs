@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class Room : TreeMapNode
+public class Room : TreeMapNode, IEquatable<Room>
 {
     public Bounds Bounds { get; private set; }
     public List<Room> ConnectedRooms { get; private set; }
@@ -43,4 +45,8 @@ public class Room : TreeMapNode
         return "[" + RoomType.ToString() + " Conencted Rooms Count: " + ConnectedRooms.Count + " Size: " + Bounds.size + "]";
     }
 
+    public bool Equals(Room other)
+    {
+        return this.Bounds == other.Bounds;
+    }
 }

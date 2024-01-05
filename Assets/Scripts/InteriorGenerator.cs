@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -54,13 +55,8 @@ public class InteriorGenerator : MonoBehaviour
 
         _rooms = treeMap.GenerateTreemap(_shouldRandomizeChildren);
 
+        BuildRoomConnections(_rooms);
 
-
-
-        //foreach (KeyValuePair<TreeMapNode, Bounds> room in _rooms)
-        //{
-        //    GetNeighberingRoom(room.Key, _rooms);
-        //}
         //InstantiateWalls(bottomLeft, topLeft, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
         //InstantiateWalls(bottomRight, topRight, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
 
@@ -68,6 +64,34 @@ public class InteriorGenerator : MonoBehaviour
         //InstantiateWalls(bottomLeft, bottomRight, wallLenght, wallHeight, Quaternion.Euler(0f, 90f, 0f), _wall);
 
 
+    }
+
+    private void BuildRoomConnections(List<Room> rooms)
+    {
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            List<Room> adjustedRooms = new List<Room>();
+
+            for (int j = 0; j < rooms.Count; j++)
+            {
+                if (rooms[i] == rooms[j]) continue;
+
+                if (rooms[i].IsAdjusted(rooms[j])) adjustedRooms.Add(rooms[j]);
+            }
+
+            if (adjustedRooms.Count == 0) Debug.LogError("No connections found for " + rooms[i].RoomType.ToString());
+
+            foreach (Room other in adjustedRooms)
+            {
+                if (PreferedConnections.Get(rooms[i].RoomType).Contains(other.RoomType))
+                {
+                    rooms[i].AddRoomConnection(other);
+                    other.AddRoomConnection(rooms[i]);
+                }
+            }
+
+            if (rooms[i].ConnectedRooms.Count == 0) rooms[i].AddRoomConnection(adjustedRooms[UnityEngine.Random.Range(0, adjustedRooms.Count)]);
+        }
     }
 
 
@@ -163,17 +187,15 @@ public class InteriorGenerator : MonoBehaviour
 
             Vector3 offset = new Vector3(-0.7f, 0, 0.5f);
             Handles.Label(room.Bounds.center + offset, room.RoomType.ToString());
+
+            Gizmos.color = Color.blue;
+            foreach (Room connected in room.ConnectedRooms)
+            {
+                Gizmos.DrawLine(room.Bounds.center, connected.Bounds.center);
+            }
+            Gizmos.color = Color.white;
+
         }
 
-        for (int i = 0; i < _rooms.Count; i++)
-        {
-            for (int j = 0; j < _rooms.Count; j++)
-            {
-                if (_rooms[i].IsAdjusted(_rooms[j]))
-                {
-                    Gizmos.DrawLine(_rooms[i].Bounds.center, _rooms[j].Bounds.center);
-                }
-            }
-        }
     }
 }
