@@ -32,67 +32,20 @@ public class InteriorGenerator : MonoBehaviour
         float wallLenght = _wall.GetComponent<MeshRenderer>().bounds.size.z;
         float wallHeight = _wall.GetComponent<MeshRenderer>().bounds.size.y;
 
-        TreeMapNode root = new TreeMapNode(RoomTypes.Root, _collider.bounds.size.x, _collider.size.z);
+        SmallHouse house = new SmallHouse(_collider.bounds);
 
-        TreeMapNode k = new TreeMapNode(RoomTypes.Kitchen, 5f, 5f);
-        TreeMapNode bt = new TreeMapNode(RoomTypes.Bathroom, 5f, 5f);
-        TreeMapNode b = new TreeMapNode(RoomTypes.Bedroom, 10f, 5f);
+        house.Instantiate();
 
-        TreeMapNode o = new TreeMapNode(RoomTypes.Office, 1f, 1f);
-
-        TreeMapNode s = new TreeMapNode(RoomTypes.StorageArea, .5f, .5f);
-
-        root.Children.Add(bt);
-        root.Children.Add(b);
-        root.Children.Add(k);
-
-        b.Children.Add(o);
-
-        o.Children.Add(s);
-
-
-        SquerifiedTreeMap treeMap = new SquerifiedTreeMap(root, _collider.bounds);
-
-        _rooms = treeMap.GenerateTreemap(_shouldRandomizeChildren);
-
-        BuildRoomConnections(_rooms);
+        _rooms = house.Rooms;
 
         //InstantiateWalls(bottomLeft, topLeft, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
         //InstantiateWalls(bottomRight, topRight, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
 
         //InstantiateWalls(topLeft, topRight, wallLenght, wallHeight, Quaternion.Euler(0f, 90f, 0f), _wall);
         //InstantiateWalls(bottomLeft, bottomRight, wallLenght, wallHeight, Quaternion.Euler(0f, 90f, 0f), _wall);
-
-
     }
 
-    private void BuildRoomConnections(List<Room> rooms)
-    {
-        for (int i = 0; i < rooms.Count; i++)
-        {
-            List<Room> adjustedRooms = new List<Room>();
 
-            for (int j = 0; j < rooms.Count; j++)
-            {
-                if (rooms[i] == rooms[j]) continue;
-
-                if (rooms[i].IsAdjusted(rooms[j])) adjustedRooms.Add(rooms[j]);
-            }
-
-            if (adjustedRooms.Count == 0) Debug.LogError("No connections found for " + rooms[i].RoomType.ToString());
-
-            foreach (Room other in adjustedRooms)
-            {
-                if (PreferedConnections.Get(rooms[i].RoomType).Contains(other.RoomType))
-                {
-                    rooms[i].AddRoomConnection(other);
-                    other.AddRoomConnection(rooms[i]);
-                }
-            }
-
-            if (rooms[i].ConnectedRooms.Count == 0) rooms[i].AddRoomConnection(adjustedRooms[UnityEngine.Random.Range(0, adjustedRooms.Count)]);
-        }
-    }
 
 
     private void InstantiateWalls(Vector3 start, Vector3 end, float wallLenght, float wallHeight, Quaternion rotation, GameObject wallPrefab)
@@ -193,7 +146,11 @@ public class InteriorGenerator : MonoBehaviour
             {
                 Gizmos.DrawLine(room.Bounds.center, connected.Bounds.center);
             }
-            Gizmos.color = Color.white;
+            Gizmos.color = Color.green;
+            foreach (Vector3 doorPos in room.DoorPositions)
+            {
+                Gizmos.DrawCube(doorPos + new Vector3(0f, 1f, 0), new Vector3(.2f, 2, 1f));
+            }
 
         }
 

@@ -10,17 +10,24 @@ public class Room : TreeMapNode, IEquatable<Room>
     public Bounds Bounds { get; private set; }
     public List<Room> ConnectedRooms { get; private set; }
 
+    public List<Vector3> DoorPositions { get; private set; }
+
     public Room(RoomTypes roomType, float width, float height, Bounds bounds) : base(roomType, width, height)
     {
         ConnectedRooms = new List<Room>();
+        DoorPositions = new List<Vector3>();
         Bounds = bounds;
     }
 
     public void AddRoomConnection(Room room)
     {
         ConnectedRooms.Add(room);
+        FindDoorPosition(room);
     }
 
+    /// <summary>
+    /// Checks if two rooms share a wall
+    /// </summary>
     public bool IsAdjusted(Room other)
     {
         if (Bounds.Intersects(other.Bounds)) return true;
@@ -39,6 +46,49 @@ public class Room : TreeMapNode, IEquatable<Room>
 
         return false;
     }
+
+
+    private void FindDoorPosition(Room other)
+    {
+        Room smallerRoom;
+        Room biggerRoom;
+
+        if (this.Size < other.Size)
+        {
+            smallerRoom = this;
+            biggerRoom = other;
+        }
+        else
+        {
+            smallerRoom = other;
+            biggerRoom = this;
+        }
+
+
+        Vector3 upWall = new Vector3(smallerRoom.Bounds.center.x, 0f, smallerRoom.Bounds.max.z);
+        Vector3 downWall = new Vector3(smallerRoom.Bounds.center.x, 0f, smallerRoom.Bounds.min.z);
+        Vector3 leftWall = new Vector3(smallerRoom.Bounds.min.x, 0f, smallerRoom.Bounds.center.z);
+        Vector3 rightWall = new Vector3(smallerRoom.Bounds.max.x, 0f, smallerRoom.Bounds.max.z);
+
+        List<Vector3> walls = new List<Vector3>() { upWall, downWall, leftWall, rightWall};
+
+        Vector3 closestPoint = Vector3.zero;
+        float smallestDistance = float.MaxValue;
+
+        foreach (Vector3 wall in walls)
+        {
+            float distance = Vector3.Distance(wall, biggerRoom.Bounds.center);
+
+            if (distance < smallestDistance)
+            {
+                smallestDistance = distance;
+                closestPoint = wall;
+            }
+        }
+
+        if (closestPoint != Vector3.zero) DoorPositions.Add(closestPoint);
+    }
+
 
     public override string ToString()
     {

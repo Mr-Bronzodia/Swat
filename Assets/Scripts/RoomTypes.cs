@@ -21,6 +21,9 @@ public enum RoomTypes
 
 public struct PreferedConnections
 {
+    /// <summary>
+    /// Returns preferd connections for given room type
+    /// </summary>
     public static List<RoomTypes> Get(RoomTypes type)
     {
         List<RoomTypes> connections = new List<RoomTypes>();
@@ -30,7 +33,6 @@ public struct PreferedConnections
                 connections.AddRange(new List<RoomTypes>()
                 {
                     RoomTypes.Livingroom,
-                    RoomTypes.Bedroom,
                     RoomTypes.Connector,
                 });
                 break;
@@ -65,7 +67,8 @@ public struct PreferedConnections
                     RoomTypes.Connector,
                     RoomTypes.StorageArea,
                     RoomTypes.Office,
-                    RoomTypes.Bathroom
+                    RoomTypes.Bathroom,
+                    RoomTypes.Bedroom
                 });
                 break;
             case RoomTypes.StorageArea:
