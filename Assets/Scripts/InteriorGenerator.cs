@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.TerrainTools;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
@@ -32,7 +33,7 @@ public class InteriorGenerator : MonoBehaviour
         float wallLenght = _wall.GetComponent<MeshRenderer>().bounds.size.z;
         float wallHeight = _wall.GetComponent<MeshRenderer>().bounds.size.y;
 
-        SmallHouse house = new SmallHouse(_collider.bounds);
+        House house = new House(_collider.bounds);
 
         house.Instantiate();
 
