@@ -16,8 +16,21 @@ public class InteriorGenerator : MonoBehaviour
 
     List<Room> _rooms;
 
+    [Header("Generation Settings")]
     [SerializeField]
     private bool _shouldRandomizeChildren;
+
+    [Header("Debug Settings")]
+    [SerializeField]
+    private bool _showRoomConnection;
+    [SerializeField]
+    private bool _showRoomNames;
+    [SerializeField]
+    private bool _showRoomBounds;
+    [SerializeField]
+    private bool _showRoomCenter;
+    [SerializeField]
+    private bool _showRoomDoors;
 
     // Start is called before the first frame update
     void Start()
@@ -134,22 +147,26 @@ public class InteriorGenerator : MonoBehaviour
         {
             if (room.Bounds.size.x < 0 || room.Bounds.size.z < 0) continue;
 
-            DrawBounds(room.Bounds);
+            if (_showRoomBounds) DrawBounds(room.Bounds);
             Gizmos.color = Color.red;
-            Gizmos.DrawSphere(room.Bounds.center, 0.2f);
+            if (_showRoomCenter) Gizmos.DrawSphere(room.Bounds.center, 0.2f);
             Gizmos.color = Color.white;
 
             Vector3 offset = new Vector3(-0.7f, 0, 0.5f);
-            Handles.Label(room.Bounds.center + offset, room.RoomType.ToString());
+            if (_showRoomNames) Handles.Label(room.Bounds.center + offset, room.RoomType.ToString());
 
             Gizmos.color = Color.blue;
+
             foreach (Room connected in room.ConnectedRooms)
             {
+                if (!_showRoomConnection) continue;
                 Gizmos.DrawLine(room.Bounds.center, connected.Bounds.center);
             }
             Gizmos.color = Color.green;
+
             foreach (Vector3 doorPos in room.DoorPositions)
             {
+                if (!_showRoomDoors) continue;
                 Gizmos.DrawCube(doorPos + new Vector3(0f, 1f, 0), new Vector3(.2f, 2, 1f));
             }
 

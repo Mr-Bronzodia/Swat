@@ -22,9 +22,14 @@ public class HouseGenerator : MonoBehaviour
     private List<Tile> _roadTiles;
     [SerializeField]
     private Tile _plotTile;
+    [SerializeField]
+    private GameObject _houseObject;
 
     public Action OnPlotGenerated;
 
+    [Header("Debug Settings")]
+    [SerializeField]
+    private bool _showPlotBounds;
 
     private void OnEnable()
     {
@@ -175,6 +180,24 @@ public class HouseGenerator : MonoBehaviour
         foreach (Plot plot in _plots)
         {
             plot.CreateGrid();
+
+            GameObject houseInstance = Instantiate(_houseObject,
+                                                   plot.PlotGrid[plot.PlotGrid.GetLength(0) / 2, plot.PlotGrid.GetLength(1) / 2].GetWorldSpacePosition(),
+                                                   Quaternion.identity);
+            BoxCollider houseCollider;
+            if (houseInstance.TryGetComponent<BoxCollider>(out houseCollider))
+            {
+                Bounds houseBounds = houseCollider.bounds;
+
+                houseBounds.Encapsulate(plot.EndingCell.GetWorldSpacePosition());
+                houseBounds.Encapsulate(plot.SideCell.GetWorldSpacePosition());
+                houseBounds.Encapsulate(plot.StartingCell.GetWorldSpacePosition());
+                houseCollider.size = houseBounds.size;
+            }
+            else
+            {
+                Debug.LogError("Can't acces house instance collider");
+            }
         }
 
         OnPlotGenerated?.Invoke();
@@ -223,25 +246,13 @@ public class HouseGenerator : MonoBehaviour
 
         if (_plots.Count == 0) return;
 
-        //foreach (Plot plot in _plots)
-        //{
-        //    //
+        if (!_showPlotBounds) return;
 
-        //    if (plot.StartingCell == null) continue;
-        //    if (plot.EndingCell == null) continue;
-        //    if (plot.SideCell == null) continue;
-
-        //    DrawBounds(plot.bounds);
-
-        //}
         Gizmos.color = Color.blue;
 
         foreach (Plot plot in _plots)
         {
-            if (plot.PlotGrid == null)
-            {
-                continue;
-            }
+            if (plot.PlotGrid == null) continue;
 
             Gizmos.color = plot.DEBUGCOLOR;
             for (int x = 0; x < plot.PlotGrid.GetLength(0); x++)

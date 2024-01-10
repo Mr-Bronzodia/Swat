@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+
 public class House 
 {
-
     public List<Room> Rooms { get; protected set; }
 
     public Bounds Bounds { get; protected set; }
@@ -56,7 +56,7 @@ public class House
         float livingRoomHeightRatio = Random.Range(1.2f, 1.5f);
         float bedroomHeightRatio = Random.Range(1.2f, 1.5f);
         float kitchenHeightRatio = Random.Range(1f, 1.5f);
-        float bathroomHeightRatio = 1;
+        float bathroomHeightRatio = Random.Range(1f, 1.5f); ;
 
         if (root.Size >= 150)
         {
@@ -72,10 +72,30 @@ public class House
         {
             float connectorArea = totalArea * Random.Range(.08f, .12f);
             livingRoomArea -= connectorArea;
-            float connectorHeightRatio = Random.Range(2f, 2.5f);
+            float connectorHeightRatio = 1;
             float connectorHeight = Mathf.Sqrt(connectorArea / connectorHeightRatio);
             TreeMapNode connector = new TreeMapNode(RoomTypes.Connector, connectorHeight * connectorHeightRatio, connectorHeight);
             root.Children.Add(connector);
+        }
+
+        if (root.Size >= 175)
+        {
+            float laundryArea = totalArea * Random.Range(.07f, .1f);
+            livingRoomArea -= laundryArea;
+            float laundryHeightRatio = 1;
+            float laundyHeight = Mathf.Sqrt(laundryArea / laundryHeightRatio);
+            TreeMapNode laundry = new TreeMapNode(RoomTypes.Laundry, laundyHeight * laundryHeightRatio, laundyHeight);
+            root.Children.Add(laundry);
+        }
+
+        if (root.Size >= 183)
+        {
+            float storageArea = totalArea * Random.Range(.05f, .07f);
+            kitchenArea -= storageArea;
+            float storageHeightRatio = Random.Range(1.1f, 1.3f);
+            float storageHeight = Mathf.Sqrt(storageArea / storageHeightRatio);
+            TreeMapNode storage = new TreeMapNode(RoomTypes.StorageArea, storageHeight * storageHeightRatio, storageHeight);
+            root.Children.Add(storage);
         }
 
         float livingRoomHeight = Mathf.Sqrt(livingRoomArea / livingRoomHeightRatio);
@@ -103,81 +123,3 @@ public class House
         BuildRoomConnections();
     }
 }
-
-//public class SmallHouse : House
-//{
-//    public SmallHouse(Bounds bounds) : base(bounds)
-//    {
-//    }
-
-//    public override void Instantiate()
-//    {
-
-//    }
-//}
-
-//public class MediumHouse : House
-//{
-//    public MediumHouse(Bounds bounds) : base(bounds)
-//    {
-//    }
-
-//    public override void Instantiate()
-//    {
-//        TreeMapNode root = new TreeMapNode(RoomTypes.Root, Bounds.size.x, Bounds.size.z);
-
-//        float totalArea = Bounds.size.x * Bounds.size.z;
-//        float bedRoomArea = totalArea * Random.Range(.25f, .35f);
-//        float bathroomArea = totalArea * Random.Range(.1f, .15f);
-//        float kitchenArea = totalArea * Random.Range(.15f, .12f);
-//        float connectorArea = totalArea * Random.Range(.05f, .1f);
-//        float laundryArea = totalArea * Random.Range(.05f, .07f);
-//        float officeArea = totalArea * Random.Range(.05f, .1f);
-//        float livingRoomArea = totalArea - (kitchenArea + bedRoomArea + bathroomArea + connectorArea + laundryArea + officeArea);
-
-//        float livingRoomHeightRatio = Random.Range(1.2f, 1.5f);
-//        float bedroomHeightRatio = Random.Range(1.2f, 1.5f);
-//        float kitchenHeightRatio = Random.Range(1f, 1.5f);
-//        float connectorHeightRatio = Random.Range(2f, 2.5f);
-//        float laundryHeightRatio = Random.Range(1f, 1.1f);
-//        float officeHeightRatio = Random.Range(1f, 1.5f);
-//        float bathroomHeightRatio = 1;
-
-//        int bedroomNo = Random.Range(2, 4);
-
-//        float livingRoomHeight = Mathf.Sqrt(livingRoomArea / livingRoomHeightRatio);
-//        float kitchenHeight = Mathf.Sqrt(kitchenArea / kitchenHeightRatio);
-//        float bedroomeHeight = Mathf.Sqrt((bedRoomArea / bedroomNo) / bedroomHeightRatio);
-//        float bathRoomHeight = Mathf.Sqrt(bathroomArea / bathroomHeightRatio);
-//        float connectorHeight = Mathf.Sqrt(connectorArea / connectorHeightRatio);
-//        float laundryHeight = Mathf.Sqrt(laundryArea / laundryHeightRatio);
-//        float officeHeight = Mathf.Sqrt(officeArea / officeHeightRatio);
-
-//        for (int i = 0; i < bedroomNo; i++)
-//        {
-//            TreeMapNode bedroom = new TreeMapNode(RoomTypes.Bedroom, bedroomeHeight * bedroomHeightRatio, bedroomeHeight);
-//            root.Children.Add(bedroom);
-//        }
-
-
-//        TreeMapNode livingRoom = new TreeMapNode(RoomTypes.Livingroom, livingRoomHeight * livingRoomHeightRatio, livingRoomHeight);
-//        TreeMapNode kitchen = new TreeMapNode(RoomTypes.Kitchen, kitchenHeight * kitchenHeightRatio, kitchenHeight);
-//        TreeMapNode bathroom = new TreeMapNode(RoomTypes.Bathroom, bathRoomHeight * bathroomHeightRatio, bathRoomHeight);
-//        TreeMapNode connector = new TreeMapNode(RoomTypes.Connector, connectorHeight * connectorHeightRatio, connectorHeight);
-//        TreeMapNode laundry = new TreeMapNode(RoomTypes.Laundry, laundryHeight * laundryHeightRatio, laundryHeight);
-//        TreeMapNode office = new TreeMapNode(RoomTypes.Office, officeHeight * officeHeightRatio, officeHeight);
-
-//        root.Children.Add(livingRoom);
-//        root.Children.Add(kitchen);
-//        root.Children.Add(bathroom);
-//        root.Children.Add(connector);
-//        root.Children.Add(laundry);
-//        root.Children.Add(office);
-
-//        SquerifiedTreeMap treeMap = new SquerifiedTreeMap(root, Bounds);
-
-//        Rooms = treeMap.GenerateTreemap(true);
-
-//        BuildRoomConnections();
-//    }
-//}
