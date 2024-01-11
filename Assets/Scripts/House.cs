@@ -10,9 +10,12 @@ public class House
 
     public Bounds Bounds { get; protected set; }
 
-    public House(Bounds bounds)
+    private GameObject _parentInstance;
+
+    public House(Bounds bounds, GameObject parentInstance)
     {
         Bounds = bounds;
+        _parentInstance = parentInstance;
     }
 
     protected void BuildRoomConnections()
@@ -43,7 +46,36 @@ public class House
         }
     }
 
-    public void Instantiate()
+    private void BuildFloor(Room room, GameObject floorPrefab)
+    {
+        GameObject floorInstance = UnityEngine.Object.Instantiate(floorPrefab, room.Bounds.center, Quaternion.identity, _parentInstance.transform);
+        BoxCollider floorCollider;
+
+        if (floorInstance.TryGetComponent<BoxCollider>(out floorCollider))
+        {
+            Bounds floorBounds = floorCollider.bounds;
+
+            Bounds roomBounds = room.Bounds;
+
+            float requiredScaleX = floorBounds.size.x / roomBounds.size.x;
+            float requiredScaleZ = floorBounds.size.z / roomBounds.size.z;
+
+            floorInstance.transform.localScale = new Vector3(floorInstance.transform.localScale.x / requiredScaleX,
+                                                             floorInstance.transform.localScale.y,
+                                                             floorInstance.transform.localScale.z / requiredScaleZ);
+        }
+        else
+        {
+            Debug.LogError("Can't Find Box Collider on " + floorPrefab.name.ToString() + " while genereting floor");
+        }
+    }
+
+    private GameObject GetRandomObject(List<GameObject> listObj)
+    {
+        return listObj[Random.Range(0, listObj.Count)];
+    }
+
+    private void GenerateFloorPlan()
     {
         TreeMapNode root = new TreeMapNode(RoomTypes.Root, Bounds.size.x, Bounds.size.z);
 
@@ -109,8 +141,6 @@ public class House
         TreeMapNode bedroom = new TreeMapNode(RoomTypes.Bedroom, bedroomeHeight * bedroomHeightRatio, bedroomeHeight);
         TreeMapNode bathroom = new TreeMapNode(RoomTypes.Bathroom, bathRoomHeight * bathroomHeightRatio, bathRoomHeight);
 
-
-
         root.Children.Add(livingRoom);
         root.Children.Add(kitchen);
         root.Children.Add(bedroom);
@@ -119,7 +149,16 @@ public class House
         SquerifiedTreeMap treeMap = new SquerifiedTreeMap(root, Bounds);
 
         Rooms = treeMap.GenerateTreemap(true);
+    }
+
+    public void InstantiateHouse(HouseTheme houseTheme)
+    {
+        GenerateFloorPlan();
 
         BuildRoomConnections();
+
+        BuildFloor(Rooms[0], GetRandomObject(houseTheme.Floor));
+        BuildFloor(Rooms[1], GetRandomObject(houseTheme.Floor));
+        BuildFloor(Rooms[3], GetRandomObject(houseTheme.Floor));
     }
 }

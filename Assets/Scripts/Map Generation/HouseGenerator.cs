@@ -193,6 +193,8 @@ public class HouseGenerator : MonoBehaviour
                 houseBounds.Encapsulate(plot.SideCell.GetWorldSpacePosition());
                 houseBounds.Encapsulate(plot.StartingCell.GetWorldSpacePosition());
                 houseCollider.size = houseBounds.size;
+                //Not Tested 
+                houseCollider.center = houseBounds.center;
             }
             else
             {

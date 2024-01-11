@@ -46,9 +46,11 @@ public class InteriorGenerator : MonoBehaviour
         float wallLenght = _wall.GetComponent<MeshRenderer>().bounds.size.z;
         float wallHeight = _wall.GetComponent<MeshRenderer>().bounds.size.y;
 
-        House house = new House(_collider.bounds);
+        House house = new House(_collider.bounds, this.gameObject);
 
-        house.Instantiate();
+        HouseTheme[] themes = Resources.LoadAll<HouseTheme>("HouseThemes");
+
+        house.InstantiateHouse(themes[UnityEngine.Random.Range(0, themes.Length)]);
 
         _rooms = house.Rooms;
 

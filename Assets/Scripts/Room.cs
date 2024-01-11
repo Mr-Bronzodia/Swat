@@ -34,20 +34,11 @@ public class Room : TreeMapNode, IEquatable<Room>
 
         float extrudeAmount = .08f;
 
-        //Vector3 UpPoint = Bounds.max + new Vector3(0, 0, extrudeAmount);
         Vector3 UpPoint = new Vector3(Bounds.center.x, 0, Bounds.max.z + extrudeAmount);
-        //Vector3 DownPoint = Bounds.min - new Vector3(0, 0, extrudeAmount);
         Vector3 DownPoint = new Vector3(Bounds.center.x, 0, Bounds.min.z - extrudeAmount);
-        //Vector3 RightPoint = Bounds.max + new Vector3(extrudeAmount, 0, 0);
         Vector3 RightPoint = new Vector3(Bounds.max.x + extrudeAmount, 0, Bounds.center.z);
-        //Vector3 LedtPoint = Bounds.min - new Vector3(extrudeAmount, 0, 0);
         Vector3 LedtPoint = new Vector3(Bounds.min.x - extrudeAmount, 0, Bounds.center.z);
 
-        //Debug.DrawLine(Bounds.center, UpPoint);
-        //Debug.DrawLine(Bounds.center, DownPoint);
-        //Debug.DrawLine(Bounds.center, RightPoint);
-        //Debug.DrawLine(Bounds.center, LedtPoint);
-        //Debug.Break();
 
         if (other.Bounds.Contains(UpPoint)) return true;
         if (other.Bounds.Contains(DownPoint)) return true;

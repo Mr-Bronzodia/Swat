@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 296b3d0b9d0345e4bab8d72354631837, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  Bed: []
+  Stove: []
+  Toilte: []
+  Table: []
+  Chair: []
+  OfficeChair: []
+  SinkKitchen: []
+  SinkToilet: []
+  Desk: []
+  Bath: []
+  Shower: []
+  Fridge: []
+  Couch: []
+  Carpet: []
+  Paintings: []
+  Washer: []
+  Dryier: []
+  InteriorWall: []
+  ExtiriorWall: []
+  Floor:
+  - {fileID: 659762245545396994, guid: c16df96a2422fb8499f523fbfe5a856f, type: 3}
