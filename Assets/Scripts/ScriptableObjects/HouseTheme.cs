@@ -24,5 +24,7 @@ public class HouseTheme : ScriptableObject
     public List<GameObject> Dryier;
     public List<GameObject> InteriorWall;
     public List<GameObject> ExtiriorWall;
+    public List<GameObject> ExteriorWindows;
+    public List<GameObject> Doors;
     public List<GameObject> Floor;
 }

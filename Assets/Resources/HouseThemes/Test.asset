@@ -29,7 +29,13 @@ MonoBehaviour:
   Paintings: []
   Washer: []
   Dryier: []
-  InteriorWall: []
-  ExtiriorWall: []
+  InteriorWall:
+  - {fileID: 2244530105233711947, guid: d753f23fefc4f0f4eaa35d24bd80e7e2, type: 3}
+  ExtiriorWall:
+  - {fileID: 2244530105233711947, guid: d753f23fefc4f0f4eaa35d24bd80e7e2, type: 3}
+  ExteriorWindows:
+  - {fileID: 8500586381493956694, guid: 94dee45fe843aa543b410fcaa3596d89, type: 3}
+  Doors:
+  - {fileID: 1634816630977604858, guid: bfa974a01b4cbd94eb18f3e7956f9aca, type: 3}
   Floor:
-  - {fileID: 659762245545396994, guid: c16df96a2422fb8499f523fbfe5a856f, type: 3}
+  - {fileID: 156976217076831411, guid: 80e5bbfa6aa12b34ca98423c9e7a0f86, type: 3}

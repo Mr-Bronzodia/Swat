@@ -25,6 +25,30 @@ public class Room : TreeMapNode, IEquatable<Room>
         FindDoorPosition(room);
     }
 
+    public void BuildFloor(GameObject floorPrefab, GameObject parentInstance)
+    {
+        GameObject floorInstance = UnityEngine.Object.Instantiate(floorPrefab, Bounds.center, Quaternion.identity, parentInstance.transform);
+        BoxCollider floorCollider;
+
+        if (floorInstance.TryGetComponent<BoxCollider>(out floorCollider))
+        {
+            Bounds floorBounds = floorCollider.bounds;
+
+            Bounds roomBounds = Bounds;
+
+            float requiredScaleX = floorBounds.size.x / roomBounds.size.x;
+            float requiredScaleZ = floorBounds.size.z / roomBounds.size.z;
+
+            floorInstance.transform.localScale = new Vector3(floorInstance.transform.localScale.x / requiredScaleX,
+                                                             floorInstance.transform.localScale.y,
+                                                             floorInstance.transform.localScale.z / requiredScaleZ);
+        }
+        else
+        {
+            Debug.LogError("Can't Find Box Collider on " + floorPrefab.name.ToString() + " while genereting floor");
+        }
+    }
+
     /// <summary>
     /// Checks if two rooms share a wall
     /// </summary>

@@ -46,30 +46,6 @@ public class House
         }
     }
 
-    private void BuildFloor(Room room, GameObject floorPrefab)
-    {
-        GameObject floorInstance = UnityEngine.Object.Instantiate(floorPrefab, room.Bounds.center, Quaternion.identity, _parentInstance.transform);
-        BoxCollider floorCollider;
-
-        if (floorInstance.TryGetComponent<BoxCollider>(out floorCollider))
-        {
-            Bounds floorBounds = floorCollider.bounds;
-
-            Bounds roomBounds = room.Bounds;
-
-            float requiredScaleX = floorBounds.size.x / roomBounds.size.x;
-            float requiredScaleZ = floorBounds.size.z / roomBounds.size.z;
-
-            floorInstance.transform.localScale = new Vector3(floorInstance.transform.localScale.x / requiredScaleX,
-                                                             floorInstance.transform.localScale.y,
-                                                             floorInstance.transform.localScale.z / requiredScaleZ);
-        }
-        else
-        {
-            Debug.LogError("Can't Find Box Collider on " + floorPrefab.name.ToString() + " while genereting floor");
-        }
-    }
-
     private GameObject GetRandomObject(List<GameObject> listObj)
     {
         return listObj[Random.Range(0, listObj.Count)];
@@ -151,14 +127,13 @@ public class House
         Rooms = treeMap.GenerateTreemap(true);
     }
 
+
     public void InstantiateHouse(HouseTheme houseTheme)
     {
         GenerateFloorPlan();
 
         BuildRoomConnections();
 
-        BuildFloor(Rooms[0], GetRandomObject(houseTheme.Floor));
-        BuildFloor(Rooms[1], GetRandomObject(houseTheme.Floor));
-        BuildFloor(Rooms[3], GetRandomObject(houseTheme.Floor));
+        Rooms[0].BuildFloor(GetRandomObject(houseTheme.Floor), _parentInstance);
     }
 }
