@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -28,11 +29,13 @@ public class Room : TreeMapNode, IEquatable<Room>
     public void BuildFloor(GameObject floorPrefab, GameObject parentInstance)
     {
         GameObject floorInstance = UnityEngine.Object.Instantiate(floorPrefab, Bounds.center, Quaternion.identity, parentInstance.transform);
-        BoxCollider floorCollider;
+        floorInstance.name = floorInstance.name + " " + RoomType.ToString();
 
-        if (floorInstance.TryGetComponent<BoxCollider>(out floorCollider))
+        MeshRenderer flooRenderer;
+
+        if (floorInstance.TryGetComponent<MeshRenderer>(out flooRenderer))
         {
-            Bounds floorBounds = floorCollider.bounds;
+            Bounds floorBounds = flooRenderer.bounds;
 
             Bounds roomBounds = Bounds;
 
@@ -45,8 +48,86 @@ public class Room : TreeMapNode, IEquatable<Room>
         }
         else
         {
-            Debug.LogError("Can't Find Box Collider on " + floorPrefab.name.ToString() + " while genereting floor");
+            Debug.LogError("Can't Find MeshRenderer on " + floorPrefab.name.ToString() + " while genereting floor");
         }
+    }
+
+    public void BuildFacade(GameObject wallInsidePrefab, GameObject wallOutsidePrefab, GameObject windowPrefab, GameObject doorPrefab, GameObject parentInstance, int windowSpacing = 2) 
+    {
+        foreach (Vector3 doorPosition in DoorPositions)
+        {
+            GameObject doorInstance = UnityEngine.Object.Instantiate(doorPrefab, doorPosition, Quaternion.identity, parentInstance.transform);
+
+            doorInstance.transform.forward = FindVectorPointingTowardRoom(doorInstance.transform);
+
+            doorInstance.name = doorInstance.name + " " + RoomType.ToString();
+        }
+
+        Vector3 endPoint = new Vector3(Bounds.max.x, Bounds.min.y, Bounds.min.z);
+        BuildWall(Bounds.min, endPoint, wallInsidePrefab, parentInstance);
+
+        Vector3 endPoint2 = new Vector3(Bounds.min.x, Bounds.min.y, Bounds.max.z);
+        BuildWall(Bounds.min, endPoint2, wallInsidePrefab, parentInstance);
+    }
+
+    private void BuildWall(Vector3 startPoint, Vector3 endPoint, GameObject wallPrefab, GameObject parentInstance)
+    {
+        float wallLenght = Vector3.Distance(startPoint, endPoint);
+
+        MeshRenderer wallRenderer = wallPrefab.GetComponentInChildren<MeshRenderer>();
+        Bounds wallBounds = wallRenderer.bounds;
+
+        float prefabLenght = wallBounds.size.x;
+
+        Debug.Log(prefabLenght);
+
+        int noWalls = (int)(wallLenght / prefabLenght);
+
+        float reminder = (wallLenght % prefabLenght) / prefabLenght;
+        float reminderPerInstance = reminder / noWalls;
+
+        Vector3 wallDirection = (endPoint - startPoint).normalized;
+
+        Debug.Log("Wall lenght: " + wallLenght);
+        Debug.Log("Wall NoWalls: " + noWalls);
+        Debug.Log("reminder: " + reminder);
+        Debug.Log("reminderPerInstance: " + reminderPerInstance);
+
+        Vector3 pos = startPoint;
+        for (int i = 0; i < noWalls; i++)
+        {
+            Vector3 nextWallPos = pos + (wallDirection * (wallLenght));
+            GameObject wall = UnityEngine.Object.Instantiate(wallPrefab, nextWallPos, Quaternion.identity, parentInstance.transform);
+            wall.transform.forward = FindVectorPointingTowardRoom(wall.transform);
+            pos += nextWallPos;
+        }
+    }
+
+    private Vector3 FindVectorPointingTowardRoom(Transform transform)
+    {
+
+        Vector3 upWall = new Vector3(Bounds.center.x, 0f, Bounds.max.z);
+        Vector3 downWall = new Vector3(Bounds.center.x, 0f, Bounds.min.z);
+        Vector3 leftWall = new Vector3(Bounds.min.x, 0f, Bounds.center.z);
+        Vector3 rightWall = new Vector3(Bounds.max.x, 0f, Bounds.center.z);
+
+        List<Vector3> walls = new List<Vector3>() { upWall, downWall, leftWall, rightWall };
+
+        Vector3 closestPoint = Vector3.zero;
+        float smallestDistance = float.MaxValue;
+
+        foreach (Vector3 wall in walls)
+        {
+            float distance = Vector3.Distance(wall, transform.position);
+
+            if (distance < smallestDistance)
+            {
+                smallestDistance = distance;
+                closestPoint = wall;
+            }
+        }
+
+        return (closestPoint - Bounds.center).normalized;
     }
 
     /// <summary>
@@ -54,20 +135,17 @@ public class Room : TreeMapNode, IEquatable<Room>
     /// </summary>
     public bool IsAdjusted(Room other)
     {
-        if (Bounds.Intersects(other.Bounds)) return true;
-
         float extrudeAmount = .08f;
 
-        Vector3 UpPoint = new Vector3(Bounds.center.x, 0, Bounds.max.z + extrudeAmount);
-        Vector3 DownPoint = new Vector3(Bounds.center.x, 0, Bounds.min.z - extrudeAmount);
-        Vector3 RightPoint = new Vector3(Bounds.max.x + extrudeAmount, 0, Bounds.center.z);
-        Vector3 LedtPoint = new Vector3(Bounds.min.x - extrudeAmount, 0, Bounds.center.z);
+        Vector3 upPoint = new Vector3(Bounds.center.x, 0, Bounds.max.z + extrudeAmount);
+        Vector3 downPoint = new Vector3(Bounds.center.x, 0, Bounds.min.z - extrudeAmount);
+        Vector3 rightPoint = new Vector3(Bounds.max.x + extrudeAmount, 0, Bounds.center.z);
+        Vector3 leftPoint = new Vector3(Bounds.min.x - extrudeAmount, 0, Bounds.center.z);
 
-
-        if (other.Bounds.Contains(UpPoint)) return true;
-        if (other.Bounds.Contains(DownPoint)) return true;
-        if (other.Bounds.Contains(LedtPoint)) return true;
-        if (other.Bounds.Contains(RightPoint)) return true;
+        if (other.Bounds.Contains(upPoint)) return true;
+        if (other.Bounds.Contains(downPoint)) return true;
+        if (other.Bounds.Contains(leftPoint)) return true;
+        if (other.Bounds.Contains(rightPoint)) return true;
 
         return false;
     }
@@ -111,7 +189,9 @@ public class Room : TreeMapNode, IEquatable<Room>
             }
         }
 
-        if (closestPoint != Vector3.zero) DoorPositions.Add(closestPoint);
+        if (other.DoorPositions.Contains(closestPoint)) return;
+
+        if (closestPoint != Vector3.zero && !DoorPositions.Contains(closestPoint)) DoorPositions.Add(closestPoint);
     }
 
 

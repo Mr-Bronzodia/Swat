@@ -134,6 +134,16 @@ public class House
 
         BuildRoomConnections();
 
-        Rooms[0].BuildFloor(GetRandomObject(houseTheme.Floor), _parentInstance);
+
+        foreach (Room room in Rooms)
+        {
+            room.BuildFloor(GetRandomObject(houseTheme.Floor), _parentInstance);
+            room.BuildFacade(GetRandomObject(houseTheme.InteriorWall),
+                                GetRandomObject(houseTheme.ExtiriorWall),
+                                GetRandomObject(houseTheme.ExteriorWindows),
+                                GetRandomObject(houseTheme.Doors),
+                                _parentInstance);
+        }
+
     }
 }
