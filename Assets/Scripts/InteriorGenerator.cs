@@ -37,15 +37,6 @@ public class InteriorGenerator : MonoBehaviour
     {
         _collider = GetComponent<BoxCollider>();
 
-        Vector3 topRight = new Vector3(gameObject.transform.position.x + (_collider.bounds.size.x / 2), 0, gameObject.transform.position.z + (_collider.bounds.size.z / 2));
-        Vector3 bottomRight = new Vector3(gameObject.transform.position.x + (_collider.bounds.size.x / 2), 0, gameObject.transform.position.z - (_collider.bounds.size.z / 2));
-
-        Vector3 topLeft = new Vector3(gameObject.transform.position.x - (_collider.bounds.size.x / 2), 0, gameObject.transform.position.z + (_collider.bounds.size.z / 2));
-        Vector3 bottomLeft = new Vector3(gameObject.transform.position.x - (_collider.bounds.size.x / 2), 0, gameObject.transform.position.z - (_collider.bounds.size.z / 2));
-
-        float wallLenght = _wall.GetComponent<MeshRenderer>().bounds.size.z;
-        float wallHeight = _wall.GetComponent<MeshRenderer>().bounds.size.y;
-
         House house = new House(_collider.bounds, this.gameObject);
 
         HouseTheme[] themes = Resources.LoadAll<HouseTheme>("HouseThemes");
@@ -53,57 +44,6 @@ public class InteriorGenerator : MonoBehaviour
         house.InstantiateHouse(themes[UnityEngine.Random.Range(0, themes.Length)]);
 
         _rooms = house.Rooms;
-
-        //InstantiateWalls(bottomLeft, topLeft, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
-        //InstantiateWalls(bottomRight, topRight, wallLenght, wallHeight, Quaternion.Euler(0f, 0f, 0f), _wall);
-
-        //InstantiateWalls(topLeft, topRight, wallLenght, wallHeight, Quaternion.Euler(0f, 90f, 0f), _wall);
-        //InstantiateWalls(bottomLeft, bottomRight, wallLenght, wallHeight, Quaternion.Euler(0f, 90f, 0f), _wall);
-    }
-
-
-
-
-    private void InstantiateWalls(Vector3 start, Vector3 end, float wallLenght, float wallHeight, Quaternion rotation, GameObject wallPrefab)
-    {
-        float structureLenght = Vector3.Distance(start, end);
-
-        int numWalls = (int)(structureLenght / wallLenght);
-
-        float reminder = (structureLenght % wallLenght) / wallLenght;
-
-        for (int i = 0; i < numWalls; i++)
-        {
-            if (rotation.eulerAngles.y > 85f)
-            {
-                Vector3 wallPos = new Vector3((start.x + (wallLenght * i) + wallLenght / 2), start.y + wallHeight / 2, start.z);
-                Instantiate(wallPrefab, wallPos, rotation, gameObject.transform);
-            }
-            else
-            {
-                Vector3 wallPos = new Vector3(start.x, start.y + wallHeight / 2, (start.z + (wallLenght * i) + wallLenght / 2));
-                Instantiate(wallPrefab, wallPos, rotation, gameObject.transform);
-            }
-            
-            
-        }
-
-        if (reminder == 0) return;
-
-        if (rotation.eulerAngles.y > 85f)
-        {
-            Vector3 reminderWallPos = new Vector3((start.x + (wallLenght * (numWalls - 1)) + wallLenght / 2), start.y + wallHeight / 2, start.z);
-            reminderWallPos.x += (wallLenght / 2) + (wallLenght * reminder) / 2;
-            GameObject remiderWallInstance = Instantiate(wallPrefab, reminderWallPos, rotation, gameObject.transform);
-            remiderWallInstance.transform.localScale = new Vector3(remiderWallInstance.transform.localScale.x, remiderWallInstance.transform.localScale.y, remiderWallInstance.transform.localScale.z * reminder);
-        }
-        else
-        {
-            Vector3 reminderWallPos = new Vector3(start.x , start.y + wallHeight / 2, (start.z + (wallLenght * (numWalls - 1)) + wallLenght / 2));
-            reminderWallPos.z += (wallLenght / 2) + (wallLenght * reminder) / 2;
-            GameObject remiderWallInstance = Instantiate(wallPrefab, reminderWallPos, rotation, gameObject.transform);
-            remiderWallInstance.transform.localScale = new Vector3(remiderWallInstance.transform.localScale.x, remiderWallInstance.transform.localScale.y, remiderWallInstance.transform.localScale.z * reminder);
-        }
     }
 
     /// <summary>
