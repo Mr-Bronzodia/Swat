@@ -183,7 +183,8 @@ public class HouseGenerator : MonoBehaviour
 
             GameObject houseInstance = Instantiate(_houseObject,
                                                    plot.PlotGrid[plot.PlotGrid.GetLength(0) / 2, plot.PlotGrid.GetLength(1) / 2].GetWorldSpacePosition(),
-                                                   Quaternion.identity);
+                                                   Quaternion.identity,
+                                                   gameObject.transform);
             BoxCollider houseCollider;
             if (houseInstance.TryGetComponent<BoxCollider>(out houseCollider))
             {
@@ -194,7 +195,7 @@ public class HouseGenerator : MonoBehaviour
                 houseBounds.Encapsulate(plot.StartingCell.GetWorldSpacePosition());
                 houseCollider.size = houseBounds.size;
                 //Not Tested 
-                houseCollider.center = houseBounds.center;
+                //houseCollider.center = houseBounds.center;
             }
             else
             {

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.WSA;
 
 
 public class House 
@@ -139,20 +140,14 @@ public class House
 
         BuildRoomConnections();
 
-        //Rooms[0].BuildFloor(GetRandomObject(houseTheme.Floor), _parentInstance);
-        //Rooms[0].BuildFacade(GetRandomObject(houseTheme.InteriorWall),
-        //            GetRandomObject(houseTheme.ExtiriorWall),
-        //            GetRandomObject(houseTheme.ExteriorWindows),
-        //            GetRandomObject(houseTheme.Doors),
-        //            _parentInstance);
+
 
         foreach (Room room in Rooms)
         {
-
             room.BuildFloor(GetRandomObject(houseTheme.Floor), _parentInstance);
             room.BuildFacade(GetRandomObject(houseTheme.InteriorWall),
                         GetRandomObject(houseTheme.ExtiriorWall),
-                        GetRandomObject(houseTheme.ExteriorWindows),
+                        houseTheme.ExteriorWindows,
                         GetRandomObject(houseTheme.Doors),
                         _parentInstance);
         }

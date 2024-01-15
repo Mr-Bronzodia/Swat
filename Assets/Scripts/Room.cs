@@ -74,7 +74,7 @@ public class Room : TreeMapNode, IEquatable<Room>
         return true;
     }
 
-    public void BuildFacade(GameObject wallInsidePrefab, GameObject wallOutsidePrefab, GameObject windowPrefab, GameObject doorPrefab, GameObject parentInstance) 
+    public void BuildFacade(GameObject wallInsidePrefab, GameObject wallOutsidePrefab, List<GameObject> windowPrefab, GameObject doorPrefab, GameObject parentInstance) 
     {
         foreach (Vector3 doorPosition in DoorPositions)
         {
@@ -136,15 +136,31 @@ public class Room : TreeMapNode, IEquatable<Room>
         }
     }
 
-    private void BuildOutsideWall(Vector3 startPoint, Vector3 endPoint, GameObject wallPrefab, GameObject windowPrefab, GameObject parentInstance)
+    private void BuildOutsideWall(Vector3 startPoint, Vector3 endPoint, GameObject wallPrefab, List<GameObject> windowPrefabs, GameObject parentInstance)
     {
+        float wallDistance = Vector3.Distance(startPoint, endPoint);
+
+        GameObject windowPrefab = null;
+        float lastBiggest = 0;
+        foreach (GameObject window in windowPrefabs)
+        {
+            MeshRenderer renderer = window.GetComponentInChildren<MeshRenderer>();
+            float windowSize = renderer.bounds.size.x;
+
+            if (lastBiggest > windowSize && windowPrefab != null) continue;
+            lastBiggest = windowSize;
+
+            if (windowSize < wallDistance / 1.5f) windowPrefab = window;
+        }
+
+        if (windowPrefab == null) windowPrefab = windowPrefabs[0];
+
         MeshRenderer windowRenderer = windowPrefab.GetComponentInChildren<MeshRenderer>();
         MeshRenderer wallRenderer = wallPrefab.GetComponentInChildren<MeshRenderer>();
 
         float windowWidth = windowRenderer.bounds.size.x;
         float wallWidth = wallRenderer.bounds.size.x;
 
-        float wallDistance = Vector3.Distance(startPoint, endPoint);
         Vector3 wallDirection = (endPoint - startPoint).normalized;
 
         int noWindows = (int)(wallDistance / (windowWidth + (wallWidth * 2)));
