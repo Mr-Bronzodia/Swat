@@ -28,7 +28,12 @@ public class House
             {
                 if (Rooms[i] == Rooms[j]) continue;
 
-                if (Rooms[i].IsAdjusted(Rooms[j])) adjustedRooms.Add(Rooms[j]);
+                if (Rooms[i].IsAdjusted(Rooms[j]))
+                {
+                    adjustedRooms.Add(Rooms[j]);
+                    Rooms[i].AddAdjustedRoom(Rooms[j]);
+                    Rooms[j].AddAdjustedRoom(Rooms[i]);
+                }
             }
 
             if (adjustedRooms.Count == 0) Debug.LogError("No connections found for " + Rooms[i].RoomType.ToString());
@@ -134,12 +139,23 @@ public class House
 
         BuildRoomConnections();
 
-        Rooms[0].BuildFloor(GetRandomObject(houseTheme.Floor), _parentInstance);
-        Rooms[0].BuildFacade(GetRandomObject(houseTheme.InteriorWall),
-                    GetRandomObject(houseTheme.ExtiriorWall),
-                    GetRandomObject(houseTheme.ExteriorWindows),
-                    GetRandomObject(houseTheme.Doors),
-                    _parentInstance);
+        //Rooms[0].BuildFloor(GetRandomObject(houseTheme.Floor), _parentInstance);
+        //Rooms[0].BuildFacade(GetRandomObject(houseTheme.InteriorWall),
+        //            GetRandomObject(houseTheme.ExtiriorWall),
+        //            GetRandomObject(houseTheme.ExteriorWindows),
+        //            GetRandomObject(houseTheme.Doors),
+        //            _parentInstance);
+
+        foreach (Room room in Rooms)
+        {
+
+            room.BuildFloor(GetRandomObject(houseTheme.Floor), _parentInstance);
+            room.BuildFacade(GetRandomObject(houseTheme.InteriorWall),
+                        GetRandomObject(houseTheme.ExtiriorWall),
+                        GetRandomObject(houseTheme.ExteriorWindows),
+                        GetRandomObject(houseTheme.Doors),
+                        _parentInstance);
+        }
 
     }
 }

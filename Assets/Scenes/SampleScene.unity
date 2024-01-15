@@ -389,12 +389,12 @@ PrefabInstance:
     - target: {fileID: 1236284663255497159, guid: 466276fc1ab6bb3408c5771cec032c43,
         type: 3}
       propertyPath: _showRoomDoors
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1236284663255497159, guid: 466276fc1ab6bb3408c5771cec032c43,
         type: 3}
       propertyPath: _showRoomNames
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1236284663255497159, guid: 466276fc1ab6bb3408c5771cec032c43,
         type: 3}
@@ -404,7 +404,7 @@ PrefabInstance:
     - target: {fileID: 1236284663255497159, guid: 466276fc1ab6bb3408c5771cec032c43,
         type: 3}
       propertyPath: _showRoomCenter
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1236284663255497159, guid: 466276fc1ab6bb3408c5771cec032c43,
         type: 3}
@@ -474,12 +474,12 @@ PrefabInstance:
     - target: {fileID: 6297008960097534447, guid: 466276fc1ab6bb3408c5771cec032c43,
         type: 3}
       propertyPath: m_Size.x
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6297008960097534447, guid: 466276fc1ab6bb3408c5771cec032c43,
         type: 3}
       propertyPath: m_Size.z
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
