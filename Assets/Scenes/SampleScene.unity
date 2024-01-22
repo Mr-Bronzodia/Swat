@@ -389,12 +389,12 @@ PrefabInstance:
     - target: {fileID: 1236284663255497159, guid: 466276fc1ab6bb3408c5771cec032c43,
         type: 3}
       propertyPath: _showRoomDoors
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1236284663255497159, guid: 466276fc1ab6bb3408c5771cec032c43,
         type: 3}
       propertyPath: _showRoomNames
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1236284663255497159, guid: 466276fc1ab6bb3408c5771cec032c43,
         type: 3}
@@ -404,12 +404,12 @@ PrefabInstance:
     - target: {fileID: 1236284663255497159, guid: 466276fc1ab6bb3408c5771cec032c43,
         type: 3}
       propertyPath: _showRoomCenter
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1236284663255497159, guid: 466276fc1ab6bb3408c5771cec032c43,
         type: 3}
       propertyPath: _showRoomConnection
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1236284663255497159, guid: 466276fc1ab6bb3408c5771cec032c43,
         type: 3}

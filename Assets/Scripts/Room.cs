@@ -82,14 +82,13 @@ public class Room : TreeMapNode, IEquatable<Room>
         }
     }
 
-    private bool IsWallFacingOutside(Vector3 wallStart, Vector3 wallEnd)
+    private bool IsWallFacingOutside(Wall wall)
     {
-        Vector3 wallMiddlePoint = Vector3.Lerp(wallStart, wallEnd, .5f);
-        Vector3 outsideDirection = FindWallOutsideDirection(wallMiddlePoint);
+        Vector3 outsideDirection = (wall.MiddlePoint - Bounds.center).normalized;
 
         foreach (Room adj in _adjustedRooms)
         {
-            if (adj.Bounds.Contains(wallMiddlePoint + outsideDirection * .2f)) return false;
+            if (adj.Bounds.Contains(wall.MiddlePoint + outsideDirection * .2f)) return false;
         }
         
         return true;
@@ -97,174 +96,10 @@ public class Room : TreeMapNode, IEquatable<Room>
 
     public void BuildFacade(GameObject wallInsidePrefab, GameObject wallOutsidePrefab, List<GameObject> windowPrefab, GameObject doorPrefab, GameObject parentInstance) 
     {
-        Vector3 bottomLeft = Bounds.min;
-        Vector3 topLeft = new Vector3(Bounds.min.x, Bounds.center.y, Bounds.max.z);
-        Vector3 topRight = Bounds.max;
-        Vector3 bottomRight = new Vector3(Bounds.max.x, Bounds.center.y, Bounds.min.z);
-
         foreach (KeyValuePair<Sides, Wall> wall in Walls)
         {
-            foreach (Vector3 doorPos in wall.Value._doorPositions)
-            {
-                GameObject doorInstance = UnityEngine.Object.Instantiate(doorPrefab, doorPos, Quaternion.identity, parentInstance.transform);
-
-                doorInstance.transform.forward = FindWallOutsideDirection(doorInstance.transform);
-
-                doorInstance.name = doorInstance.name + " " + RoomType.ToString();
-            }
+            if (!IsWallFacingOutside(wall.Value)) wall.Value.BuildIndoorsWall(Bounds.center, wallInsidePrefab, doorPrefab, parentInstance);
         }
-
-        //Left Wall
-        if (IsWallFacingOutside(bottomLeft, topLeft)) BuildOutsideWall(bottomLeft, topLeft, wallOutsidePrefab, windowPrefab, parentInstance);
-        else BuildIndoorsWall(bottomLeft, topLeft, wallInsidePrefab, parentInstance);
-
-        //Top Wall
-        if (IsWallFacingOutside(topLeft, topRight)) BuildOutsideWall(topLeft, topRight, wallOutsidePrefab, windowPrefab, parentInstance);
-        else BuildIndoorsWall(topLeft, topRight, wallInsidePrefab, parentInstance);
-
-        //Right Wall
-        if (IsWallFacingOutside(topRight, bottomRight)) BuildOutsideWall(topRight, bottomRight, wallOutsidePrefab, windowPrefab, parentInstance);
-        else BuildIndoorsWall(topRight, bottomRight, wallInsidePrefab, parentInstance);
-
-        //Bottom Wall
-        if (IsWallFacingOutside(bottomRight, bottomLeft)) BuildOutsideWall(bottomRight, bottomLeft, wallOutsidePrefab, windowPrefab, parentInstance);
-        else BuildIndoorsWall(bottomRight, bottomLeft, wallInsidePrefab, parentInstance);
-    }
-
-    private void BuildIndoorsWall(Vector3 startPoint, Vector3 endPoint, GameObject wallPrefab, GameObject parentInstance)
-    {
-        float wallDistance = Vector3.Distance(startPoint, endPoint);
-
-        MeshRenderer wallRenderer = wallPrefab.GetComponentInChildren<MeshRenderer>();
-
-        float wallWidth = wallRenderer.bounds.size.x;
-        int noWalls = (int)(wallDistance / wallWidth);
-
-        float reminder = (wallDistance % wallWidth) / wallWidth;
-        float reminderPerInstance = reminder / noWalls;
-
-        Vector3 wallDirection = (endPoint - startPoint).normalized;
-
-        wallWidth += reminderPerInstance;
-
-        for (int i = 0; i < noWalls; i++)
-        {
-            Vector3 nextWallPos = startPoint + (((wallWidth * i) + wallWidth / 2) * wallDirection);
-            GameObject nextWall = UnityEngine.Object.Instantiate(wallPrefab, nextWallPos, Quaternion.identity, parentInstance.transform);
-            nextWall.transform.forward = FindWallOutsideDirection(Vector3.Lerp(startPoint, endPoint, .5f));
-            Vector3 newWallScale = new Vector3(nextWall.transform.localScale.x + (nextWall.transform.localScale.x * reminderPerInstance),
-                                               nextWall.transform.localScale.y,
-                                               nextWall.transform.localScale.z);
-
-            if (reminder != 0) nextWall.transform.localScale = newWallScale;
-        }
-    }
-
-    private void BuildOutsideWall(Vector3 startPoint, Vector3 endPoint, GameObject wallPrefab, List<GameObject> windowPrefabs, GameObject parentInstance)
-    {
-        float wallDistance = Vector3.Distance(startPoint, endPoint);
-
-        GameObject windowPrefab = null;
-        float lastBiggest = 0;
-        foreach (GameObject window in windowPrefabs)
-        {
-            MeshRenderer renderer = window.GetComponentInChildren<MeshRenderer>();
-            float windowSize = renderer.bounds.size.x;
-
-            if (lastBiggest > windowSize && windowPrefab != null) continue;
-            lastBiggest = windowSize;
-
-            if (windowSize < wallDistance / 1.5f) windowPrefab = window;
-        }
-
-        if (windowPrefab == null) windowPrefab = windowPrefabs[0];
-
-        MeshRenderer windowRenderer = windowPrefab.GetComponentInChildren<MeshRenderer>();
-        MeshRenderer wallRenderer = wallPrefab.GetComponentInChildren<MeshRenderer>();
-
-        float windowWidth = windowRenderer.bounds.size.x;
-        float wallWidth = wallRenderer.bounds.size.x;
-
-        Vector3 wallDirection = (endPoint - startPoint).normalized;
-
-        int noWindows = (int)(wallDistance / (windowWidth + (wallWidth * 2)));
-        int noWalls = (int)((wallDistance - noWindows * windowWidth) / wallWidth);
-
-        float reminder = (wallDistance % wallWidth) / wallWidth;
-        float reminderPerInstance = reminder / noWalls;
-
-        wallWidth += reminderPerInstance;
-
-        int windowSpacing = 0;
-        if (noWindows != 0) windowSpacing = (int)(noWalls / noWindows);
-
-        float distancePointer = wallWidth / 2;
-        int sinceLastWindow = Mathf.CeilToInt(windowSpacing / 2);
-        for (int i = 0; i < noWalls + noWindows; i++)
-        {
-            Vector3 nextWallPos = startPoint + distancePointer * wallDirection;
-            GameObject nextWall = UnityEngine.Object.Instantiate(wallPrefab, nextWallPos, Quaternion.identity, parentInstance.transform);
-            Vector3 newWallScale = new Vector3(nextWall.transform.localScale.x + (nextWall.transform.localScale.x * reminderPerInstance),
-                                               nextWall.transform.localScale.y,
-                                               nextWall.transform.localScale.z);
-
-            if (reminder != 0) nextWall.transform.localScale = newWallScale;
-            nextWall.transform.forward = FindWallOutsideDirection(Vector3.Lerp(startPoint, endPoint, .5f));
-
-            distancePointer += wallWidth;
-            sinceLastWindow++;
-
-            if (noWindows == 0) continue;
-            if (noWalls + noWalls == i) break;
-
-            if (windowSpacing <= sinceLastWindow) 
-            {
-                sinceLastWindow = 0;
-
-                distancePointer += (wallWidth / 2) - reminderPerInstance;
-
-                Vector3 nextWindowPos = startPoint + (distancePointer + wallWidth - reminderPerInstance) * wallDirection;
-                GameObject nextWindow = UnityEngine.Object.Instantiate(windowPrefab, nextWindowPos, Quaternion.identity, parentInstance.transform);
-                nextWindow.transform.forward = FindWallOutsideDirection(Vector3.Lerp(startPoint, endPoint, .5f));
-
-                distancePointer += (windowWidth - wallWidth / 2) + reminderPerInstance;
-                i++;
-            }
-        }
-    }
-
-
-    private Vector3 FindWallOutsideDirection(Transform transform)
-    {
-
-        Vector3 upWall = new Vector3(Bounds.center.x, 0f, Bounds.max.z);
-        Vector3 downWall = new Vector3(Bounds.center.x, 0f, Bounds.min.z);
-        Vector3 leftWall = new Vector3(Bounds.min.x, 0f, Bounds.center.z);
-        Vector3 rightWall = new Vector3(Bounds.max.x, 0f, Bounds.center.z);
-
-        List<Vector3> walls = new List<Vector3>() { upWall, downWall, leftWall, rightWall };
-
-        Vector3 closestPoint = Vector3.zero;
-        float smallestDistance = float.MaxValue;
-
-        foreach (Vector3 wall in walls)
-        {
-            float distance = Vector3.Distance(wall, transform.position);
-
-            if (distance < smallestDistance)
-            {
-                smallestDistance = distance;
-                closestPoint = wall;
-            }
-        }
-
-        return (closestPoint - Bounds.center).normalized;
-    }
-
-
-    private Vector3 FindWallOutsideDirection(Vector3 wallMiddlePoint)
-    {
-        return (wallMiddlePoint - Bounds.center).normalized;
     }
 
     /// <summary>
@@ -287,18 +122,12 @@ public class Room : TreeMapNode, IEquatable<Room>
         return false;
     }
 
-
     private void FindDoorPosition(Room other)
     {
         Vector3 otherDirection = (other.Bounds.center - Bounds.center).normalized;
 
         Vector3 upVector = new Vector3(0, 0, 1f);
-        Vector3 downVector = new Vector3(0, 0, -1f);
         Vector3 rightVector = new Vector3(1f, 0, 0);
-        Vector3 leftVector = new Vector3(-1f, 0, 0);
-
-        Debug.Log(RoomType.ToString() + " " + other.RoomType + " " + otherDirection + " angle UP: " + Vector3.Angle(otherDirection, upVector) + " Angle Right: " + Vector3.Angle(otherDirection, rightVector));
-
 
         Wall thisWallSide;
         Wall otherWallSide;
@@ -328,7 +157,6 @@ public class Room : TreeMapNode, IEquatable<Room>
         }
 
     }
-
 
     public override string ToString()
     {
