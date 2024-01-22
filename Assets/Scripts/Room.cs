@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Runtime.InteropServices;
 using Unity.VisualScripting;
+using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,17 +12,20 @@ public class Room : TreeMapNode, IEquatable<Room>
 {
     public Bounds Bounds { get; private set; }
     public List<Room> ConnectedRooms { get; private set; }
-
-    public List<Vector3> DoorPositions { get; private set; }
+    public Dictionary<Sides, Wall> Walls { get; private set; }
 
     private List<Room> _adjustedRooms;
+
+    private readonly int ANGLETHRESHOLD = 30;
+
 
     public Room(RoomTypes roomType, float width, float height, Bounds bounds) : base(roomType, width, height)
     {
         ConnectedRooms = new List<Room>();
-        DoorPositions = new List<Vector3>();
-        _adjustedRooms = new List<Room>();
         Bounds = bounds;
+        Walls = new Dictionary<Sides, Wall>();
+
+        _adjustedRooms = new List<Room>();
     }
 
     public void AddRoomConnection(Room room)
@@ -35,16 +39,33 @@ public class Room : TreeMapNode, IEquatable<Room>
         _adjustedRooms.Add(room);
     }
 
+    public void FinalizeLayout()
+    {
+        Vector3 bottomLeft = Bounds.min;
+        Vector3 topLeft = new Vector3(Bounds.min.x, Bounds.center.y, Bounds.max.z);
+        Vector3 topRight = Bounds.max;
+        Vector3 bottomRight = new Vector3(Bounds.max.x, Bounds.center.y, Bounds.min.z);
+
+        Wall topWall = new Wall(topLeft, topRight, Sides.Up);
+        Walls.Add(Sides.Up, topWall);
+        Wall leftWall = new Wall(bottomLeft, topLeft, Sides.Left);
+        Walls.Add(Sides.Left, leftWall);
+        Wall rightWall = new Wall(topRight, bottomRight, Sides.Right);
+        Walls.Add(Sides.Right, rightWall);
+        Wall bottomWall = new Wall(bottomRight, bottomLeft, Sides.Down);
+        Walls.Add(Sides.Down, bottomWall);
+    }
+
     public void BuildFloor(GameObject floorPrefab, GameObject parentInstance)
     {
         GameObject floorInstance = UnityEngine.Object.Instantiate(floorPrefab, Bounds.center, Quaternion.identity, parentInstance.transform);
         floorInstance.name = floorInstance.name + " " + RoomType.ToString();
 
-        MeshRenderer flooRenderer;
+        MeshRenderer floorRenderer;
 
-        if (floorInstance.TryGetComponent<MeshRenderer>(out flooRenderer))
+        if (floorInstance.TryGetComponent<MeshRenderer>(out floorRenderer))
         {
-            Bounds floorBounds = flooRenderer.bounds;
+            Bounds floorBounds = floorRenderer.bounds;
 
             Bounds roomBounds = Bounds;
 
@@ -57,18 +78,18 @@ public class Room : TreeMapNode, IEquatable<Room>
         }
         else
         {
-            Debug.LogError("Can't Find MeshRenderer on " + floorPrefab.name.ToString() + " while genereting floor");
+            Debug.LogError("Can't Find MeshRenderer on " + floorPrefab.name.ToString() + " while generating floor");
         }
     }
 
     private bool IsWallFacingOutside(Vector3 wallStart, Vector3 wallEnd)
     {
-        Vector3 wallMiddelPoint = Vector3.Lerp(wallStart, wallEnd, .5f);
-        Vector3 outsideDirection = FindWallOutsideDirection(wallMiddelPoint);
+        Vector3 wallMiddlePoint = Vector3.Lerp(wallStart, wallEnd, .5f);
+        Vector3 outsideDirection = FindWallOutsideDirection(wallMiddlePoint);
 
         foreach (Room adj in _adjustedRooms)
         {
-            if (adj.Bounds.Contains(wallMiddelPoint + outsideDirection * .2f)) return false;
+            if (adj.Bounds.Contains(wallMiddlePoint + outsideDirection * .2f)) return false;
         }
         
         return true;
@@ -76,19 +97,22 @@ public class Room : TreeMapNode, IEquatable<Room>
 
     public void BuildFacade(GameObject wallInsidePrefab, GameObject wallOutsidePrefab, List<GameObject> windowPrefab, GameObject doorPrefab, GameObject parentInstance) 
     {
-        foreach (Vector3 doorPosition in DoorPositions)
-        {
-            GameObject doorInstance = UnityEngine.Object.Instantiate(doorPrefab, doorPosition, Quaternion.identity, parentInstance.transform);
-
-            doorInstance.transform.forward = FindWallOutsideDirection(doorInstance.transform);
-
-            doorInstance.name = doorInstance.name + " " + RoomType.ToString();
-        }
-
         Vector3 bottomLeft = Bounds.min;
         Vector3 topLeft = new Vector3(Bounds.min.x, Bounds.center.y, Bounds.max.z);
         Vector3 topRight = Bounds.max;
         Vector3 bottomRight = new Vector3(Bounds.max.x, Bounds.center.y, Bounds.min.z);
+
+        foreach (KeyValuePair<Sides, Wall> wall in Walls)
+        {
+            foreach (Vector3 doorPos in wall.Value._doorPositions)
+            {
+                GameObject doorInstance = UnityEngine.Object.Instantiate(doorPrefab, doorPos, Quaternion.identity, parentInstance.transform);
+
+                doorInstance.transform.forward = FindWallOutsideDirection(doorInstance.transform);
+
+                doorInstance.name = doorInstance.name + " " + RoomType.ToString();
+            }
+        }
 
         //Left Wall
         if (IsWallFacingOutside(bottomLeft, topLeft)) BuildOutsideWall(bottomLeft, topLeft, wallOutsidePrefab, windowPrefab, parentInstance);
@@ -266,45 +290,43 @@ public class Room : TreeMapNode, IEquatable<Room>
 
     private void FindDoorPosition(Room other)
     {
-        Room smallerRoom;
-        Room biggerRoom;
+        Vector3 otherDirection = (other.Bounds.center - Bounds.center).normalized;
 
-        if (this.Size < other.Size)
+        Vector3 upVector = new Vector3(0, 0, 1f);
+        Vector3 downVector = new Vector3(0, 0, -1f);
+        Vector3 rightVector = new Vector3(1f, 0, 0);
+        Vector3 leftVector = new Vector3(-1f, 0, 0);
+
+        Debug.Log(RoomType.ToString() + " " + other.RoomType + " " + otherDirection + " angle UP: " + Vector3.Angle(otherDirection, upVector) + " Angle Right: " + Vector3.Angle(otherDirection, rightVector));
+
+
+        Wall thisWallSide;
+        Wall otherWallSide;
+
+        if (Vector3.Angle(otherDirection, upVector) < ANGLETHRESHOLD)
         {
-            smallerRoom = this;
-            biggerRoom = other;
-        }
-        else
-        {
-            smallerRoom = other;
-            biggerRoom = this;
-        }
+            thisWallSide = Walls[Sides.Up];
+            otherWallSide = other.Walls[Sides.Down];
 
+            Wall shorterWall = thisWallSide.Length < otherWallSide.Length ? thisWallSide : otherWallSide;
 
-        Vector3 upWall = new Vector3(smallerRoom.Bounds.center.x, 0f, smallerRoom.Bounds.max.z);
-        Vector3 downWall = new Vector3(smallerRoom.Bounds.center.x, 0f, smallerRoom.Bounds.min.z);
-        Vector3 leftWall = new Vector3(smallerRoom.Bounds.min.x, 0f, smallerRoom.Bounds.center.z);
-        Vector3 rightWall = new Vector3(smallerRoom.Bounds.max.x, 0f, smallerRoom.Bounds.center.z);
-
-        List<Vector3> walls = new List<Vector3>() { upWall, downWall, leftWall, rightWall};
-
-        Vector3 closestPoint = Vector3.zero;
-        float smallestDistance = float.MaxValue;
-
-        foreach (Vector3 wall in walls)
-        {
-            float distance = Vector3.Distance(wall, biggerRoom.Bounds.center);
-
-            if (distance < smallestDistance)
-            {
-                smallestDistance = distance;
-                closestPoint = wall;
-            }
+            thisWallSide.AddDoorPosition(shorterWall.MiddlePoint);
+            otherWallSide.AddDoorPosition(shorterWall.MiddlePoint);
+            return;
         }
 
-        if (other.DoorPositions.Contains(closestPoint)) return;
+        if (Vector3.Angle(otherDirection, rightVector) < ANGLETHRESHOLD)
+        {
+            thisWallSide = Walls[Sides.Right];
+            otherWallSide = other.Walls[Sides.Left];
 
-        if (closestPoint != Vector3.zero && !DoorPositions.Contains(closestPoint)) DoorPositions.Add(closestPoint);
+            Wall shorterWall = thisWallSide.Length < otherWallSide.Length ? thisWallSide : otherWallSide;
+
+            thisWallSide.AddDoorPosition(shorterWall.MiddlePoint);
+            otherWallSide.AddDoorPosition(shorterWall.MiddlePoint);
+            return;
+        }
+
     }
 
 

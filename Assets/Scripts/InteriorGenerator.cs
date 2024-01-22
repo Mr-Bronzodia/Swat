@@ -106,10 +106,13 @@ public class InteriorGenerator : MonoBehaviour
             }
             Gizmos.color = Color.green;
 
-            foreach (Vector3 doorPos in room.DoorPositions)
+            foreach (KeyValuePair<Sides, Wall> wall in room.Walls)
             {
                 if (!_showRoomDoors) continue;
-                Gizmos.DrawCube(doorPos + new Vector3(0f, 1f, 0), new Vector3(.2f, 2, 1f));
+                foreach (Vector3 doorPos in wall.Value._doorPositions)
+                {
+                    Gizmos.DrawCube(doorPos + new Vector3(0f, 1f, 0), new Vector3(.2f, 2, 1f));
+                }
             }
 
         }

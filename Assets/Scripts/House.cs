@@ -138,9 +138,12 @@ public class House
     {
         GenerateFloorPlan();
 
+        foreach (Room room in Rooms)
+        {
+            room.FinalizeLayout();
+        }
+
         BuildRoomConnections();
-
-
 
         foreach (Room room in Rooms)
         {
