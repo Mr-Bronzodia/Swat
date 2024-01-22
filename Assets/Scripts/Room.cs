@@ -98,7 +98,8 @@ public class Room : TreeMapNode, IEquatable<Room>
     {
         foreach (KeyValuePair<Sides, Wall> wall in Walls)
         {
-            if (!IsWallFacingOutside(wall.Value)) wall.Value.BuildIndoorsWall(Bounds.center, wallInsidePrefab, doorPrefab, parentInstance);
+            if (IsWallFacingOutside(wall.Value)) wall.Value.BuildOutsideWall(Bounds.center, wallOutsidePrefab, windowPrefab, parentInstance);
+            else wall.Value.BuildIndoorsWall(Bounds.center, wallInsidePrefab, doorPrefab, parentInstance);
         }
     }
 

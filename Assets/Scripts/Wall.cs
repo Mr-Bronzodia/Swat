@@ -83,10 +83,7 @@ public class Wall
                              parentInstance);
 
             GameObject nextDoor = UnityEngine.Object.Instantiate(doorPrefab, sortedDoors[i + 1], Quaternion.identity, parentInstance.transform);
-            nextDoor.transform.forward = (MiddlePoint - roomCentre).normalized;
-
-            Debug.DrawLine(sortedDoors[i] + (doorWidth / 2) * wallDirection, sortedDoors[i + 1] + (doorWidth / 2) * -wallDirection, Color.black);
-            Debug.Break();  
+            nextDoor.transform.forward = (MiddlePoint - roomCentre).normalized; 
         }
 
         BuildWallSegment(sortedDoors[sortedDoors.Count - 1] + (doorWidth / 2) * wallDirection, EndPoint, roomCentre, wallPrefab, parentInstance);
@@ -136,77 +133,56 @@ public class Wall
         }
     }
 
-    private void BuildOutsideWall(Vector3 startPoint, Vector3 endPoint, Vector3 roomCentre, GameObject wallPrefab, List<GameObject> windowPrefabs, GameObject parentInstance)
+    public void BuildOutsideWall(Vector3 roomCentre, GameObject wallPrefab, List<GameObject> windowPrefabs, GameObject parentInstance)
     {
-        float wallDistance = Vector3.Distance(startPoint, endPoint);
 
-        GameObject windowPrefab = null;
-        float lastBiggest = 0;
+        List<GameObject> suitableWindows = new List<GameObject>();
         foreach (GameObject window in windowPrefabs)
         {
             MeshRenderer renderer = window.GetComponentInChildren<MeshRenderer>();
             float windowSize = renderer.bounds.size.x;
 
-            if (lastBiggest > windowSize && windowPrefab != null) continue;
-            lastBiggest = windowSize;
-
-            if (windowSize < wallDistance / 1.5f) windowPrefab = window;
+            if (windowSize < Length / 1.5f) suitableWindows.Add(window);
         }
 
-        if (windowPrefab == null) windowPrefab = windowPrefabs[0];
+        GameObject windowPrefab = suitableWindows[UnityEngine.Random.Range(0, suitableWindows.Count)];
 
         MeshRenderer windowRenderer = windowPrefab.GetComponentInChildren<MeshRenderer>();
         MeshRenderer wallRenderer = wallPrefab.GetComponentInChildren<MeshRenderer>();
 
         float windowWidth = windowRenderer.bounds.size.x;
         float wallWidth = wallRenderer.bounds.size.x;
+        Vector3 wallDirection = (EndPoint - StartPoint).normalized;
 
-        Vector3 wallDirection = (endPoint - startPoint).normalized;
+        int noWindows = (int)(Length / (windowWidth + (wallWidth * 1.5f)));
 
-        int noWindows = (int)(wallDistance / (windowWidth + (wallWidth * 2)));
-        int noWalls = (int)((wallDistance - noWindows * windowWidth) / wallWidth);
-
-        float reminder = (wallDistance % wallWidth) / wallWidth;
-        float reminderPerInstance = reminder / noWalls;
-
-        wallWidth += reminderPerInstance;
-
-        int windowSpacing = 0;
-        if (noWindows != 0) windowSpacing = (int)(noWalls / noWindows);
-
-        float distancePointer = wallWidth / 2;
-        int sinceLastWindow = Mathf.CeilToInt(windowSpacing / 2);
-        for (int i = 0; i < noWalls + noWindows; i++)
+        for (int i = 0; i < noWindows; i++)
         {
-            Vector3 nextWallPos = startPoint + distancePointer * wallDirection;
-            GameObject nextWall = UnityEngine.Object.Instantiate(wallPrefab, nextWallPos, Quaternion.identity, parentInstance.transform);
-            Vector3 newWallScale = new Vector3(nextWall.transform.localScale.x + (nextWall.transform.localScale.x * reminderPerInstance),
-                                               nextWall.transform.localScale.y,
-                                               nextWall.transform.localScale.z);
-
-            if (reminder != 0) nextWall.transform.localScale = newWallScale;
-            nextWall.transform.forward = (MiddlePoint - roomCentre).normalized;
-
-            distancePointer += wallWidth;
-            sinceLastWindow++;
-
-            if (noWindows == 0) continue;
-            if (noWalls + noWalls == i) break;
-
-            if (windowSpacing <= sinceLastWindow) 
-            {
-                sinceLastWindow = 0;
-
-                distancePointer += (wallWidth / 2) - reminderPerInstance;
-
-                Vector3 nextWindowPos = startPoint + (distancePointer + wallWidth - reminderPerInstance) * wallDirection;
-                GameObject nextWindow = UnityEngine.Object.Instantiate(windowPrefab, nextWindowPos, Quaternion.identity, parentInstance.transform);
-                nextWindow.transform.forward = (MiddlePoint - roomCentre).normalized;
-
-                distancePointer += (windowWidth - wallWidth / 2) + reminderPerInstance;
-                i++;
-            }
+            Vector3 windowPos = Vector3.Lerp(StartPoint, EndPoint, (i + 0.5f) / noWindows);
+            GameObject nextWindow = UnityEngine.Object.Instantiate(windowPrefab, windowPos, Quaternion.identity, parentInstance.transform);
+            _windowPositions.Add(windowPos);
+            nextWindow.transform.forward = (MiddlePoint - roomCentre).normalized;
         }
+
+        if (_windowPositions.Count == 0)
+        {
+            BuildWallSegment(StartPoint, EndPoint, roomCentre, wallPrefab, parentInstance);
+            return;
+        }
+
+        BuildWallSegment(StartPoint, _windowPositions[0] + (windowWidth / 2) * -wallDirection, roomCentre, wallPrefab, parentInstance);
+
+        for (int i = 0; i < _windowPositions.Count - 1; i++)
+        {
+            BuildWallSegment(_windowPositions[i] + (windowWidth / 2) * wallDirection,
+                             _windowPositions[i + 1] + (windowWidth / 2) * -wallDirection,
+                             roomCentre,
+                             wallPrefab,
+                             parentInstance);
+
+        }
+
+        BuildWallSegment(_windowPositions[_windowPositions.Count - 1] + (windowWidth / 2) * wallDirection, EndPoint, roomCentre, wallPrefab, parentInstance);
     }
 
 }
