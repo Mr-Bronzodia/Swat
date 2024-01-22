@@ -9,8 +9,6 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider))]
 public class InteriorGenerator : MonoBehaviour
 {
-    BoxCollider _collider;
-
     [SerializeField]
     GameObject _wall;
 
@@ -35,15 +33,32 @@ public class InteriorGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _collider = GetComponent<BoxCollider>();
+        Generate();
+    }
 
-        House house = new House(_collider.bounds, this.gameObject);
+    public void Generate()
+    {
+        DestoryHouse();
+
+        BoxCollider collider = GetComponent<BoxCollider>();
+
+        House house = new House(collider.bounds, this.gameObject);
 
         HouseTheme[] themes = Resources.LoadAll<HouseTheme>("HouseThemes");
 
         house.InstantiateHouse(themes[UnityEngine.Random.Range(0, themes.Length)]);
 
         _rooms = house.Rooms;
+    }
+
+    public void DestoryHouse()
+    {
+        while (transform.childCount != 0)
+        {
+            DestroyImmediate(transform.GetChild(0).gameObject);
+        }
+
+        if (_rooms != null && _rooms.Count > 0) _rooms.Clear();
     }
 
     /// <summary>

@@ -145,6 +145,8 @@ public class Wall
             if (windowSize < Length / 1.5f) suitableWindows.Add(window);
         }
 
+        if (suitableWindows.Count == 0) suitableWindows.Add(windowPrefabs[0]);
+
         GameObject windowPrefab = suitableWindows[UnityEngine.Random.Range(0, suitableWindows.Count)];
 
         MeshRenderer windowRenderer = windowPrefab.GetComponentInChildren<MeshRenderer>();
