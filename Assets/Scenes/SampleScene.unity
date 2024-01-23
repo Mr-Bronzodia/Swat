@@ -612,7 +612,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f4e2a1de02baa864981926a377e9fa4e, type: 2}
   - {fileID: 11400000, guid: 55df3e737b82cfc4fb7526521fa59bc2, type: 2}
   - {fileID: 11400000, guid: 658a0665d1846074dbd3663538fdf927, type: 2}
-  size: {x: 2, y: 2}
+  size: {x: 7, y: 7}
 --- !u!4 &1532554251
 Transform:
   m_ObjectHideFlags: 0

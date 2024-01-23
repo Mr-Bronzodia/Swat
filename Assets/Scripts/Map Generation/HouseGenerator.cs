@@ -56,8 +56,6 @@ public class HouseGenerator : MonoBehaviour
         if (_cellGrid != null) _cellGrid = null;
 
         Debug.Log("regenerate call");
-
-        FindSuitablePlotPosition();
     }
 
     /// <summary>
@@ -65,11 +63,12 @@ public class HouseGenerator : MonoBehaviour
     /// </summary>
     public void FindSuitablePlotPosition()
     {
-        _cellGrid = _waveFunctionCollapse.GetGrid();
+        _cellGrid = gameObject.GetComponent<WaveFunctionCollapse>().GetGrid();
 
         List<(int, Cell)> verticalRoads = new List<(int Index, Cell Cell)>();
         List<(int, Cell)> horizontalRoads = new List<(int Index, Cell Cell)>();
 
+        Debug.Log(_cellGrid.Length);
         
         for (int i = 0; i < _cellGrid.GetLength(0); i++) //Row major scan for continuous roads
         {

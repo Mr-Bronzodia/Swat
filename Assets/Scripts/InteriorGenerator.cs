@@ -37,7 +37,7 @@ public class InteriorGenerator : MonoBehaviour
 
     public void Generate()
     {
-        DestoryHouse();
+        DestroyHouse();
 
         BoxCollider collider = GetComponent<BoxCollider>();
 
@@ -49,7 +49,7 @@ public class InteriorGenerator : MonoBehaviour
 
         _rooms = house.Rooms;
     }
-    public void DestoryHouse()
+    public void DestroyHouse()
     {
         while (transform.childCount != 0)
         {

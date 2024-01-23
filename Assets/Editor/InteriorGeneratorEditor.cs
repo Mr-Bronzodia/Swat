@@ -25,7 +25,7 @@ public class InteriorGeneratorEditor : Editor
 
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Generate")) generator.Generate();
-        if (GUILayout.Button("Destroy")) generator.DestoryHouse();
+        if (GUILayout.Button("Destroy")) generator.DestroyHouse();
         EditorGUILayout.EndHorizontal();
     }
   

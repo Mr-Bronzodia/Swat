@@ -170,6 +170,8 @@ public class WaveFunctionCollapse : MonoBehaviour
         {
             DestroyImmediate(transform.GetChild(0).gameObject);
         }
+
+        OnGridRegenerate?.Invoke();
     }
 
 
