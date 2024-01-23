@@ -13,6 +13,9 @@ public class House
 
     private GameObject _parentInstance;
 
+    private readonly int ROOMTHRESHOLD = 150;
+    private readonly int HOUSEINCREMENT = 20;
+
     public House(Bounds bounds, GameObject parentInstance)
     {
         Bounds = bounds;
@@ -72,7 +75,7 @@ public class House
         float kitchenHeightRatio = Random.Range(1f, 1.5f);
         float bathroomHeightRatio = Random.Range(1f, 1.5f); ;
 
-        if (root.Size >= 150)
+        if (root.Size >= ROOMTHRESHOLD)
         {
             float officeArea = totalArea * Random.Range(.1f, .12f);
             bedRoomArea -= officeArea;
@@ -82,7 +85,7 @@ public class House
             root.Children.Add(office);
         }
 
-        if (root.Size >= 169)
+        if (root.Size >= ROOMTHRESHOLD + HOUSEINCREMENT * 1)
         {
             float connectorArea = totalArea * Random.Range(.08f, .12f);
             livingRoomArea -= connectorArea;
@@ -92,7 +95,7 @@ public class House
             root.Children.Add(connector);
         }
 
-        if (root.Size >= 175)
+        if (root.Size >= ROOMTHRESHOLD + HOUSEINCREMENT * 2)
         {
             float laundryArea = totalArea * Random.Range(.07f, .1f);
             livingRoomArea -= laundryArea;
@@ -102,7 +105,7 @@ public class House
             root.Children.Add(laundry);
         }
 
-        if (root.Size >= 183)
+        if (root.Size >= ROOMTHRESHOLD + HOUSEINCREMENT * 3)
         {
             float storageArea = totalArea * Random.Range(.05f, .07f);
             kitchenArea -= storageArea;
@@ -110,6 +113,27 @@ public class House
             float storageHeight = Mathf.Sqrt(storageArea / storageHeightRatio);
             TreeMapNode storage = new TreeMapNode(RoomTypes.StorageArea, storageHeight * storageHeightRatio, storageHeight);
             root.Children.Add(storage);
+        }
+
+        if (root.Size >= ROOMTHRESHOLD + HOUSEINCREMENT * 4)
+        {
+            float additionalBedroomArea = totalArea * Random.Range(.08f, .1f);
+            livingRoomArea -= additionalBedroomArea / 2;
+            bedRoomArea -= additionalBedroomArea / 2;
+            float newBedroomHeightRatio = Random.Range(1.1f, 1.2f);
+            float newBedroomHeight = Mathf.Sqrt(additionalBedroomArea / newBedroomHeightRatio);
+            TreeMapNode newBedroom = new TreeMapNode(RoomTypes.Bedroom, newBedroomHeight * newBedroomHeightRatio, newBedroomHeight);
+            root.Children.Add(newBedroom);
+        }
+
+        if (root.Size >= ROOMTHRESHOLD + HOUSEINCREMENT * 5)
+        {
+            float newBathroomArea = totalArea * Random.Range(.03f, .05f);
+            bathroomArea -= newBathroomArea;
+            float newBathroomHeightRatio = Random.Range(1.1f, 1.2f);
+            float newBathroomHeight = Mathf.Sqrt(newBathroomArea / newBathroomHeightRatio);
+            TreeMapNode newBathroom = new TreeMapNode(RoomTypes.Bathroom, newBathroomHeight * newBathroomHeightRatio, newBathroomHeight);
+            root.Children.Add(newBathroom);
         }
 
         float livingRoomHeight = Mathf.Sqrt(livingRoomArea / livingRoomHeightRatio);
@@ -130,20 +154,49 @@ public class House
 
         SquerifiedTreeMap treeMap = new SquerifiedTreeMap(root, Bounds);
 
-        Rooms = treeMap.GenerateTreemap(true);
+        Rooms = treeMap.GenerateTreemap(true, .7f);
+    }
+
+    private bool IsLayoutConnected()
+    {
+        List<Room> connected = new List<Room>();
+        TraverseLayout(Rooms[Random.Range(0, Rooms.Count)], connected);
+
+        return connected.Count == Rooms.Count;
+    }
+
+    public void TraverseLayout(Room room, List<Room> visited)
+    {
+        if (visited.Contains(room)) return;
+
+        visited.Add(room);
+
+        foreach (Room connected in room.ConnectedRooms) 
+        {
+            TraverseLayout(connected, visited);
+        }
     }
 
 
     public void InstantiateHouse(HouseTheme houseTheme)
     {
-        GenerateFloorPlan();
 
-        foreach (Room room in Rooms)
+        bool isLayoutValid = false;
+
+        while (!isLayoutValid)
         {
-            room.FinalizeLayout();
-        }
+            GenerateFloorPlan();
 
-        BuildRoomConnections();
+            foreach (Room room in Rooms)
+            {
+                room.FinalizeLayout();
+            }
+
+            BuildRoomConnections();
+
+            isLayoutValid = IsLayoutConnected();
+
+        }
 
         foreach (Room room in Rooms)
         {

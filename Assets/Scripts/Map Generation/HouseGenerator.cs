@@ -45,17 +45,10 @@ public class HouseGenerator : MonoBehaviour
         _waveFunctionCollapse.OnGridRegenerate -= RegeneratePlots;
     }
 
-    void Start()
-    {
-        
-    }
-
     public void RegeneratePlots()
     {
         if (_plotTile != null) _plots.Clear();
         if (_cellGrid != null) _cellGrid = null;
-
-        Debug.Log("regenerate call");
     }
 
     /// <summary>
@@ -68,7 +61,6 @@ public class HouseGenerator : MonoBehaviour
         List<(int, Cell)> verticalRoads = new List<(int Index, Cell Cell)>();
         List<(int, Cell)> horizontalRoads = new List<(int Index, Cell Cell)>();
 
-        Debug.Log(_cellGrid.Length);
         
         for (int i = 0; i < _cellGrid.GetLength(0); i++) //Row major scan for continuous roads
         {
