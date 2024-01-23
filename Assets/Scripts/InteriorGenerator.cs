@@ -14,6 +14,8 @@ public class InteriorGenerator : MonoBehaviour
     [Header("Generation Settings")]
     [SerializeField]
     private bool _shouldRandomizeChildren;
+    [SerializeField]
+    private bool _regenerateOnPlay;
 
     [Header("Debug Settings")]
     [SerializeField]
@@ -30,7 +32,7 @@ public class InteriorGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Generate();
+        if (_regenerateOnPlay) Generate();
     }
 
     public void Generate()

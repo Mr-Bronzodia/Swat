@@ -46,6 +46,15 @@ public class Cell : IComparable<Cell>
         PossibleTiles = Resources.LoadAll<Tile>("TileTypes").ToList();
     }
 
+    public void DestroyCellImmediate()
+    {
+        UnityEngine.Object.DestroyImmediate(_instance);
+        Tile = null;
+        _entropyModifier = UnityEngine.Random.Range(0, 0.02f);
+        IsCollapsed = false;
+        PossibleTiles = Resources.LoadAll<Tile>("TileTypes").ToList();
+    }
+
 
 
     ///<summary>

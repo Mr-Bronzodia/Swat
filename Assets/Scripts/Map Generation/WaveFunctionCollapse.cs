@@ -25,11 +25,6 @@ public class WaveFunctionCollapse : MonoBehaviour
     [SerializeField]
     private int _gridSizeY = 0;
 
-    private Cell[,] _grid;
-
-    private List<Cell> _emptyCells;
-    private List<Cell> _touchedCells;
-
     [Header("Cells")]
     [SerializeField]
     private List<Tile> _startingTiles;
@@ -37,9 +32,14 @@ public class WaveFunctionCollapse : MonoBehaviour
     private Tile _generationFailure;
 
     public Action OnAllCellsCollapsed;
+    public Action OnGridRegenerate;
 
     [SerializeField]
     public Vector2 size;
+
+    private Cell[,] _grid;
+    private List<Cell> _emptyCells;
+    private List<Cell> _touchedCells;
 
 
 
@@ -50,7 +50,9 @@ public class WaveFunctionCollapse : MonoBehaviour
 
     public void GenerateTilemap()
     {
-        Profiler.BeginSample("Generation Setup");
+        if (_grid != null) DestroyGrid();
+
+            Profiler.BeginSample("Generation Setup");
         //Initializes empty cell grid
         _grid = new Cell[_gridSizeX, _gridSizeY];
         _emptyCells = new List<Cell>();
@@ -158,6 +160,18 @@ public class WaveFunctionCollapse : MonoBehaviour
             OnAllCellsCollapsed?.Invoke(); // no error tiles detected. Generation is finished.
         }
     }
+    public void DestroyGrid()
+    {
+        if (_emptyCells != null)_emptyCells.Clear();
+        if (_touchedCells != null) _touchedCells.Clear();
+        if (_grid != null) _grid = null;
+
+        while (transform.childCount != 0)
+        {
+            DestroyImmediate(transform.GetChild(0).gameObject);
+        }
+    }
+
 
 
     /// <summary>

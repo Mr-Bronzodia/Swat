@@ -35,17 +35,29 @@ public class HouseGenerator : MonoBehaviour
     {
         _waveFunctionCollapse = gameObject.GetComponent<WaveFunctionCollapse>();
         _waveFunctionCollapse.OnAllCellsCollapsed += FindSuitablePlotPosition;
+        _waveFunctionCollapse.OnGridRegenerate += RegeneratePlots;
         _plots = new List<Plot>();
     }
 
     private void OnDisable()
     {
         _waveFunctionCollapse.OnAllCellsCollapsed -= FindSuitablePlotPosition;
+        _waveFunctionCollapse.OnGridRegenerate -= RegeneratePlots;
     }
 
     void Start()
     {
         
+    }
+
+    public void RegeneratePlots()
+    {
+        if (_plotTile != null) _plots.Clear();
+        if (_cellGrid != null) _cellGrid = null;
+
+        Debug.Log("regenerate call");
+
+        FindSuitablePlotPosition();
     }
 
     /// <summary>
