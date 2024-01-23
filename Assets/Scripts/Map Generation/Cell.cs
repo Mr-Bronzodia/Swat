@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEngine.ParticleSystem;
 
-public class Cell 
+public class Cell : IComparable<Cell>
 {
     public List<Tile> PossibleTiles;
 
@@ -30,7 +31,7 @@ public class Cell
         PossibleTiles = Resources.LoadAll<Tile>("TileTypes").ToList();
         Index = index;
         _size = size;
-        _entropyModifier = Random.Range(0, 0.02f);
+        _entropyModifier = UnityEngine.Random.Range(0, 0.02f);
     }
 
     ///<summary>
@@ -38,9 +39,9 @@ public class Cell
     ///</summary>
     public void DestroyCell()
     {
-        Object.Destroy(_instance, 0.1f);
+        UnityEngine.Object.Destroy(_instance, 0.1f);
         Tile = null;
-        _entropyModifier = Random.Range(0, 0.02f);
+        _entropyModifier = UnityEngine.Random.Range(0, 0.02f);
         IsCollapsed = false;
         PossibleTiles = Resources.LoadAll<Tile>("TileTypes").ToList();
     }
@@ -142,10 +143,12 @@ public class Cell
 
     }
 
+
+
     ///<summary>
     ///Collapses the cell with the tile based on probability. 
     ///</summary>
-    public void Collapse(Cell[,] parentGrid)
+    public void Collapse(Cell[,] parentGrid, List<Cell> touchedCells)
     {
         List<Tile> collapsePossibilities = PossibleTiles;
         if (IsCollapsed) return;
@@ -158,6 +161,7 @@ public class Cell
             {
                 collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x, Index.y + 1].Tile.GetNeighbors(Sides.Down)).ToList();
             }
+            else parentGrid[Index.x, Index.y + 1].AddCellToSortedList(touchedCells);
         }
 
         //Bottom
@@ -167,6 +171,7 @@ public class Cell
             {
                 collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x, Index.y - 1].Tile.GetNeighbors(Sides.Up)).ToList();
             }
+            else parentGrid[Index.x, Index.y - 1].AddCellToSortedList(touchedCells);
         }
 
         //Right
@@ -176,6 +181,7 @@ public class Cell
             {
                 collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x + 1, Index.y].Tile.GetNeighbors(Sides.Left)).ToList();
             }
+            else parentGrid[Index.x + 1, Index.y].AddCellToSortedList(touchedCells);
         }
 
         //Left
@@ -186,6 +192,7 @@ public class Cell
             {
                 collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x - 1, Index.y].Tile.GetNeighbors(Sides.Right)).ToList();
             }
+            else parentGrid[Index.x - 1, Index.y].AddCellToSortedList(touchedCells);
 
         }
 
@@ -193,13 +200,13 @@ public class Cell
         if (collapsePossibilities.Count > 0)
         {
             //Calculating probability 
-            float max_prabability = 0.0f;
+            float max_probability = 0.0f;
             foreach (Tile tile in collapsePossibilities)
             {
-                max_prabability += tile.GetTileWeight();   
+                max_probability += tile.GetTileWeight();   
             }
 
-            float diceRoll = Random.Range(0.0f, max_prabability);
+            float diceRoll = UnityEngine.Random.Range(0.0f, max_probability);
 
             float cumulative = 0.0f;
 
@@ -223,7 +230,35 @@ public class Cell
         
         IsCollapsed = true;
 
+
         NotifyNeighbours(parentGrid);
     }
 
+    private void AddCellToSortedList(List<Cell> sortedList)
+    {
+        for (int i = 0; i < sortedList.Count; i++)
+        {
+            Cell otherCell = sortedList[i];
+
+            if (this.CompareTo(otherCell) == 1)
+            {
+                sortedList.Insert(i, this);
+                return;
+            }
+        }
+
+        sortedList.Add(this);
+    }
+
+    public int CompareTo(Cell other)
+    {
+        float thisEntropy = this.GetCellEntropy();
+        float otherEntropy = other.GetCellEntropy();    
+
+        // Object is less if entropy higher 
+        if (otherEntropy < thisEntropy) return -1;
+        if (Mathf.Approximately(thisEntropy, otherEntropy)) return 0;
+
+        return 1;
+    }
 }

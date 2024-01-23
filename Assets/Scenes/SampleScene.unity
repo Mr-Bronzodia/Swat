@@ -475,7 +475,7 @@ PrefabInstance:
     - target: {fileID: 4689912080485976475, guid: 466276fc1ab6bb3408c5771cec032c43,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6297008960097534447, guid: 466276fc1ab6bb3408c5771cec032c43,
         type: 3}
@@ -634,13 +634,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1532554249}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 707fa51d1e95cc5499d9e8004c4e5255, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   RegenerateConnections: 0
   GenerateTileVariants: 0
+  RegenrateOnPlay: 1
   _gridSizeX: 35
   _gridSizeY: 35
   _startingTiles:

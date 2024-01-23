@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.ParticleSystem;
+using UnityEngine.Profiling;
 
 
 public class WaveFunctionCollapse : MonoBehaviour
@@ -14,6 +15,8 @@ public class WaveFunctionCollapse : MonoBehaviour
     private bool RegenerateConnections;
     [SerializeField]
     private bool GenerateTileVariants;
+    [SerializeField]
+    private bool RegenrateOnPlay;
 
     [Header("Grid Size")]
     [SerializeField]
@@ -25,6 +28,7 @@ public class WaveFunctionCollapse : MonoBehaviour
     private Cell[,] _grid;
 
     private List<Cell> _emptyCells;
+    private List<Cell> _touchedCells;
 
     [Header("Cells")]
     [SerializeField]
@@ -41,23 +45,27 @@ public class WaveFunctionCollapse : MonoBehaviour
 
     void Start()
     {
+        if (RegenrateOnPlay) GenerateTilemap();
+    }
+
+    public void GenerateTilemap()
+    {
+        Profiler.BeginSample("Generation Setup");
         //Initializes empty cell grid
         _grid = new Cell[_gridSizeX, _gridSizeY];
         _emptyCells = new List<Cell>();
-        //size = new Vector2(2, 2);
+        _touchedCells = new List<Cell>(450);
 
-        for (int x = 0;  x < _gridSizeX; x++)
+        for (int x = 0; x < _gridSizeX; x++)
         {
-            for (int y = 0;  y < _gridSizeY; y++)
+            for (int y = 0; y < _gridSizeY; y++)
             {
-                _grid[x, y] = new Cell(new Vector2Int(x,y), size);
-                _grid[x, y] = new Cell(new Vector2Int(x,y), size);
+                _grid[x, y] = new Cell(new Vector2Int(x, y), size);
+                _grid[x, y] = new Cell(new Vector2Int(x, y), size);
                 _emptyCells.Add(_grid[x, y]);
             }
         }
 
-
-      
         _generationFailure = Resources.Load<Tile>("TileTypes/ErrorTile/Error");
 
 
@@ -76,22 +84,24 @@ public class WaveFunctionCollapse : MonoBehaviour
         Cell startingCell = _grid[UnityEngine.Random.Range(0, _gridSizeX), UnityEngine.Random.Range(0, _gridSizeY)];
 
 
-        startingCell.Collapse(_grid);
+        startingCell.Collapse(_grid, _touchedCells);
 
         Instantiate(startingCell.Tile.GetPrefab(), new Vector3(startingCell.Index.x * size.x, 0, startingCell.Index.y * size.y), Quaternion.identity, gameObject.transform);
 
         _emptyCells.Remove(startingCell);
 
+        Profiler.EndSample();
 
-        StartCoroutine(SpawnCells());
-
+        Profiler.BeginSample("Spawning Cells");
+        SpawnCells();
+        Profiler.EndSample();
     }
 
     /// <summary>
     /// Looks for error tiles, destroys them replacing them and their neighbours. 
     /// </summary>
     /// <returns></returns>
-    IEnumerator DestroyFailures()
+    private void DestroyFailures(List<Cell> touchedCells)
     {
         for (int x = 0; x < _gridSizeX; x++)
         {
@@ -101,12 +111,14 @@ public class WaveFunctionCollapse : MonoBehaviour
                 {
                     _grid[x, y].DestroyCell();
                     _emptyCells.Add(_grid[x, y]);
+                    touchedCells.Add(_grid[x, y]);
 
                     //Right
                     if (x + 1 < _gridSizeX)
                     {
                         _grid[x + 1, y].DestroyCell();
                         _emptyCells.Add(_grid[x + 1, y]);
+                        touchedCells.Add(_grid[x + 1, y]);
                     }
 
                     //Left
@@ -114,6 +126,7 @@ public class WaveFunctionCollapse : MonoBehaviour
                     {
                         _grid[x - 1, y].DestroyCell();
                         _emptyCells.Add(_grid[x - 1, y]);
+                        touchedCells.Add(_grid[x - 1, y]);
                     }
 
                     //Up
@@ -121,6 +134,7 @@ public class WaveFunctionCollapse : MonoBehaviour
                     {
                         _grid[x, y + 1].DestroyCell();
                         _emptyCells.Add(_grid[x, y + 1]);
+                        touchedCells.Add(_grid[x, y + 1]);
                     }
 
                     //Down
@@ -128,19 +142,16 @@ public class WaveFunctionCollapse : MonoBehaviour
                     {
                         _grid[x, y - 1].DestroyCell();
                         _emptyCells.Add(_grid[x, y - 1]);
+                        touchedCells.Add(_grid[x, y - 1]);
                     }
-
-
-                    yield return new WaitForSeconds(0.05f);
-
                 }
-
             }
         }
 
-        if (_emptyCells.Count > 0)
+
+        if (touchedCells.Count > 0)
         {
-            StartCoroutine(SpawnCells()); // Regenerates destroyed cells 
+            SpawnCells(); // Regenerates destroyed cells 
         }
         else
         {
@@ -154,25 +165,39 @@ public class WaveFunctionCollapse : MonoBehaviour
     /// </summary>
     /// <returns></returns>
 
-    IEnumerator SpawnCells()
+    private void SpawnCells()
     {
 
-        while (_emptyCells.Count > 0)
+        Profiler.BeginSample("sorting");
+        _touchedCells.Sort((x, y) => x.GetCellEntropy().CompareTo(y.GetCellEntropy()));
+        Profiler.EndSample();
+
+        while (_touchedCells.Count > 0)
         {
-            _emptyCells.Sort((x, y) => x.GetCellEntropy().CompareTo(y.GetCellEntropy())); //sorts cells based on their entropy. Potential performance concern // 92% of time spent here 
+            if (_touchedCells[0].Tile != null)
+            {
+                _touchedCells.RemoveAt(0);
+                continue;
+            }
 
-            Cell currentCell = _emptyCells[0];
+            Cell currentCell = _touchedCells[0];
 
-            currentCell.Collapse(_grid);
+            currentCell.Collapse(_grid, _touchedCells);
 
             currentCell.AddInstance(Instantiate(currentCell.Tile.GetPrefab(), new Vector3(currentCell.Index.x * size.x, 0, currentCell.Index.y * size.y), Quaternion.Euler(new Vector3(0, currentCell.Tile.RotationInDegrees, 0)), gameObject.transform));
-       
-            _emptyCells.Remove(currentCell);
 
-            yield return new WaitForSeconds(0.005f);
+            Profiler.BeginSample("removing cell");
+            _emptyCells.Remove(currentCell);
+            _touchedCells.Remove(currentCell);
+            Profiler.EndSample();
         }
 
-        StartCoroutine(DestroyFailures());
+
+        _touchedCells.Clear();
+
+        Profiler.BeginSample("Destroying failures");
+        DestroyFailures(_touchedCells);
+        Profiler.EndSample();
     }
 
     /// <summary>
