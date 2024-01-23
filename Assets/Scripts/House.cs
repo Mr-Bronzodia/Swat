@@ -114,13 +114,13 @@ public class House
 
         float livingRoomHeight = Mathf.Sqrt(livingRoomArea / livingRoomHeightRatio);
         float kitchenHeight = Mathf.Sqrt(kitchenArea / kitchenHeightRatio);
-        float bedroomeHeight = Mathf.Sqrt(bedRoomArea / bedroomHeightRatio);
+        float bedroomHeight = Mathf.Sqrt(bedRoomArea / bedroomHeightRatio);
         float bathRoomHeight = Mathf.Sqrt(bathroomArea / bathroomHeightRatio);
 
 
         TreeMapNode livingRoom = new TreeMapNode(RoomTypes.Livingroom, livingRoomHeight * livingRoomHeightRatio, livingRoomHeight);
         TreeMapNode kitchen = new TreeMapNode(RoomTypes.Kitchen, kitchenHeight * kitchenHeightRatio, kitchenHeight);
-        TreeMapNode bedroom = new TreeMapNode(RoomTypes.Bedroom, bedroomeHeight * bedroomHeightRatio, bedroomeHeight);
+        TreeMapNode bedroom = new TreeMapNode(RoomTypes.Bedroom, bedroomHeight * bedroomHeightRatio, bedroomHeight);
         TreeMapNode bathroom = new TreeMapNode(RoomTypes.Bathroom, bathRoomHeight * bathroomHeightRatio, bathRoomHeight);
 
         root.Children.Add(livingRoom);
@@ -153,6 +153,7 @@ public class House
                         houseTheme.ExteriorWindows,
                         GetRandomObject(houseTheme.Doors),
                         _parentInstance);
+           room.BuildRoof(houseTheme.Roof, 3f, _parentInstance);
         }
 
     }

@@ -82,6 +82,32 @@ public class Room : TreeMapNode, IEquatable<Room>
         }
     }
 
+    public void BuildRoof(GameObject roofPrefab, float roofHeight, GameObject parentInstance)
+    {
+        GameObject floorInstance = UnityEngine.Object.Instantiate(roofPrefab, Bounds.center + new Vector3(0, roofHeight, 0), Quaternion.identity, parentInstance.transform);
+        floorInstance.name = floorInstance.name + " " + RoomType.ToString();
+
+        MeshRenderer floorRenderer;
+
+        if (floorInstance.TryGetComponent<MeshRenderer>(out floorRenderer))
+        {
+            Bounds floorBounds = floorRenderer.bounds;
+
+            Bounds roomBounds = Bounds;
+
+            float requiredScaleX = floorBounds.size.x / roomBounds.size.x;
+            float requiredScaleZ = floorBounds.size.z / roomBounds.size.z;
+
+            floorInstance.transform.localScale = new Vector3(floorInstance.transform.localScale.x / requiredScaleX,
+                                                             floorInstance.transform.localScale.y,
+                                                             floorInstance.transform.localScale.z / requiredScaleZ);
+        }
+        else
+        {
+            Debug.LogError("Can't Find MeshRenderer on " + roofPrefab.name.ToString() + " while generating floor");
+        }
+    }
+
     private bool IsWallFacingOutside(Wall wall)
     {
         Vector3 outsideDirection = (wall.MiddlePoint - Bounds.center).normalized;

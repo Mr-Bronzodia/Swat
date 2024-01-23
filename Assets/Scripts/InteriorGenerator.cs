@@ -9,9 +9,6 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider))]
 public class InteriorGenerator : MonoBehaviour
 {
-    [SerializeField]
-    GameObject _wall;
-
     List<Room> _rooms;
 
     [Header("Generation Settings")]
@@ -50,7 +47,6 @@ public class InteriorGenerator : MonoBehaviour
 
         _rooms = house.Rooms;
     }
-
     public void DestoryHouse()
     {
         while (transform.childCount != 0)
@@ -77,11 +73,11 @@ public class InteriorGenerator : MonoBehaviour
         Debug.DrawLine(p2, p3, Color.red, delay);
         Debug.DrawLine(p3, p4, Color.yellow, delay);
         Debug.DrawLine(p4, p1, Color.magenta, delay);
-
         // top
         var p5 = new Vector3(b.min.x, b.max.y, b.min.z);
         var p6 = new Vector3(b.max.x, b.max.y, b.min.z);
         var p7 = new Vector3(b.max.x, b.max.y, b.max.z);
+
         var p8 = new Vector3(b.min.x, b.max.y, b.max.z);
 
         Debug.DrawLine(p5, p6, Color.blue, delay);
@@ -131,6 +127,7 @@ public class InteriorGenerator : MonoBehaviour
             }
 
         }
+
 
     }
 }

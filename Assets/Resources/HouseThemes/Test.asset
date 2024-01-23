@@ -42,3 +42,4 @@ MonoBehaviour:
   - {fileID: 5976986699068108571, guid: 2a0112f4fd798c8459cf0e23c603350d, type: 3}
   Floor:
   - {fileID: 156976217076831411, guid: 80e5bbfa6aa12b34ca98423c9e7a0f86, type: 3}
+  Roof: {fileID: 156976217076831411, guid: 5f2d6bc3ac6628941be235b7c399aca3, type: 3}

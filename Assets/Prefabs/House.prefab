@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3570453421327208762
 Transform:
@@ -66,10 +66,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53429d5614888d04bb8520b3bc633d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _wall: {fileID: 8796488441946716364, guid: 77195107d098f8a449f34fb264bd226d, type: 3}
   _shouldRandomizeChildren: 1
   _showRoomConnection: 1
   _showRoomNames: 1
-  _showRoomBounds: 1
+  _showRoomBounds: 0
   _showRoomCenter: 1
-  _showRoomDoors: 1
+  _showRoomDoors: 0
