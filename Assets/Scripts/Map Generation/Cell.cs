@@ -18,7 +18,7 @@ public class Cell : IComparable<Cell>
 
     public Vector2Int Index { get; private set; }
 
-    private Vector2 _size;
+    private int _size;
 
     float _entropyModifier;
 
@@ -26,7 +26,7 @@ public class Cell : IComparable<Cell>
 
 
 
-    public Cell(Vector2Int index, Vector2 size)
+    public Cell(Vector2Int index, int size)
     {
         PossibleTiles = Resources.LoadAll<Tile>("TileTypes").ToList();
         Index = index;
@@ -86,7 +86,7 @@ public class Cell : IComparable<Cell>
 
     public Vector3 GetWorldSpacePosition()
     {
-        Vector3 worldSpacePosition = new Vector3(Index.x * _size.x, 0, Index.y * _size.y);
+        Vector3 worldSpacePosition = new Vector3(Index.x * _size, 0, Index.y * _size);
 
         return worldSpacePosition; 
     }

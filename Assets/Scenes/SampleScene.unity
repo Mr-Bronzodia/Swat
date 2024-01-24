@@ -210,8 +210,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.39154002, y: 0.58284557, z: -0.3779098, w: 0.6034664}
-  m_LocalPosition: {x: -4.1251073, y: 12.733368, z: -0.22082813}
+  m_LocalRotation: {x: -0.37858516, y: -0.58470047, z: 0.35466206, w: -0.6237095}
+  m_LocalPosition: {x: -14.591812, y: 211.9191, z: 117.01737}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -442,6 +442,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: House
       objectReference: {fileID: 0}
+    - target: {fileID: 4689912080485976475, guid: 466276fc1ab6bb3408c5771cec032c43,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6297008960097534447, guid: 466276fc1ab6bb3408c5771cec032c43,
         type: 3}
       propertyPath: m_Size.x
@@ -622,7 +627,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f4e2a1de02baa864981926a377e9fa4e, type: 2}
   - {fileID: 11400000, guid: 55df3e737b82cfc4fb7526521fa59bc2, type: 2}
   - {fileID: 11400000, guid: 658a0665d1846074dbd3663538fdf927, type: 2}
-  size: {x: 7, y: 7}
+  CellSize: 7
 --- !u!4 &1532554251
 Transform:
   m_ObjectHideFlags: 0
@@ -650,8 +655,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b01e5d71ad66a4b40ad4612aea34552e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _minPlotSize: {x: 2, y: 2}
-  _maxPlotSize: {x: 3, y: 3}
+  _minPlotSize: {x: 1, y: 1}
+  _maxPlotSize: {x: 4, y: 4}
   _tileToReplace: {fileID: 11400000, guid: 63a9e2ad0b19b154ab8e17e2f41afeb1, type: 2}
   _roadTiles:
   - {fileID: 11400000, guid: d1ccb5624eb9fa6449223106081c633f, type: 2}

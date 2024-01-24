@@ -7,6 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(WaveFunctionCollapse))]
 public class HouseGenerator : MonoBehaviour
 {
+    private const float SPACINGMODIFIER = .8f;
     private WaveFunctionCollapse _waveFunctionCollapse;
     private List<Plot> _plots;
     private Cell[,] _cellGrid;
@@ -182,27 +183,49 @@ public class HouseGenerator : MonoBehaviour
 
         foreach (Plot plot in _plots)
         {
+
             plot.CreateGrid();
 
-            GameObject houseInstance = Instantiate(_houseObject,
-                                                   plot.PlotGrid[plot.PlotGrid.GetLength(0) / 2, plot.PlotGrid.GetLength(1) / 2].GetWorldSpacePosition(),
+            float plotWidth = plot.PlotGrid.GetLength(0);
+            float plotHeight = plot.PlotGrid.GetLength(1);
+
+            if (plotWidth < _minPlotSize.x || plotHeight < _minPlotSize.y) continue;
+
+            Vector3 plotStartCell = plot.StartingCell.GetWorldSpacePosition();
+            Vector3 plotEndCell = plot.EndingCell.GetWorldSpacePosition();
+            Vector3 plotSideCell = plot.SideCell.GetWorldSpacePosition();
+
+            Vector3 plotWidthDir = plotEndCell - plotStartCell;
+            Vector3 plotHeightDir = plotSideCell - plotStartCell;
+
+            float plotSize = UnityEngine.Random.Range(_minPlotSize.x, _maxPlotSize.x);
+
+            int noPlots = (int)(plotWidthDir.magnitude / (plotSize * _waveFunctionCollapse.CellSize));
+            Vector3 endPoint = plotStartCell + plotWidthDir;
+
+            for (int i = 0; i < noPlots; i++)
+            {
+                Vector3 nextPos = Vector3.Lerp(plot.StartingCell.GetWorldSpacePosition(), endPoint, (i + .5f) / noPlots);
+                nextPos += (plotHeightDir / 2);
+
+                GameObject houseInstance = Instantiate(_houseObject,
+                                                   nextPos,
                                                    Quaternion.identity,
                                                    gameObject.transform);
-            BoxCollider houseCollider;
-            if (houseInstance.TryGetComponent<BoxCollider>(out houseCollider))
-            {
-                Bounds houseBounds = houseCollider.bounds;
+                BoxCollider houseCollider;
+                if (houseInstance.TryGetComponent<BoxCollider>(out houseCollider))
+                {
+                    Bounds houseBounds = houseCollider.bounds;
 
-                houseBounds.Encapsulate(plot.EndingCell.GetWorldSpacePosition());
-                houseBounds.Encapsulate(plot.SideCell.GetWorldSpacePosition());
-                houseBounds.Encapsulate(plot.StartingCell.GetWorldSpacePosition());
-                houseCollider.size = houseBounds.size;
-                //Not Tested 
-                //houseCollider.center = houseBounds.center;
-            }
-            else
-            {
-                Debug.LogError("Can't acces house instance collider");
+                    houseBounds.center = nextPos;
+                    houseBounds.size = new Vector3((plotWidthDir.magnitude / noPlots) * SPACINGMODIFIER, 0, plotHeightDir.magnitude * SPACINGMODIFIER);
+                    houseCollider.size = houseBounds.size;
+                }
+                else
+                {
+                    Debug.LogError("Can't access house instance collider");
+                }
+
             }
         }
 

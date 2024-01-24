@@ -67,8 +67,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shouldRandomizeChildren: 1
+  _regenerateOnPlay: 1
   _showRoomConnection: 1
   _showRoomNames: 1
-  _showRoomBounds: 0
+  _showRoomBounds: 1
   _showRoomCenter: 1
   _showRoomDoors: 0

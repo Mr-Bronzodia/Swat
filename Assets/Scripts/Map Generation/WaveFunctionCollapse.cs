@@ -35,7 +35,7 @@ public class WaveFunctionCollapse : MonoBehaviour
     public Action OnGridRegenerate;
 
     [SerializeField]
-    public Vector2 size;
+    public int CellSize;
 
     private Cell[,] _grid;
     private List<Cell> _emptyCells;
@@ -62,8 +62,8 @@ public class WaveFunctionCollapse : MonoBehaviour
         {
             for (int y = 0; y < _gridSizeY; y++)
             {
-                _grid[x, y] = new Cell(new Vector2Int(x, y), size);
-                _grid[x, y] = new Cell(new Vector2Int(x, y), size);
+                _grid[x, y] = new Cell(new Vector2Int(x, y), CellSize);
+                _grid[x, y] = new Cell(new Vector2Int(x, y), CellSize);
                 _emptyCells.Add(_grid[x, y]);
             }
         }
@@ -88,7 +88,7 @@ public class WaveFunctionCollapse : MonoBehaviour
 
         startingCell.Collapse(_grid, _touchedCells);
 
-        Instantiate(startingCell.Tile.GetPrefab(), new Vector3(startingCell.Index.x * size.x, 0, startingCell.Index.y * size.y), Quaternion.identity, gameObject.transform);
+        Instantiate(startingCell.Tile.GetPrefab(), new Vector3(startingCell.Index.x * CellSize, 0, startingCell.Index.y * CellSize), Quaternion.identity, gameObject.transform);
 
         _emptyCells.Remove(startingCell);
 
@@ -200,7 +200,7 @@ public class WaveFunctionCollapse : MonoBehaviour
 
             currentCell.Collapse(_grid, _touchedCells);
 
-            currentCell.AddInstance(Instantiate(currentCell.Tile.GetPrefab(), new Vector3(currentCell.Index.x * size.x, 0, currentCell.Index.y * size.y), Quaternion.Euler(new Vector3(0, currentCell.Tile.RotationInDegrees, 0)), gameObject.transform));
+            currentCell.AddInstance(Instantiate(currentCell.Tile.GetPrefab(), new Vector3(currentCell.Index.x * CellSize, 0, currentCell.Index.y * CellSize), Quaternion.Euler(new Vector3(0, currentCell.Tile.RotationInDegrees, 0)), gameObject.transform));
 
             Profiler.BeginSample("removing cell");
             _emptyCells.Remove(currentCell);
