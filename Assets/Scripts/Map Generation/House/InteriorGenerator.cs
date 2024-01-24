@@ -9,7 +9,9 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider))]
 public class InteriorGenerator : MonoBehaviour
 {
-    List<Room> _rooms;
+    public Action OnRoomsGenerated;
+
+    public List<Room> Rooms { get; private set; }
 
     [Header("Generation Settings")]
     [SerializeField]
@@ -47,7 +49,9 @@ public class InteriorGenerator : MonoBehaviour
 
         house.InstantiateHouse(themes[UnityEngine.Random.Range(0, themes.Length)]);
 
-        _rooms = house.Rooms;
+        Rooms = house.Rooms;
+
+        OnRoomsGenerated?.Invoke();
     }
     public void DestroyHouse()
     {
@@ -56,7 +60,7 @@ public class InteriorGenerator : MonoBehaviour
             DestroyImmediate(transform.GetChild(0).gameObject);
         }
 
-        if (_rooms != null && _rooms.Count > 0) _rooms.Clear();
+        if (Rooms != null && Rooms.Count > 0) Rooms.Clear();
     }
 
     /// <summary>
@@ -96,9 +100,9 @@ public class InteriorGenerator : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (_rooms == null) return;
+        if (Rooms == null) return;
 
-        foreach (Room room in _rooms)
+        foreach (Room room in Rooms)
         {
             if (room.Bounds.size.x < 0 || room.Bounds.size.z < 0) continue;
 

@@ -387,6 +387,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1236284663255497159, guid: 466276fc1ab6bb3408c5771cec032c43,
+        type: 3}
+      propertyPath: _regenerateOnPlay
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3570453421327208762, guid: 466276fc1ab6bb3408c5771cec032c43,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -442,21 +447,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: House
       objectReference: {fileID: 0}
-    - target: {fileID: 4689912080485976475, guid: 466276fc1ab6bb3408c5771cec032c43,
+    - target: {fileID: 5278731575031839088, guid: 466276fc1ab6bb3408c5771cec032c43,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6297008960097534447, guid: 466276fc1ab6bb3408c5771cec032c43,
+      propertyPath: empty
+      value: 
+      objectReference: {fileID: 2802636427194455096, guid: f9551d97bbe92e44484c6bd4160da31c,
         type: 3}
-      propertyPath: m_Size.x
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 6297008960097534447, guid: 466276fc1ab6bb3408c5771cec032c43,
-        type: 3}
-      propertyPath: m_Size.z
-      value: 10
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
