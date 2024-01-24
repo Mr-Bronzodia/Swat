@@ -41,6 +41,7 @@ public class FurnitureGenerator : MonoBehaviour
                 case RoomTypes.Bedroom:
                     break;
                 case RoomTypes.Bathroom:
+                    GenerateBathroom();
                     break;
                 case RoomTypes.Connector:
                     break;
@@ -58,6 +59,6 @@ public class FurnitureGenerator : MonoBehaviour
 
     private void GenerateBathroom()
     {
-
+        Debug.Log("soy");
     }
 }

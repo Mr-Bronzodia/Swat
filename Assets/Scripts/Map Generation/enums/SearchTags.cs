@@ -40,5 +40,5 @@ public enum SearchMode
 {
     RequireAll,
     RequireOne,
-    BlackList
+    BlackList,
 }

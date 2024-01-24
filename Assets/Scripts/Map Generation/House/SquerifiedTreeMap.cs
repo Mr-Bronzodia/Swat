@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Linq;
 using System.Transactions;
 using System.Xml.Serialization;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Rendering;
 
