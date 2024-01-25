@@ -1,8 +1,7 @@
 {
-    "name": "EditorAssembly",
+    "name": "WaveFunctionCollapseEditorAssembly",
     "rootNamespace": "",
     "references": [
-        "GUID:e50c5de4a4c50284a9f3c23463c15eff",
         "GUID:de40655d98060e74ab499b588939d1e9"
     ],
     "includePlatforms": [],

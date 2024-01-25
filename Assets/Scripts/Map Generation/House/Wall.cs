@@ -49,11 +49,25 @@ public class Wall
         _doorPositions.Add(pos);
     }
 
-    private bool IsWallEmpty()
+    public bool IsWallEmpty()
     {
         bool isEmpty = _doorPositions.Count == 0 && _windowPositions.Count == 0;
 
         return isEmpty;
+    }
+
+    public bool ContainsDoor()
+    {
+        if (_doorPositions.Count == 0) return false;
+
+        return true;
+    }
+
+    public bool ContainsWindow()
+    {
+        if (_windowPositions.Count == 0) return false;
+
+        return true;
     }
 
     public void BuildIndoorsWall(Vector3 roomCentre, GameObject wallPrefab, GameObject doorPrefab, GameObject parentInstance)
@@ -185,6 +199,11 @@ public class Wall
         }
 
         BuildWallSegment(_windowPositions[_windowPositions.Count - 1] + (windowWidth / 2) * wallDirection, EndPoint, roomCentre, wallPrefab, parentInstance);
+    }
+
+    public Vector3 GetInsideVector(Room room)
+    {
+        return (MiddlePoint - room.Bounds.center).normalized;
     }
 
 }

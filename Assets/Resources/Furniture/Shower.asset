@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Shower
   m_EditorClassIdentifier: 
   Prefab: {fileID: 100010, guid: f47c3332cc1e27e429e62f14a27f814d, type: 3}
-  RoomType: 03000000
+  RoomTags: 03000000
   ObjectTag: 13
   DescriptorTags: 010000000500000004000000

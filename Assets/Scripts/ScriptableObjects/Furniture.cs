@@ -6,7 +6,7 @@ using UnityEngine;
 public class Furniture : ScriptableObject
 {
     public GameObject Prefab;
-    public List<RoomTypes> RoomType;
+    public List<RoomTypes> RoomTags;
     public ObjectTag ObjectTag;
     public List<DescriptorTags> DescriptorTags;
 }

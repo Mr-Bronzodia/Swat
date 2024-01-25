@@ -1,3 +1,4 @@
+using Codice.Client.BaseCommands.BranchExplorer;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -12,6 +13,9 @@ public class FurnitureGenerator : MonoBehaviour
     private Furniture[] _furniture;
 
     private static string FURNITUREDIR = "Furniture";
+    private static float SMALL = 20f;
+    private static float MEDIUM = 30f;
+    private static float BIG = 40f;
 
     private void OnEnable()
     {
@@ -26,7 +30,6 @@ public class FurnitureGenerator : MonoBehaviour
 
     private void GenerateFurniture()
     {
-        Debug.Log(_furniture.Length);
         List<Room> rooms = gameObject.GetComponent<InteriorGenerator>().Rooms;
         _roomParents = new List<GameObject>();
 
@@ -41,7 +44,7 @@ public class FurnitureGenerator : MonoBehaviour
                 case RoomTypes.Bedroom:
                     break;
                 case RoomTypes.Bathroom:
-                    GenerateBathroom();
+                    GenerateBathroom(room);
                     break;
                 case RoomTypes.Connector:
                     break;
@@ -57,8 +60,121 @@ public class FurnitureGenerator : MonoBehaviour
         }
     }
 
-    private void GenerateBathroom()
+    private List<Furniture> FindFurnitureByTag(RoomTypes roomType, ObjectTag objectTag, List<DescriptorTags> descriptorTags, SearchMode mode)
     {
-        Debug.Log("soy");
+        List<Furniture> results = new List<Furniture>();
+
+        switch (mode)
+        {
+            case SearchMode.RequireAll:
+
+                for (int i = 0; i < _furniture.Length; i++)
+                {
+                    if (!_furniture[i].RoomTags.Contains(roomType)) continue;
+
+                    if (_furniture[i].ObjectTag != objectTag) continue;
+
+                    bool shouldAddFurniture = true;
+
+                    foreach (DescriptorTags tag in descriptorTags)
+                    {
+                        if (!_furniture[i].DescriptorTags.Contains(tag))
+                        {
+                            shouldAddFurniture = false;
+                        }
+                    }
+
+                    if (shouldAddFurniture) results.Add(_furniture[i]);
+                }
+
+                    break;
+            case SearchMode.RequireOne:
+                for (int i = 0; i < _furniture.Length; i++)
+                {
+                    if (!_furniture[i].RoomTags.Contains(roomType)) continue;
+
+                    if (_furniture[i].ObjectTag != objectTag) continue;
+
+                    foreach (DescriptorTags tag in descriptorTags)
+                    {
+                        if (_furniture[i].DescriptorTags.Contains(tag))
+                        {
+                            results.Add(_furniture[i]);
+                            break;
+                        }
+                    }
+                }
+                break;
+            case SearchMode.BlackList:
+                for (int i = 0; i < _furniture.Length; i++)
+                {
+                    if (!_furniture[i].RoomTags.Contains(roomType)) continue;
+
+                    if (_furniture[i].ObjectTag != objectTag) continue;
+
+                    bool shouldAddFurniture = true;
+
+                    foreach (DescriptorTags tag in descriptorTags)
+                    {
+                        if (_furniture[i].DescriptorTags.Contains(tag))
+                        {
+                            shouldAddFurniture = false;
+                        }
+                    }
+
+                    if (shouldAddFurniture) results.Add(_furniture[i]);
+                }
+                break;
+        }
+
+        return results;
+    }
+
+    private static Furniture GetRandom(List<Furniture> furnitureList)
+    {
+        return furnitureList[Random.Range(0, furnitureList.Count)];
+    }
+
+
+    private void GenerateBathroom(Room bathroom)
+    {
+        GameObject parentRoomInstance = Instantiate(empty, bathroom.Bounds.center, Quaternion.identity, gameObject.transform);
+        
+        Vector3 toiletLocation = Vector3.zero;
+
+        List<Wall> emptyWalls = new List<Wall>();
+        foreach (KeyValuePair<Sides, Wall> wall in bathroom.Walls)
+        {
+            if (!wall.Value.ContainsDoor()) 
+            {
+                emptyWalls.Add(wall.Value);
+            }
+        }
+
+        emptyWalls.Sort((x,y) => x.Length.CompareTo(y.Length));
+
+        List<DescriptorTags> descriptors = new List<DescriptorTags>() { DescriptorTags.Small };
+
+        Furniture toilet = GetRandom(FindFurnitureByTag(RoomTypes.Bathroom,
+                                                        ObjectTag.Toilet,
+                                                        descriptors,
+                                                        SearchMode.RequireOne));
+
+        SpawnAdjustedToWall(toilet, bathroom, emptyWalls[0], parentRoomInstance, 0f, .2f);
+
+        Debug.Log(bathroom.Size);
+
+        Furniture bath = GetRandom(FindFurnitureByTag(RoomTypes.Bathroom, ObjectTag.Shower, descriptors, SearchMode.RequireOne));
+
+        SpawnAdjustedToWall(bath, bathroom, bathroom.Walls[Wall.GetOppositeSide(emptyWalls[0].Side)], parentRoomInstance, 0f, .8f);
+    }
+
+    private void SpawnAdjustedToWall(Furniture furniture, Room room, Wall wall, GameObject parent, float wallMargin, float wallSlide)
+    {
+        GameObject furnitureInstance = Instantiate(furniture.Prefab, wall.MiddlePoint, Quaternion.identity, parent.transform);
+        float furnitureLength = furnitureInstance.GetComponentInChildren<MeshRenderer>().bounds.size.z;
+        furnitureInstance.transform.position = Vector3.Lerp(wall.StartPoint, wall.EndPoint, wallSlide) - ((furnitureLength / 2) + wallMargin) * wall.GetInsideVector(room);
+
+        furnitureInstance.transform.forward = wall.GetInsideVector(room);
     }
 }
