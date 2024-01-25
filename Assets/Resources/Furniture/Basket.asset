@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Basket
   m_EditorClassIdentifier: 
   Prefab: {fileID: 100000, guid: 5c9ab8dcefc861c4c962bbf326d5abb5, type: 3}
-  RoomType: 03000000
+  RoomTags: 03000000
   ObjectTag: 17
   DescriptorTags: 01000000

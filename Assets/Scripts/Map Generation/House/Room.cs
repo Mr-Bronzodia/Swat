@@ -16,7 +16,7 @@ public class Room : TreeMapNode, IEquatable<Room>
 
     private List<Room> _adjustedRooms;
 
-    private readonly int ANGLETHRESHOLD = 30;
+    private readonly int ANGLETHRESHOLD = 35;
 
 
     public Room(RoomTypes roomType, float width, float height, Bounds bounds) : base(roomType, width, height)

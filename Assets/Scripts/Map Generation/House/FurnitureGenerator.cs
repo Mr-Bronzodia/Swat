@@ -1,6 +1,7 @@
 using Codice.Client.BaseCommands.BranchExplorer;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -13,9 +14,9 @@ public class FurnitureGenerator : MonoBehaviour
     private Furniture[] _furniture;
 
     private static string FURNITUREDIR = "Furniture";
-    private static float SMALL = 20f;
-    private static float MEDIUM = 30f;
-    private static float BIG = 40f;
+    private static float SMALL = 10f;
+    private static float MEDIUM = 20f;
+    private static float BIG = 30f;
 
     private void OnEnable()
     {
@@ -130,6 +131,57 @@ public class FurnitureGenerator : MonoBehaviour
         return results;
     }
 
+    private List<Furniture> FindFurnitureByTag(RoomTypes roomType, ObjectTag objectTag, DescriptorTags descriptorTags, SearchMode mode)
+    {
+        List<Furniture> results = new List<Furniture>();
+
+        switch (mode)
+        {
+            case SearchMode.RequireAll:
+
+                for (int i = 0; i < _furniture.Length; i++)
+                {
+                    if (!_furniture[i].RoomTags.Contains(roomType)) continue;
+
+                    if (_furniture[i].ObjectTag != objectTag) continue;
+
+                    if (_furniture[i].DescriptorTags.Contains(descriptorTags))
+                    {
+                        results.Add(_furniture[i]);
+                        break;
+                    }
+                }
+
+                break;
+            case SearchMode.RequireOne:
+                for (int i = 0; i < _furniture.Length; i++)
+                {
+                    if (!_furniture[i].RoomTags.Contains(roomType)) continue;
+
+                    if (_furniture[i].ObjectTag != objectTag) continue;
+
+                        if (_furniture[i].DescriptorTags.Contains(descriptorTags))
+                        {
+                            results.Add(_furniture[i]);
+                            break;
+                        }
+                }
+                break;
+            case SearchMode.BlackList:
+                for (int i = 0; i < _furniture.Length; i++)
+                {
+                    if (!_furniture[i].RoomTags.Contains(roomType)) continue;
+
+                    if (_furniture[i].ObjectTag != objectTag) continue;
+
+                    if (!_furniture[i].DescriptorTags.Contains(descriptorTags)) results.Add(_furniture[i]);
+                }
+                break;
+        }
+
+        return results;
+    }
+
     private static Furniture GetRandom(List<Furniture> furnitureList)
     {
         return furnitureList[Random.Range(0, furnitureList.Count)];
@@ -153,28 +205,50 @@ public class FurnitureGenerator : MonoBehaviour
 
         emptyWalls.Sort((x,y) => x.Length.CompareTo(y.Length));
 
-        List<DescriptorTags> descriptors = new List<DescriptorTags>() { DescriptorTags.Small };
+        List<DescriptorTags> descriptors = new List<DescriptorTags>();
+
+        if (bathroom.Size >= SMALL) descriptors.Add(DescriptorTags.Small);
+        if (bathroom.Size >= MEDIUM) descriptors.Add(DescriptorTags.Medium);
+        if (bathroom.Size >= BIG) descriptors.Add(DescriptorTags.Big);
+
+
 
         Furniture toilet = GetRandom(FindFurnitureByTag(RoomTypes.Bathroom,
                                                         ObjectTag.Toilet,
                                                         descriptors,
                                                         SearchMode.RequireOne));
 
-        SpawnAdjustedToWall(toilet, bathroom, emptyWalls[0], parentRoomInstance, 0f, .2f);
-
-        Debug.Log(bathroom.Size);
-
         Furniture bath = GetRandom(FindFurnitureByTag(RoomTypes.Bathroom, ObjectTag.Shower, descriptors, SearchMode.RequireOne));
 
-        SpawnAdjustedToWall(bath, bathroom, bathroom.Walls[Wall.GetOppositeSide(emptyWalls[0].Side)], parentRoomInstance, 0f, .8f);
+        Furniture basin = GetRandom(FindFurnitureByTag(RoomTypes.Bathroom, ObjectTag.Sink, DescriptorTags.Small, SearchMode.RequireOne));
+
     }
 
-    private void SpawnAdjustedToWall(Furniture furniture, Room room, Wall wall, GameObject parent, float wallMargin, float wallSlide)
+    private GameObject SpawnAdjustedToWall(Furniture furniture, Room room, Wall wall, GameObject parent, float wallMargin, float wallSlide)
     {
         GameObject furnitureInstance = Instantiate(furniture.Prefab, wall.MiddlePoint, Quaternion.identity, parent.transform);
-        float furnitureLength = furnitureInstance.GetComponentInChildren<MeshRenderer>().bounds.size.z;
-        furnitureInstance.transform.position = Vector3.Lerp(wall.StartPoint, wall.EndPoint, wallSlide) - ((furnitureLength / 2) + wallMargin) * wall.GetInsideVector(room);
+        MeshRenderer furnitureMesh = furnitureInstance.GetComponentInChildren<MeshRenderer>();
 
+        float furnitureLength = furnitureMesh.bounds.size.z;
+        float furnitureWidth = furnitureMesh.bounds.size.x;
+        float wallCoveragePercentage = (furnitureWidth / 2) / wall.Length;
+        float adjustedWallSlide = wallSlide > .5f ? wallSlide - wallCoveragePercentage : wallSlide + wallCoveragePercentage;    
+
+        furnitureInstance.transform.position = Vector3.Lerp(wall.StartPoint, wall.EndPoint, adjustedWallSlide) - ((furnitureLength / 2) + wallMargin) * wall.GetInsideVector(room);
         furnitureInstance.transform.forward = wall.GetInsideVector(room);
+
+        return furnitureInstance;
+    }
+
+    private GameObject SpawnOpposite(Furniture furniture, GameObject other, GameObject parentInstance, float objectMargin)
+    {
+        GameObject furnitureInstance = Instantiate(furniture.Prefab, other.transform.position, Quaternion.identity, parentInstance.transform);
+        
+        float meshLength = furnitureInstance.GetComponentInChildren<MeshRenderer>().bounds.size.z;
+
+        furnitureInstance.transform.position = other.transform.position - (objectMargin + meshLength) * other.transform.forward;
+        furnitureInstance.transform.forward = -other.transform.forward;
+
+        return furnitureInstance;
     }
 }

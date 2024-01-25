@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Mirror_1 1
   m_EditorClassIdentifier: 
   Prefab: {fileID: 100004, guid: 5692ea7adcac2734186a38415b80ea09, type: 3}
-  RoomType: 02000000
+  RoomTags: 0200000003000000
   ObjectTag: 17
   DescriptorTags: 0300000001000000

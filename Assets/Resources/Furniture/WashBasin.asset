@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: WashBasin
   m_EditorClassIdentifier: 
   Prefab: {fileID: 100022, guid: 47af50246352ed14da4ade618d736175, type: 3}
-  RoomType: 03000000
+  RoomTags: 03000000
   ObjectTag: 12
   DescriptorTags: 010000000500000004000000

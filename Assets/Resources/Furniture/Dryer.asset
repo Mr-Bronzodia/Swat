@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Dryer
   m_EditorClassIdentifier: 
   Prefab: {fileID: 100000, guid: 5c5d675157a1a8c4bb3a499600b460f8, type: 3}
-  RoomType: 03000000
+  RoomTags: 0700000001000000
   ObjectTag: 17
   DescriptorTags: 0300000001000000

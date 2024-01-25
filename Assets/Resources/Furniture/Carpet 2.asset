@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Carpet 2
   m_EditorClassIdentifier: 
   Prefab: {fileID: 5867853647330971879, guid: 0758d192278633543ad832e7ee2f264f, type: 3}
-  RoomType: 0200000003000000
+  RoomTags: 0200000003000000010000000700000008000000
   ObjectTag: 15
   DescriptorTags: 02000000
