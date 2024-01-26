@@ -150,7 +150,7 @@ Transform:
   m_GameObject: {fileID: 234869729}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 78, y: 0, z: 98}
+  m_LocalPosition: {x: 36, y: 0, z: 18.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -175,10 +175,10 @@ MonoBehaviour:
   _cameraTransform: {fileID: 330585546}
   _movementSpeed: 0.2
   _movementTime: 5
-  _rotationSpeed: 0.2
-  _zoomAmount: {x: 0, y: -0.2, z: 0.2}
-  _minZoomAmount: {x: 0, y: 7, z: -7}
-  _maxZoomAmount: {x: 0, y: 10, z: -10}
+  _rotationSpeed: 1
+  _zoomAmount: {x: 0, y: -0.1, z: 0.1}
+  _minZoomAmount: {x: 0, y: 3, z: -3}
+  _maxZoomAmount: {x: 0, y: 7, z: -7}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,7 +266,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 10, z: -10}
+  m_LocalPosition: {x: 0, y: 7, z: -7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -529,7 +529,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 1e6e2a6a93e4e354797e606448e8d885,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 78.9
+      value: 35.8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1e6e2a6a93e4e354797e606448e8d885,
         type: 3}
@@ -539,7 +539,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 1e6e2a6a93e4e354797e606448e8d885,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 98.5
+      value: 19.7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1e6e2a6a93e4e354797e606448e8d885,
         type: 3}
@@ -668,8 +668,9 @@ MonoBehaviour:
   RegenerateConnections: 0
   GenerateTileVariants: 0
   RegenrateOnPlay: 1
-  _gridSizeX: 35
-  _gridSizeY: 35
+  BuildNavMeshOnPlay: 0
+  _gridSizeX: 10
+  _gridSizeY: 10
   _startingTiles:
   - {fileID: 11400000, guid: 63a9e2ad0b19b154ab8e17e2f41afeb1, type: 2}
   - {fileID: 11400000, guid: ef59fa047f1ce9147884f0ac4144c8fc, type: 2}

@@ -46,34 +46,7 @@ public class CameraMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        HandleCameraMouseInput();
         HandleCameraKeyboardInput();
-    }
-
-    private void HandleCameraMouseInput()
-    {
-        if (Input.GetMouseButtonDown(1)) 
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            float entry;
-
-            if (_upPlane.Raycast(ray, out entry)) 
-            { 
-                dragStartPoint = ray.GetPoint(entry);
-            }
-        }
-
-        if (Input.GetMouseButton(1)) 
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            float entry;
-
-            if (_upPlane.Raycast(ray, out entry))
-            {
-                dragCurrentPoint = ray.GetPoint(entry);
-                _nextPosition = transform.position + dragStartPoint - dragCurrentPoint;
-            }
-        }
     }
 
     private void HandleCameraKeyboardInput()

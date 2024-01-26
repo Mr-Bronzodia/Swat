@@ -260,6 +260,7 @@ GameObject:
   - component: {fileID: 5941079164141590655}
   - component: {fileID: 958029265979024993}
   - component: {fileID: 8807870284690021286}
+  - component: {fileID: 6999760995925066637}
   m_Layer: 0
   m_Name: WallWindowBay4m
   m_TagString: Untagged
@@ -332,6 +333,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!208 &6999760995925066637
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4925387228940507283}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 2, y: 0.34500003, z: 1.5000001}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 2, y: -0.245, z: 1.5000001}
+  m_TimeToStationary: 0.5
 --- !u!1 &7643397894282542631
 GameObject:
   m_ObjectHideFlags: 0

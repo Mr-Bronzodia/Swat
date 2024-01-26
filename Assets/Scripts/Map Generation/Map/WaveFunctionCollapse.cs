@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.ParticleSystem;
 using UnityEngine.Profiling;
+using UnityEngine.AI;
+using Unity.AI.Navigation;
+
 
 
 public class WaveFunctionCollapse : MonoBehaviour
@@ -16,6 +19,8 @@ public class WaveFunctionCollapse : MonoBehaviour
     private bool GenerateTileVariants;
     [SerializeField]
     private bool RegenrateOnPlay;
+    [SerializeField]
+    private bool BuildNavMeshOnPlay;
 
     [Header("Grid Size")]
     [SerializeField]
@@ -159,6 +164,8 @@ public class WaveFunctionCollapse : MonoBehaviour
             OnAllCellsCollapsed?.Invoke(); // no error tiles detected. Generation is finished.
         }
     }
+
+
     public void DestroyGrid()
     {
         if (_emptyCells != null)_emptyCells.Clear();
