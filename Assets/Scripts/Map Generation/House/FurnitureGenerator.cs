@@ -18,6 +18,10 @@ public class FurnitureGenerator : MonoBehaviour
     private static float MEDIUM = 20f;
     private static float BIG = 30f;
 
+    [Header("Debug Settings")]
+    [SerializeField] 
+    private bool _attachCameraToRoom;
+
     private void OnEnable()
     {
         gameObject.GetComponent<InteriorGenerator>().OnRoomsGenerated += GenerateFurniture;
@@ -194,33 +198,59 @@ public class FurnitureGenerator : MonoBehaviour
         
         Vector3 toiletLocation = Vector3.zero;
 
-        List<Wall> emptyWalls = new List<Wall>();
+        List<Wall> doorlessWall = new List<Wall>();
         foreach (KeyValuePair<Sides, Wall> wall in bathroom.Walls)
         {
             if (!wall.Value.ContainsDoor()) 
             {
-                emptyWalls.Add(wall.Value);
+                doorlessWall.Add(wall.Value);
             }
         }
 
-        emptyWalls.Sort((x,y) => x.Length.CompareTo(y.Length));
+        List<Wall> emptyWalls = new List<Wall>();
+        foreach (Wall wall in doorlessWall)
+        {
+            if (wall.IsWallEmpty()) emptyWalls.Add(wall);
+        }
+
+        doorlessWall.Sort((x,y) => x.Length.CompareTo(y.Length));
 
         List<DescriptorTags> descriptors = new List<DescriptorTags>();
 
-        if (bathroom.Size >= SMALL) descriptors.Add(DescriptorTags.Small);
-        if (bathroom.Size >= MEDIUM) descriptors.Add(DescriptorTags.Medium);
-        if (bathroom.Size >= BIG) descriptors.Add(DescriptorTags.Big);
+        if (bathroom.Size >= SMALL)
+        {
+            Furniture toilet = GetRandom(FindFurnitureByTag(RoomTypes.Bathroom,
+                                                ObjectTag.Toilet,
+                                                DescriptorTags.Small,
+                                                SearchMode.RequireOne));
 
+            Furniture bath = GetRandom(FindFurnitureByTag(RoomTypes.Bathroom, ObjectTag.Shower, DescriptorTags.Small, SearchMode.RequireOne));
 
+            Furniture basin = GetRandom(FindFurnitureByTag(RoomTypes.Bathroom, ObjectTag.Sink, DescriptorTags.Small, SearchMode.RequireOne));
 
-        Furniture toilet = GetRandom(FindFurnitureByTag(RoomTypes.Bathroom,
-                                                        ObjectTag.Toilet,
-                                                        descriptors,
-                                                        SearchMode.RequireOne));
+            Furniture showermat = GetRandom(FindFurnitureByTag(RoomTypes.Bathroom, ObjectTag.Carpet, DescriptorTags.Small, SearchMode.RequireOne));
 
-        Furniture bath = GetRandom(FindFurnitureByTag(RoomTypes.Bathroom, ObjectTag.Shower, descriptors, SearchMode.RequireOne));
+            GameObject showerInstance = SpawnAdjustedToWall(bath, bathroom, emptyWalls[0], parentRoomInstance, 0f, 1f);
 
-        Furniture basin = GetRandom(FindFurnitureByTag(RoomTypes.Bathroom, ObjectTag.Sink, DescriptorTags.Small, SearchMode.RequireOne));
+            float toiletWallSlide = emptyWalls[0].Length > 3 ? .3f : .1f;
+
+            GameObject toiletIntance = SpawnAdjustedToWall(toilet, bathroom, emptyWalls[0], parentRoomInstance, 0f, toiletWallSlide);
+
+            Wall basinWall = null;
+
+            foreach (Wall wall in doorlessWall)
+            {
+                if (wall != emptyWalls[0] && Vector3.Distance(wall.MiddlePoint, showerInstance.transform.position) > 1.5f) { basinWall = wall; break; }
+            }
+
+            GameObject basinInstance = SpawnAdjustedToWall(basin, bathroom, basinWall, parentRoomInstance, 0f, .5f);
+            GameObject carpet = SpawnOpposite(showermat, showerInstance, parentRoomInstance, .1f);
+
+        }
+        else if (bathroom.Size >= MEDIUM) descriptors.Add(DescriptorTags.Medium);
+        else if (bathroom.Size >= BIG) descriptors.Add(DescriptorTags.Big);
+
+        if (_attachCameraToRoom) Camera.main.transform.position = bathroom.Bounds.center + new Vector3(0, 5.8f, 0f);
 
     }
 
@@ -232,7 +262,9 @@ public class FurnitureGenerator : MonoBehaviour
         float furnitureLength = furnitureMesh.bounds.size.z;
         float furnitureWidth = furnitureMesh.bounds.size.x;
         float wallCoveragePercentage = (furnitureWidth / 2) / wall.Length;
-        float adjustedWallSlide = wallSlide > .5f ? wallSlide - wallCoveragePercentage : wallSlide + wallCoveragePercentage;    
+
+        float adjustedWallSlide = wallSlide > .5f ? wallSlide - wallCoveragePercentage : wallSlide + wallCoveragePercentage;
+        adjustedWallSlide = wallSlide == .5f ? wallSlide : adjustedWallSlide;
 
         furnitureInstance.transform.position = Vector3.Lerp(wall.StartPoint, wall.EndPoint, adjustedWallSlide) - ((furnitureLength / 2) + wallMargin) * wall.GetInsideVector(room);
         furnitureInstance.transform.forward = wall.GetInsideVector(room);
@@ -243,7 +275,7 @@ public class FurnitureGenerator : MonoBehaviour
     private GameObject SpawnOpposite(Furniture furniture, GameObject other, GameObject parentInstance, float objectMargin)
     {
         GameObject furnitureInstance = Instantiate(furniture.Prefab, other.transform.position, Quaternion.identity, parentInstance.transform);
-        
+
         float meshLength = furnitureInstance.GetComponentInChildren<MeshRenderer>().bounds.size.z;
 
         furnitureInstance.transform.position = other.transform.position - (objectMargin + meshLength) * other.transform.forward;
