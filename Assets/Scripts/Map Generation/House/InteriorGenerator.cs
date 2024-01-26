@@ -37,6 +37,25 @@ public class InteriorGenerator : MonoBehaviour
         if (_regenerateOnPlay) Generate();
     }
 
+    private void OnEnable()
+    {
+        FurnitureGenerator furnitureGenerator;
+        if (gameObject.TryGetComponent<FurnitureGenerator>(out furnitureGenerator))
+        {
+            furnitureGenerator.EmergencyRegenerate += Generate;
+        }
+
+    }
+
+    private void OnDisable()
+    {
+        FurnitureGenerator furnitureGenerator;
+        if (gameObject.TryGetComponent<FurnitureGenerator>(out furnitureGenerator))
+        {
+            furnitureGenerator.EmergencyRegenerate -= Generate;
+        }
+    }
+
     public void Generate()
     {
         DestroyHouse();

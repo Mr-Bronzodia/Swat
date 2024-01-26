@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 8528265156103836056}
   - component: {fileID: 7995891303786255074}
   - component: {fileID: 9074964023569941573}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: RoadHorizontal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &8016767169683669624
 Transform:

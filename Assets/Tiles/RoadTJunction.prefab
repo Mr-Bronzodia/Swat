@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 8251265756792524091}
   - component: {fileID: 620082176200993719}
   - component: {fileID: 6193283746339567120}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: RoadTJunction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2560014770390404967
 Transform:
