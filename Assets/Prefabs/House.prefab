@@ -86,3 +86,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 705ea118edf5b2c46b04e5358e53f2a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  empty: {fileID: 2802636427194455096, guid: f9551d97bbe92e44484c6bd4160da31c, type: 3}
+  _attachCameraToRoom: 0

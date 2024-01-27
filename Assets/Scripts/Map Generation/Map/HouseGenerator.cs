@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(WaveFunctionCollapse))]
-public class HouseGenerator : MonoBehaviour
+public class HouseGenerator : MonoBehaviour, ISubscriber
 {
     private const float SPACINGMODIFIER = .8f;
     private WaveFunctionCollapse _waveFunctionCollapse;
@@ -26,24 +26,19 @@ public class HouseGenerator : MonoBehaviour
     [SerializeField]
     private GameObject _houseObject;
 
-    public Action OnPlotGenerated;
-
     [Header("Debug Settings")]
     [SerializeField]
     private bool _showPlotBounds;
 
     private void OnEnable()
     {
-        _waveFunctionCollapse = gameObject.GetComponent<WaveFunctionCollapse>();
-        _waveFunctionCollapse.OnAllCellsCollapsed += FindSuitablePlotPosition;
-        _waveFunctionCollapse.OnGridRegenerate += RegeneratePlots;
         _plots = new List<Plot>();
+        WorldStateManager.Instance.OnWorldStateChanged += WorldListener;
     }
 
     private void OnDisable()
     {
-        _waveFunctionCollapse.OnAllCellsCollapsed -= FindSuitablePlotPosition;
-        _waveFunctionCollapse.OnGridRegenerate -= RegeneratePlots;
+        WorldStateManager.Instance.OnWorldStateChanged -= WorldListener;
     }
 
     public void RegeneratePlots()
@@ -52,12 +47,21 @@ public class HouseGenerator : MonoBehaviour
         if (_cellGrid != null) _cellGrid = null;
     }
 
+    private void WorldListener(WorldState state)
+    {
+        if (state == WorldState.MapGenerated) FindSuitablePlotPosition();
+    }
+
     /// <summary>
     /// Finds contiguous roads to create rectangular plots for house generations. 
     /// </summary>
     public void FindSuitablePlotPosition()
     {
-        _cellGrid = gameObject.GetComponent<WaveFunctionCollapse>().GetGrid();
+        Subscribe();
+
+        _waveFunctionCollapse = gameObject.GetComponent<WaveFunctionCollapse>();
+        _cellGrid = _waveFunctionCollapse.GetGrid();
+        
 
         List<(int, Cell)> verticalRoads = new List<(int Index, Cell Cell)>();
         List<(int, Cell)> horizontalRoads = new List<(int Index, Cell Cell)>();
@@ -229,7 +233,7 @@ public class HouseGenerator : MonoBehaviour
             }
         }
 
-        OnPlotGenerated?.Invoke();
+        NotifyTaskCompleted();
 
     }
 
@@ -294,5 +298,16 @@ public class HouseGenerator : MonoBehaviour
 
             Gizmos.color = Color.white;
         }
+    }
+
+    public void Subscribe()
+    {
+        WorldStateManager.Instance.AddSubscriber();
+    }
+
+    public void NotifyTaskCompleted()
+    {
+        WorldStateManager.Instance.UpdateWorldState(WorldState.PlotsGenerated);
+        WorldStateManager.Instance.NotifyComplete();
     }
 }

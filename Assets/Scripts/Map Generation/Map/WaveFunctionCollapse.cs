@@ -10,7 +10,7 @@ using Unity.AI.Navigation;
 
 
 
-public class WaveFunctionCollapse : MonoBehaviour
+public class WaveFunctionCollapse : MonoBehaviour, ISubscriber
 {
     [Header("Settings")]
     [SerializeField] 
@@ -35,9 +35,6 @@ public class WaveFunctionCollapse : MonoBehaviour
 
     private Tile _generationFailure;
 
-    public Action OnAllCellsCollapsed;
-    public Action OnGridRegenerate;
-
     [SerializeField]
     public int CellSize;
 
@@ -56,7 +53,8 @@ public class WaveFunctionCollapse : MonoBehaviour
     {
         if (_grid != null) DestroyGrid();
 
-            Profiler.BeginSample("Generation Setup");
+        Subscribe();
+        Profiler.BeginSample("Generation Setup");
         //Initializes empty cell grid
         _grid = new Cell[_gridSizeX, _gridSizeY];
         _emptyCells = new List<Cell>();
@@ -161,7 +159,7 @@ public class WaveFunctionCollapse : MonoBehaviour
         }
         else
         {
-            OnAllCellsCollapsed?.Invoke(); // no error tiles detected. Generation is finished.
+            NotifyTaskCompleted();
         }
     }
 
@@ -177,7 +175,7 @@ public class WaveFunctionCollapse : MonoBehaviour
             DestroyImmediate(transform.GetChild(0).gameObject);
         }
 
-        OnGridRegenerate?.Invoke();
+        WorldStateManager.Instance.UpdateWorldState(WorldState.Empty);
     }
 
 
@@ -229,5 +227,16 @@ public class WaveFunctionCollapse : MonoBehaviour
     public Cell[,] GetGrid()
     {
         return _grid;
+    }
+
+    public void Subscribe()
+    {
+        WorldStateManager.Instance.AddSubscriber();
+    }
+
+    public void NotifyTaskCompleted()
+    {
+        WorldStateManager.Instance.NotifyComplete();
+        WorldStateManager.Instance.UpdateWorldState(WorldState.MapGenerated);
     }
 }

@@ -7,11 +7,10 @@ using UnityEditor.TerrainTools;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
-public class InteriorGenerator : MonoBehaviour
+public class InteriorGenerator : MonoBehaviour, ISubscriber
 {
-    public Action OnRoomsGenerated;
-
     public List<Room> Rooms { get; private set; }
+    public Action OnRoomsGenerated;
 
     [Header("Generation Settings")]
     [SerializeField]
@@ -31,34 +30,27 @@ public class InteriorGenerator : MonoBehaviour
     [SerializeField]
     private bool _showRoomDoors;
 
+    private void OnEnable()
+    {
+        WorldStateManager.Instance.OnWorldStateChanged += WorldListener;
+    }
+
+    private void OnDisable()
+    {
+        WorldStateManager.Instance.OnWorldStateChanged -= WorldListener;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         if (_regenerateOnPlay) Generate();
     }
 
-    private void OnEnable()
-    {
-        FurnitureGenerator furnitureGenerator;
-        if (gameObject.TryGetComponent<FurnitureGenerator>(out furnitureGenerator))
-        {
-            furnitureGenerator.EmergencyRegenerate += Generate;
-        }
-
-    }
-
-    private void OnDisable()
-    {
-        FurnitureGenerator furnitureGenerator;
-        if (gameObject.TryGetComponent<FurnitureGenerator>(out furnitureGenerator))
-        {
-            furnitureGenerator.EmergencyRegenerate -= Generate;
-        }
-    }
-
     public void Generate()
     {
         DestroyHouse();
+
+        Subscribe();
 
         BoxCollider collider = GetComponent<BoxCollider>();
 
@@ -70,7 +62,7 @@ public class InteriorGenerator : MonoBehaviour
 
         Rooms = house.Rooms;
 
-        OnRoomsGenerated?.Invoke();
+        NotifyTaskCompleted();
     }
     public void DestroyHouse()
     {
@@ -80,6 +72,11 @@ public class InteriorGenerator : MonoBehaviour
         }
 
         if (Rooms != null && Rooms.Count > 0) Rooms.Clear();
+    }
+
+    private void WorldListener(WorldState state)
+    {
+        if (state == WorldState.PlotsGenerated) Generate();
     }
 
     /// <summary>
@@ -116,6 +113,7 @@ public class InteriorGenerator : MonoBehaviour
         Debug.DrawLine(p3, p7, Color.green, delay);
         Debug.DrawLine(p4, p8, Color.cyan, delay);
     }
+
 
     private void OnDrawGizmos()
     {
@@ -154,5 +152,16 @@ public class InteriorGenerator : MonoBehaviour
         }
 
 
+    }
+
+    public void Subscribe()
+    {
+        WorldStateManager.Instance.AddSubscriber();
+    }
+
+    public void NotifyTaskCompleted()
+    {
+        WorldStateManager.Instance.NotifyComplete();
+        OnRoomsGenerated?.Invoke();
     }
 }

@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-public class FurnitureGenerator : MonoBehaviour
+public class FurnitureGenerator : MonoBehaviour, ISubscriber
 {
     [SerializeField]
     private GameObject empty;
@@ -40,6 +40,7 @@ public class FurnitureGenerator : MonoBehaviour
     {
         List<Room> rooms = gameObject.GetComponent<InteriorGenerator>().Rooms;
         _roomParents = new List<GameObject>();
+        Subscribe();
 
         foreach (Room room in rooms)
         {
@@ -66,6 +67,8 @@ public class FurnitureGenerator : MonoBehaviour
                     break;
             }
         }
+
+        NotifyTaskCompleted();
     }
 
     private List<Furniture> FindFurnitureByTag(RoomTypes roomType, ObjectTag objectTag, List<DescriptorTags> descriptorTags, SearchMode mode)
@@ -322,5 +325,15 @@ public class FurnitureGenerator : MonoBehaviour
         furnitureInstance.transform.forward = -other.transform.forward;
 
         return furnitureInstance;
+    }
+
+    public void Subscribe()
+    {
+        WorldStateManager.Instance.AddSubscriber();
+    }
+
+    public void NotifyTaskCompleted()
+    {
+        WorldStateManager.Instance.NotifyComplete();
     }
 }
