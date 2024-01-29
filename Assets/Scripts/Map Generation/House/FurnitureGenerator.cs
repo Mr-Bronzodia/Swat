@@ -29,6 +29,7 @@ public class FurnitureGenerator : MonoBehaviour, ISubscriber
     {
         gameObject.GetComponent<InteriorGenerator>().OnRoomsGenerated += GenerateFurniture;
         _furniture = Resources.LoadAll<Furniture>(FURNITUREDIR);
+        Subscribe();
     }
 
     private void OnDisable()
@@ -40,7 +41,6 @@ public class FurnitureGenerator : MonoBehaviour, ISubscriber
     {
         List<Room> rooms = gameObject.GetComponent<InteriorGenerator>().Rooms;
         _roomParents = new List<GameObject>();
-        Subscribe();
 
         foreach (Room room in rooms)
         {

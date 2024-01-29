@@ -30,10 +30,14 @@ public class HouseGenerator : MonoBehaviour, ISubscriber
     [SerializeField]
     private bool _showPlotBounds;
 
+    private bool IsSubscribed = false;
+
     private void OnEnable()
     {
         _plots = new List<Plot>();
         WorldStateManager.Instance.OnWorldStateChanged += WorldListener;
+        Subscribe();
+        IsSubscribed = true;
     }
 
     private void OnDisable()
@@ -45,11 +49,13 @@ public class HouseGenerator : MonoBehaviour, ISubscriber
     {
         if (_plotTile != null) _plots.Clear();
         if (_cellGrid != null) _cellGrid = null;
+        IsSubscribed = false;
     }
 
     private void WorldListener(WorldState state)
     {
         if (state == WorldState.MapGenerated) FindSuitablePlotPosition();
+        if (state == WorldState.Empty) RegeneratePlots();
     }
 
     /// <summary>
@@ -57,12 +63,12 @@ public class HouseGenerator : MonoBehaviour, ISubscriber
     /// </summary>
     public void FindSuitablePlotPosition()
     {
-        Subscribe();
+
+        if (!IsSubscribed) Subscribe(); 
 
         _waveFunctionCollapse = gameObject.GetComponent<WaveFunctionCollapse>();
         _cellGrid = _waveFunctionCollapse.GetGrid();
         
-
         List<(int, Cell)> verticalRoads = new List<(int Index, Cell Cell)>();
         List<(int, Cell)> horizontalRoads = new List<(int Index, Cell Cell)>();
 

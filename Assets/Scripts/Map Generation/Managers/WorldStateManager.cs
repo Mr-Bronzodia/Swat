@@ -14,7 +14,7 @@ public class WorldStateManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null) Instance = this;
     }
 
     public void UpdateWorldState(WorldState newWorldState)
@@ -29,6 +29,16 @@ public class WorldStateManager : MonoBehaviour
     {
         _subscribers++;
         Debug.Log("Added subscriber. Subscriber Count: " + _subscribers);
+        DebugUiManager.Instance.AddDebugText(1, "Subscriber Count: " + _subscribers);
+    }
+
+    public void ResetSubscribers()
+    {
+        _subscribers = 0;
+        _subscribersCompleted = 0;
+
+        DebugUiManager.Instance.AddDebugText(1, "Subscriber Count: " + _subscribers);
+        DebugUiManager.Instance.AddDebugText(2, "Subscriber Completed: " + _subscribersCompleted);
     }
 
     public void NotifyComplete()
@@ -36,6 +46,7 @@ public class WorldStateManager : MonoBehaviour
         _subscribersCompleted++;
         Debug.Log("Subscribed Notified Completion. Currently completed: " + _subscribersCompleted);
 
-        //if (_subscribersCompleted == _subscribers) UpdateWorldState(WorldState.NavMeshReady);
+        DebugUiManager.Instance.AddDebugText(2, "Subscriber Completed: " + _subscribersCompleted);
+        if (_subscribersCompleted == _subscribers && _worldState == WorldState.PlotsGenerated) UpdateWorldState(WorldState.NavMeshReady);
     }
 }

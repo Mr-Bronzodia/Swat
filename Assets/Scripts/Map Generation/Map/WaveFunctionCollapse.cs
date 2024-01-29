@@ -41,8 +41,13 @@ public class WaveFunctionCollapse : MonoBehaviour, ISubscriber
     private Cell[,] _grid;
     private List<Cell> _emptyCells;
     private List<Cell> _touchedCells;
+    private bool _isSubscribed = false;
 
-
+    private void OnEnable()
+    {
+        Subscribe();
+        _isSubscribed = true;
+    }
 
     void Start()
     {
@@ -53,7 +58,8 @@ public class WaveFunctionCollapse : MonoBehaviour, ISubscriber
     {
         if (_grid != null) DestroyGrid();
 
-        Subscribe();
+        if (!_isSubscribed) Subscribe();
+
         Profiler.BeginSample("Generation Setup");
         //Initializes empty cell grid
         _grid = new Cell[_gridSizeX, _gridSizeY];
@@ -176,6 +182,8 @@ public class WaveFunctionCollapse : MonoBehaviour, ISubscriber
         }
 
         WorldStateManager.Instance.UpdateWorldState(WorldState.Empty);
+        _isSubscribed = false;
+        WorldStateManager.Instance.ResetSubscribers();
     }
 
 

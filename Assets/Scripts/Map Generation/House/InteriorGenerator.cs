@@ -30,9 +30,14 @@ public class InteriorGenerator : MonoBehaviour, ISubscriber
     [SerializeField]
     private bool _showRoomDoors;
 
+    private bool IsSubscribed = false;
+
     private void OnEnable()
     {
         WorldStateManager.Instance.OnWorldStateChanged += WorldListener;
+
+        Subscribe();
+        IsSubscribed = true;
     }
 
     private void OnDisable()
@@ -50,7 +55,7 @@ public class InteriorGenerator : MonoBehaviour, ISubscriber
     {
         DestroyHouse();
 
-        Subscribe();
+        if (!IsSubscribed) Subscribe();
 
         BoxCollider collider = GetComponent<BoxCollider>();
 
@@ -64,6 +69,7 @@ public class InteriorGenerator : MonoBehaviour, ISubscriber
 
         NotifyTaskCompleted();
     }
+
     public void DestroyHouse()
     {
         while (transform.childCount != 0)
@@ -72,6 +78,8 @@ public class InteriorGenerator : MonoBehaviour, ISubscriber
         }
 
         if (Rooms != null && Rooms.Count > 0) Rooms.Clear();
+
+        IsSubscribed = false;
     }
 
     private void WorldListener(WorldState state)
