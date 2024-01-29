@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6627197770741746523
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1851420196594956627}
+  - component: {fileID: 1381359375739968101}
+  - component: {fileID: 540589792085500431}
+  - component: {fileID: 8795903819005131112}
+  m_Layer: 0
+  m_Name: Map
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &1851420196594956627
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6627197770741746523}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1381359375739968101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6627197770741746523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 707fa51d1e95cc5499d9e8004c4e5255, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RegenerateConnections: 0
+  GenerateTileVariants: 0
+  RegenrateOnPlay: 0
+  BuildNavMeshOnPlay: 0
+  _gridSizeX: 15
+  _gridSizeY: 15
+  _startingTiles:
+  - {fileID: 11400000, guid: 63a9e2ad0b19b154ab8e17e2f41afeb1, type: 2}
+  - {fileID: 11400000, guid: ef59fa047f1ce9147884f0ac4144c8fc, type: 2}
+  - {fileID: 11400000, guid: 2bea174c4646fdf41a4fddd5a662ffba, type: 2}
+  - {fileID: 11400000, guid: 8bd0fb73d3b41154ba5586396e799cdb, type: 2}
+  - {fileID: 11400000, guid: fceaaabb492b37d4ba07458a8190f1ea, type: 2}
+  - {fileID: 11400000, guid: d1ccb5624eb9fa6449223106081c633f, type: 2}
+  - {fileID: 11400000, guid: 38feee10a28fefb4eb46d8870ade6d1d, type: 2}
+  - {fileID: 11400000, guid: a0a62e81ea187f84e904c935e8e53195, type: 2}
+  - {fileID: 11400000, guid: 04835a5f06941264fb6577206bed2bca, type: 2}
+  - {fileID: 11400000, guid: f4e2a1de02baa864981926a377e9fa4e, type: 2}
+  - {fileID: 11400000, guid: 55df3e737b82cfc4fb7526521fa59bc2, type: 2}
+  - {fileID: 11400000, guid: 658a0665d1846074dbd3663538fdf927, type: 2}
+  CellSize: 7
+--- !u!114 &540589792085500431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6627197770741746523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01e5d71ad66a4b40ad4612aea34552e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _minPlotSize: {x: 1, y: 1}
+  _maxPlotSize: {x: 3, y: 3}
+  _tileToReplace: {fileID: 11400000, guid: 63a9e2ad0b19b154ab8e17e2f41afeb1, type: 2}
+  _roadTiles:
+  - {fileID: 11400000, guid: d1ccb5624eb9fa6449223106081c633f, type: 2}
+  - {fileID: 11400000, guid: 55df3e737b82cfc4fb7526521fa59bc2, type: 2}
+  _plotTile: {fileID: 11400000, guid: 084a46b231cb4d34bb39b378a28dd287, type: 2}
+  _houseObject: {fileID: 4689912080485976475, guid: 466276fc1ab6bb3408c5771cec032c43,
+    type: 3}
+  _showPlotBounds: 1
+--- !u!114 &8795903819005131112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6627197770741746523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bded689c0ee22a9479bc5ea064d90035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enableNavGeneration: 1

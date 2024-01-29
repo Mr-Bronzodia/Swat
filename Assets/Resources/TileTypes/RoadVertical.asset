@@ -33,9 +33,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 63a9e2ad0b19b154ab8e17e2f41afeb1, type: 2}
   _leftNeighbors:
   - {fileID: 11400000, guid: 63a9e2ad0b19b154ab8e17e2f41afeb1, type: 2}
-  Weight: 0.01
+  Weight: 0.1
   RotationInDegrees: 0
-  AllowForRoatationVariants: 0
+  AllowForRotationVariants: 0
   AllowSelfConnection: 1
   TopConnection: 1
   BottomConnection: 1

@@ -12,15 +12,15 @@ public class WorldStateManager : MonoBehaviour
     public static WorldStateManager Instance;
     public Action<WorldState> OnWorldStateChanged;
 
-    private void Awake()
+    private void OnEnable()
     {
-        if (Instance == null) Instance = this;
+        Instance = this;
     }
 
     public void UpdateWorldState(WorldState newWorldState)
     {
         _worldState = newWorldState;
-        Debug.Log("World State Updated to : " +  _worldState);
+        DebugUiManager.Instance.AddDebugText(3, "World State: " + _worldState.ToString());
         OnWorldStateChanged?.Invoke(newWorldState);
     }
 
@@ -28,7 +28,6 @@ public class WorldStateManager : MonoBehaviour
     public void AddSubscriber()
     {
         _subscribers++;
-        Debug.Log("Added subscriber. Subscriber Count: " + _subscribers);
         DebugUiManager.Instance.AddDebugText(1, "Subscriber Count: " + _subscribers);
     }
 
@@ -39,13 +38,12 @@ public class WorldStateManager : MonoBehaviour
 
         DebugUiManager.Instance.AddDebugText(1, "Subscriber Count: " + _subscribers);
         DebugUiManager.Instance.AddDebugText(2, "Subscriber Completed: " + _subscribersCompleted);
+        DebugUiManager.Instance.AddDebugText(3, "World State: " + _worldState.ToString());
     }
 
     public void NotifyComplete()
     {
         _subscribersCompleted++;
-        Debug.Log("Subscribed Notified Completion. Currently completed: " + _subscribersCompleted);
-
         DebugUiManager.Instance.AddDebugText(2, "Subscriber Completed: " + _subscribersCompleted);
         if (_subscribersCompleted == _subscribers && _worldState == WorldState.PlotsGenerated) UpdateWorldState(WorldState.NavMeshReady);
     }
