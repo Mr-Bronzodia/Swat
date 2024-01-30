@@ -15,10 +15,9 @@ public class Idle : Command
 
     public override void Update()
     {
-        
     }
 
-    protected override bool CheckCommandCompleted()
+    public override bool CheckCommandCompleted()
     {
         if (_unit.BlackBoard.CommandQueue.Count > 1) return true;
 

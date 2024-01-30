@@ -5,20 +5,18 @@ using UnityEngine;
 public class UnitBlackBoard : MonoBehaviour
 {
     public float MaxHealth;
+    public Team Team;
+
     public float CurrentHealth { get; private set; }
     public Command CurrentCommand { get; private set; }
     public Queue<Command> CommandQueue { get; private set; }
     public Queue<Command> HighPriorityCommandQueue { get; private set; }
-    public Team Team { get; private set; }
 
     private void Awake()
     {
         CurrentHealth = MaxHealth;
-    }
-
-    public void SetTeam(Team team)
-    {
-        Team = team;
+        CommandQueue = new Queue<Command>();
+        HighPriorityCommandQueue = new Queue<Command>();
     }
 
     public void SetCurrentCommand(Command command)

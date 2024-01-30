@@ -17,7 +17,7 @@ public abstract class Command
 
     protected abstract void OnCommandEndExecute();
 
-    protected abstract bool CheckCommandCompleted();
+    public abstract bool CheckCommandCompleted();
 
     public abstract string ToUIString();
 

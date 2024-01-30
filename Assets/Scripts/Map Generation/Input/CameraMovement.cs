@@ -33,6 +33,9 @@ public class CameraMovement : MonoBehaviour
     private Vector3 dragStartPoint;
     private Vector3 dragCurrentPoint;
 
+    private Unit _followUnit;
+    private int _followIndex = -1;
+
 
     // Start is called before the first frame update
     void Start()
@@ -51,16 +54,42 @@ public class CameraMovement : MonoBehaviour
 
     private void HandleCameraKeyboardInput()
     {
+        if (_followUnit != null) _nextPosition = _followUnit.gameObject.transform.position;
 
         if (_groundLayer == 0) Debug.LogError("No ground layer assigned to camera script");
         if (_movementSpeed == 0) Debug.LogWarning("camera movement speed set to 0");
         if (_movementTime == 0) Debug.LogWarning("camera movement time set to 0");
         if (_rotationSpeed == 0) Debug.LogWarning("camera rotation speed set to 0");
 
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) _nextPosition += (transform.forward * _movementSpeed);
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) _nextPosition += (transform.forward * -_movementSpeed);
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) _nextPosition += (transform.right * -_movementSpeed);
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) _nextPosition += (transform.right * _movementSpeed);
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        {
+            _nextPosition += (transform.forward * _movementSpeed);
+            _followUnit = null;
+        }
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        {
+            _nextPosition += (transform.forward * -_movementSpeed);
+            _followUnit = null;
+        }
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        {
+            _nextPosition += (transform.right * -_movementSpeed);
+            _followUnit = null;
+        }
+
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        {
+            _nextPosition += (transform.right * _movementSpeed);
+            _followUnit = null;
+        }
+
+        if (Input.GetKey(KeyCode.Tab))
+        {
+            if (_followIndex + 1 >= UnitManager.Instance.GetTeamSize(Team.Blue)) _followIndex = 0;
+            else _followIndex++;
+
+            _followUnit = UnitManager.Instance.GetUnitAtIndex(_followIndex, Team.Blue);
+        }
 
         if (Input.GetKey(KeyCode.Q)) _nextRotation *= Quaternion.Euler(Vector3.up * _rotationSpeed);
         if (Input.GetKey(KeyCode.E)) _nextRotation *= Quaternion.Euler(Vector3.up * -_rotationSpeed);

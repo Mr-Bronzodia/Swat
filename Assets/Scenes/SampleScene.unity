@@ -155,6 +155,7 @@ Transform:
   m_Children:
   - {fileID: 725523000}
   - {fileID: 1676057688}
+  - {fileID: 1804937736}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &234869729
@@ -211,7 +212,7 @@ MonoBehaviour:
   _rotationSpeed: 1
   _zoomAmount: {x: 0, y: -0.1, z: 0.1}
   _minZoomAmount: {x: 0, y: 3, z: -3}
-  _maxZoomAmount: {x: 0, y: 7, z: -7}
+  _maxZoomAmount: {x: 0, y: 15, z: -15}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -1006,6 +1007,50 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1804937735
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1804937736}
+  - component: {fileID: 1804937737}
+  m_Layer: 0
+  m_Name: UnitManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1804937736
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804937735}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 83647623}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1804937737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804937735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 155f35a45cae35842ac4a8dd8ebabafd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2008052070 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 1e6e2a6a93e4e354797e606448e8d885,
@@ -1025,6 +1070,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHealth: 100
+  Team: 1
 --- !u!114 &2008052072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1037,7 +1083,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d27313f89c72f74bb621ac73a836b39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _team: 1
+  _framesPerAIUpdate: 2
 --- !u!1 &2057487068
 GameObject:
   m_ObjectHideFlags: 0
@@ -1114,6 +1160,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1381359375739968101, guid: f96ec8f35f0dd684eae7494d52cba514,
+        type: 3}
+      propertyPath: RegenrateOnPlay
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1851420196594956627, guid: f96ec8f35f0dd684eae7494d52cba514,
         type: 3}
       propertyPath: m_LocalPosition.x
