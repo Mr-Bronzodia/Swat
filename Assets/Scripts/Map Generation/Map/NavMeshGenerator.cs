@@ -18,6 +18,18 @@ public class NavMeshGenerator : MonoBehaviour
         WorldStateManager.Instance.OnWorldStateChanged -= GenerateNavMesh;
     }
 
+    public void GenerateEditorOnly()
+    {
+        foreach (Transform child in gameObject.transform)
+        {
+            NavMeshSurface navMeshSurface;
+
+            if (child.TryGetComponent<NavMeshSurface>(out navMeshSurface))
+            {
+                navMeshSurface.BuildNavMesh();
+            }
+        }
+    }
 
     private void GenerateNavMesh(WorldState state)
     {

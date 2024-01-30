@@ -2,7 +2,8 @@
     "name": "WaveFunctionCollapseEditorAssembly",
     "rootNamespace": "",
     "references": [
-        "GUID:de40655d98060e74ab499b588939d1e9"
+        "GUID:de40655d98060e74ab499b588939d1e9",
+        "GUID:5cba7b34df89b30479a7deff21186609"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
