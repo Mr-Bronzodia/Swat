@@ -36,6 +36,9 @@ public class CameraMovement : MonoBehaviour
     private Unit _followUnit;
     private int _followIndex = -1;
 
+    private float _keyLockTime = .4f;
+    private float _sinceLastLock = 0f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +52,8 @@ public class CameraMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (_sinceLastLock < _keyLockTime + 1f) _sinceLastLock += Time.deltaTime;
+
         HandleCameraKeyboardInput();
     }
 
@@ -83,12 +88,15 @@ public class CameraMovement : MonoBehaviour
             _followUnit = null;
         }
 
-        if (Input.GetKey(KeyCode.Tab))
+        if (Input.GetKey(KeyCode.Tab) && _sinceLastLock > _keyLockTime)
         {
-            if (_followIndex + 1 >= UnitManager.Instance.GetTeamSize(Team.Blue)) _followIndex = 0;
+            _sinceLastLock = 0;
+
+            Team playerTeam = GameManager.Instance.PlayerTeam;
+            if (_followIndex + 1 >= UnitManager.Instance.GetTeamSize(playerTeam)) _followIndex = 0;
             else _followIndex++;
 
-            _followUnit = UnitManager.Instance.GetUnitAtIndex(_followIndex, Team.Blue);
+            _followUnit = UnitManager.Instance.GetUnitAtIndex(_followIndex, playerTeam);
         }
 
         if (Input.GetKey(KeyCode.Q)) _nextRotation *= Quaternion.Euler(Vector3.up * _rotationSpeed);

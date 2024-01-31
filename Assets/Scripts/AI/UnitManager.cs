@@ -28,7 +28,7 @@ public class UnitManager : MonoBehaviour
 
         if (team == Team.Blue) return _blueTeam.Count;
 
-        Debug.LogError("Inquering about non existing team Szie");
+        Debug.LogError("Inquiring about non existing team Size");
         return 0;
     }
 

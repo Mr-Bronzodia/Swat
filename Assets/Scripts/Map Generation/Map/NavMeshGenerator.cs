@@ -29,6 +29,8 @@ public class NavMeshGenerator : MonoBehaviour
                 navMeshSurface.BuildNavMesh();
             }
         }
+
+        WorldStateManager.Instance.UpdateWorldState(WorldState.NavMeshGenerated);
     }
 
     private void GenerateNavMesh(WorldState state)
