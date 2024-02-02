@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Plastic.Newtonsoft.Json.Bson;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using static UnityEngine.UI.CanvasScaler;
 
 public class UnitController : MonoBehaviour
 {
@@ -9,6 +12,9 @@ public class UnitController : MonoBehaviour
 
     [SerializeField]
     private RectTransform _unitDragSelectorRect;
+
+    [SerializeField]
+    private GameObject _controlPanelParent;
 
     private Vector2 _selectorStartPosition;
     private Vector2 _selectorEndPosition;
@@ -48,7 +54,7 @@ public class UnitController : MonoBehaviour
         _selectedUnit.Clear();
     }
 
-    private void UpdateSelectorBox()
+    private void UpdateSelectorBoxVisual()
     {
         Vector2 boxCentre = (_selectorStartPosition + _selectorEndPosition) / 2;
         Vector2 boxSize = new Vector2(Mathf.Abs(_selectorStartPosition.x - _selectorEndPosition.x),Mathf.Abs( _selectorStartPosition.y - _selectorEndPosition.y));
@@ -56,6 +62,19 @@ public class UnitController : MonoBehaviour
         _unitDragSelectorRect.position = boxCentre;
         _unitDragSelectorRect.sizeDelta = boxSize;
 
+    }
+
+    private void AddCommandButton(Unit unit, Command command, GameObject parent)
+    {
+        RectTransform parentRectTransform;
+        if (!parent.TryGetComponent<RectTransform>(out parentRectTransform)) { Debug.Log("Cant Get parent rect transform"); return; }
+
+        GameObject buttonInstance = new GameObject();
+        buttonInstance.transform.parent = parent.transform;
+        RectTransform buttonRectTransform = buttonInstance.AddComponent<RectTransform>();
+        Button button = buttonInstance.AddComponent<Button>();
+        button.onClick.AddListener(delegate { unit.BlackBoard.ScheduleNormalCommand(command); });
+        buttonRectTransform.sizeDelta = new Vector2(parentRectTransform.sizeDelta.x * 0.8f, parentRectTransform.sizeDelta.y * .8f);
     }
 
     private void BoxSelect()
@@ -85,7 +104,6 @@ public class UnitController : MonoBehaviour
             selectionRect.yMin = _selectorStartPosition.y;
             selectionRect.yMax = Input.mousePosition.y;
         }
-
 
         Team playerTeam = GameManager.Instance.PlayerTeam;
 
@@ -127,13 +145,12 @@ public class UnitController : MonoBehaviour
                     AddUnitToSelected(unit);
                 }
             }
-
         }
 
         if (Input.GetMouseButton(0))
         {
             _selectorEndPosition = Input.mousePosition;
-            UpdateSelectorBox();
+            UpdateSelectorBoxVisual();
         }
 
         if (Input.GetMouseButtonUp(0))
@@ -141,7 +158,31 @@ public class UnitController : MonoBehaviour
             BoxSelect();
             _selectorStartPosition = Vector2.zero;
             _selectorEndPosition = Vector2.zero;
-            UpdateSelectorBox();
+            UpdateSelectorBoxVisual();
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+
+            if (_selectedUnit.Count <= 0) return;
+
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+            {
+                IClickable clickableObject;
+                if (!hit.collider.gameObject.TryGetComponent<IClickable>(out clickableObject)) return;
+
+                Unit unit = _selectedUnit[0];
+                _controlPanelParent.GetComponent<RectTransform>().sizeDelta = new Vector2(100f, 100f);
+                AddCommandButton(unit, clickableObject.GetAvailableCommands(unit)[0], _controlPanelParent);
+                //Debug.Log("Hit Clickable object got command " + clickableObject.GetAvailableCommands(_selectedUnit[0])[0]);
+                _controlPanelParent.GetComponent<RectTransform>().sizeDelta = new Vector2(100f, 100f);
+            }
+
         }
     }
+
+    
 }
