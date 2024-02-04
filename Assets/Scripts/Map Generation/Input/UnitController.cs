@@ -15,17 +15,29 @@ public class UnitController : MonoBehaviour
 
     [SerializeField]
     private GameObject _controlPanelParent;
+    private RectTransform _controlParentRect;
+
+    [SerializeField]
+    private GameObject _buttonPrefab;
 
     private Vector2 _selectorStartPosition;
     private Vector2 _selectorEndPosition;
+
+    private bool _isCommandMenuOpen;
+    private const float BUTTON_PADDING = 20f;
+
+    [SerializeField]
+    private Vector2 _buttonSize;
 
     private void Awake()
     {
         _selectedUnit = new List<Unit>();
         _selectorStartPosition = Vector2.zero;
         _selectorEndPosition = Vector2.zero;
+        _isCommandMenuOpen = false;
 
         if (_unitDragSelectorRect == null) Debug.LogError("Selector box not assigned in UnitController");
+        _controlParentRect = _controlPanelParent.GetComponent<RectTransform>();
     }
 
     private void AddUnitToSelected(Unit unit)
@@ -34,14 +46,6 @@ public class UnitController : MonoBehaviour
 
         _selectedUnit.Add(unit);
         unit.SetSelectionVisual(true);
-    }
-
-    private void RemoveUnitFromSelected(Unit unit)
-    {
-        if(!_selectedUnit.Contains(unit)) return;
-
-        _selectedUnit.Remove(unit);
-        unit.SetSelectionVisual(false);
     }
 
     private void ClearSelected()
@@ -64,17 +68,57 @@ public class UnitController : MonoBehaviour
 
     }
 
-    private void AddCommandButton(Unit unit, Command command, GameObject parent)
+    private void AddCommandButton(Unit unit, Command command, GameObject parent, Vector2 pos)
     {
-        RectTransform parentRectTransform;
-        if (!parent.TryGetComponent<RectTransform>(out parentRectTransform)) { Debug.Log("Cant Get parent rect transform"); return; }
+        GameObject buttonInstance = Instantiate(_buttonPrefab, parent.transform);
+        Button button = buttonInstance.GetComponent<Button>();
+        RectTransform rectTransform = buttonInstance.GetComponent<RectTransform>();
+        TMP_Text tmp = buttonInstance.GetComponentInChildren<TMP_Text>();
+        buttonInstance.name = command.ToString() + " Button";
 
-        GameObject buttonInstance = new GameObject();
-        buttonInstance.transform.parent = parent.transform;
-        RectTransform buttonRectTransform = buttonInstance.AddComponent<RectTransform>();
-        Button button = buttonInstance.AddComponent<Button>();
-        button.onClick.AddListener(delegate { unit.BlackBoard.ScheduleNormalCommand(command); });
-        buttonRectTransform.sizeDelta = new Vector2(parentRectTransform.sizeDelta.x * 0.8f, parentRectTransform.sizeDelta.y * .8f);
+
+        rectTransform.position = pos;
+        rectTransform.sizeDelta = _buttonSize;
+
+        tmp.text = command.ToUIString();
+        tmp.horizontalAlignment = HorizontalAlignmentOptions.Center;
+        tmp.verticalAlignment = VerticalAlignmentOptions.Middle;
+        tmp.fontSize = 12f;
+
+        button.onClick.AddListener(() => unit.BlackBoard.ScheduleNormalCommand(command));
+        button.onClick.AddListener(() => CloseCommandMenu());
+    }
+
+    private void OpenCommandMenu(List<Command> commands, Vector2 screenSpacePos)
+    {
+        if (_isCommandMenuOpen) return;
+
+        _controlPanelParent.SetActive(true);
+        _controlParentRect.sizeDelta = new Vector2(_buttonSize.x * 1.2f, (_buttonSize.y + BUTTON_PADDING) * commands.Count);
+        _controlParentRect.position = screenSpacePos - new Vector2(0, _controlParentRect.sizeDelta.y / 2);
+
+        for (int i = 0; i < commands.Count; i++)
+        {
+            Vector2 buttonPos = new Vector2(_controlParentRect.position.x , _controlParentRect.position.y - (i * _buttonSize.y));
+            AddCommandButton(_selectedUnit[0], commands[i], _controlPanelParent, buttonPos);
+        }
+
+        _isCommandMenuOpen = true;
+    }
+
+    private void CloseCommandMenu()
+    {
+
+        if (!_isCommandMenuOpen) return;
+
+        foreach(Transform child in _controlPanelParent.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        _isCommandMenuOpen = false;
+        _controlParentRect.sizeDelta = new Vector2(0f, 0f);
+        _controlPanelParent.SetActive(false);
     }
 
     private void BoxSelect()
@@ -131,7 +175,11 @@ public class UnitController : MonoBehaviour
             if (Physics.Raycast(ray,out hit, Mathf.Infinity))
             {
                 Unit unit;
-                if (!hit.collider.gameObject.TryGetComponent<Unit>(out unit)) { ClearSelected(); return; }
+                if (!hit.collider.gameObject.TryGetComponent<Unit>(out unit)) 
+                { 
+                    if (!_isCommandMenuOpen) ClearSelected();
+                    return;
+                }
 
                 if (unit.BlackBoard.Team != GameManager.Instance.PlayerTeam) return;
 
@@ -162,7 +210,8 @@ public class UnitController : MonoBehaviour
         }
 
         if (Input.GetMouseButtonDown(1))
-        {
+        {         
+            CloseCommandMenu();
 
             if (_selectedUnit.Count <= 0) return;
 
@@ -176,9 +225,8 @@ public class UnitController : MonoBehaviour
 
                 Unit unit = _selectedUnit[0];
                 _controlPanelParent.GetComponent<RectTransform>().sizeDelta = new Vector2(100f, 100f);
-                AddCommandButton(unit, clickableObject.GetAvailableCommands(unit)[0], _controlPanelParent);
-                //Debug.Log("Hit Clickable object got command " + clickableObject.GetAvailableCommands(_selectedUnit[0])[0]);
-                _controlPanelParent.GetComponent<RectTransform>().sizeDelta = new Vector2(100f, 100f);
+                OpenCommandMenu(clickableObject.GetAvailableCommands(unit), Input.mousePosition);
+
             }
 
         }

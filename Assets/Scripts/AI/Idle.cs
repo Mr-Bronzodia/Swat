@@ -19,7 +19,7 @@ public class Idle : Command
 
     public override bool CheckCommandCompleted()
     {
-        if (_unit.BlackBoard.CommandQueue.Count > 1) return true;
+        if (_unit.BlackBoard.CommandQueue.Count >= 1) return true;
 
         return false;
     }

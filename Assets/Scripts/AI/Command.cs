@@ -21,9 +21,11 @@ public abstract class Command
 
     public abstract string ToUIString();
 
-    protected void ExecuteNext(Command nextCommand)
+    public void ExecuteNext(Command nextCommand)
     {
         OnCommandEndExecute();
+
+        _unit.BlackBoard.SetCurrentCommand(nextCommand);
 
         nextCommand.OnCommandBeginExecute();
     }

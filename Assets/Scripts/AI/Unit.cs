@@ -10,6 +10,8 @@ public class Unit : MonoBehaviour
 
     public Action<Command> OnNewCommand;
 
+    public Action OnStopImmediately;
+
     public NavMeshAgent NavAgent { get; private set; }
 
     [SerializeField]
@@ -30,7 +32,7 @@ public class Unit : MonoBehaviour
 
         UnitManager.Instance.AddUnit(this);
 
-        _sinceLastAIUpdate = _framesPerAIUpdate;
+        _sinceLastAIUpdate = 0;
     }
 
     public void SetSelectionVisual(bool enabled)
@@ -38,22 +40,31 @@ public class Unit : MonoBehaviour
         _selectionVisual.SetActive(enabled);
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        Unit other;
+        if (!collision.gameObject.TryGetComponent<Unit>(out other)) return;
+
+        OnStopImmediately?.Invoke();
+    }
+
     private void Update()
     {
-        _sinceLastAIUpdate++;
-
-        if (_framesPerAIUpdate > _sinceLastAIUpdate) return;
-
         if (BlackBoard.CurrentCommand == null && BlackBoard.CommandQueue.Count <= 0)
         {
             Idle idle = new Idle(this);
             BlackBoard.ScheduleNormalCommand(idle);
+            BlackBoard.SetCurrentCommand(idle);
         }
+
+        _sinceLastAIUpdate++;
+
+        if (_framesPerAIUpdate > _sinceLastAIUpdate) return;
 
         if (BlackBoard.CurrentCommand == null)
         {
             Command nextCommand = BlackBoard.CommandQueue.Dequeue();
-            BlackBoard.SetCurrentCommand(nextCommand);
+            BlackBoard.CurrentCommand.ExecuteNext(nextCommand);
             OnNewCommand?.Invoke(nextCommand);
         }
 
@@ -63,8 +74,12 @@ public class Unit : MonoBehaviour
 
         if (BlackBoard.CurrentCommand.CheckCommandCompleted())
         {
-            Command nextCommand = BlackBoard.CommandQueue.Dequeue();
-            BlackBoard.SetCurrentCommand(nextCommand);
+            Command nextCommand;
+            if (BlackBoard.CommandQueue.Count == 0) nextCommand = new Idle(this);
+            else nextCommand = BlackBoard.CommandQueue.Dequeue();
+
+
+            BlackBoard.CurrentCommand.ExecuteNext(nextCommand);
             OnNewCommand?.Invoke(nextCommand);
         }
 
