@@ -4,11 +4,11 @@ using UnityEngine;
 
 public abstract class Command 
 {
-    protected Unit _unit;
+    public Unit Unit {  get; private set; }
 
     public Command(Unit unit)
     {
-        _unit = unit;
+        Unit = unit;
     }
     
     public abstract void Update();
@@ -25,7 +25,7 @@ public abstract class Command
     {
         OnCommandEndExecute();
 
-        _unit.BlackBoard.SetCurrentCommand(nextCommand);
+        Unit.BlackBoard.SetCurrentCommand(nextCommand);
 
         nextCommand.OnCommandBeginExecute();
     }

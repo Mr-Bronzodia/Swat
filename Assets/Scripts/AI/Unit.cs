@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Unit : MonoBehaviour
+public class Unit : MonoBehaviour, IClickable
 {
     public UnitBlackBoard BlackBoard { get; private set; }
 
@@ -84,5 +84,33 @@ public class Unit : MonoBehaviour
         }
 
         _sinceLastAIUpdate = 0;
+    }
+
+    public List<Command> GetAvailableCommands(Unit other)
+    {
+        List<Command> commands = new List<Command>();
+
+        //Ally
+        if (BlackBoard.Team == other.BlackBoard.Team)
+        {
+            FollowCommand followCommand = new FollowCommand(other, this);
+            WaitToFinishCommand wait = new WaitToFinishCommand(other, this);
+
+            commands.Add(followCommand);
+            commands.Add(wait);
+        }
+        //Enemy
+        else
+        {
+
+        }
+
+
+        return commands;
+    }
+
+    public List<Command> GetAvailableCommands(List<Unit> units)
+    {
+        throw new NotImplementedException();
     }
 }

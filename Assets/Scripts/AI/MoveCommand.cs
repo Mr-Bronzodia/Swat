@@ -14,19 +14,19 @@ public class MoveCommand : Command
     public MoveCommand(Unit unit, Vector3 target) : base(unit)
     {
         _target = target;
-        _unit.OnStopImmediately += ImmediateStop;
+        //Unit.OnStopImmediately += ImmediateStop;
     }
 
     ~MoveCommand() 
     {
-        _unit.OnStopImmediately -= ImmediateStop;
+        //Unit.OnStopImmediately -= ImmediateStop;
     }
 
     private void ImmediateStop()
     {
         _terminateOnNextUpdate = true;
-        _unit.NavAgent.velocity = Vector3.zero;
-        _unit.NavAgent.isStopped = true;
+        Unit.NavAgent.velocity = Vector3.zero;
+        Unit.NavAgent.isStopped = true;
     } 
 
 
@@ -34,8 +34,8 @@ public class MoveCommand : Command
     {
         if (_terminateOnNextUpdate) return true;
 
-        Vector3 unitPos = _unit.transform.position;
-        return _unit.NavAgent.remainingDistance <= 0.1f;
+        Vector3 unitPos = Unit.transform.position;
+        return Unit.NavAgent.remainingDistance <= 0.1f;
     }
 
     public override string ToUIString()
@@ -50,9 +50,9 @@ public class MoveCommand : Command
 
     protected override void OnCommandBeginExecute()
     {
-        if (_unit.NavAgent.isStopped) _unit.NavAgent.isStopped = false;
+        if (Unit.NavAgent.isStopped) Unit.NavAgent.isStopped = false;
 
-        _unit.NavAgent.SetDestination(_target);
+        Unit.NavAgent.SetDestination(_target);
     }
 
     protected override void OnCommandEndExecute()

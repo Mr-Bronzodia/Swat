@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using static UnityEngine.UI.CanvasScaler;
+using static PlasticPipe.PlasticProtocol.Messages.NegotiationCommand;
 
 public class UnitController : MonoBehaviour
 {
@@ -82,18 +83,30 @@ public class UnitController : MonoBehaviour
     {
         List<GameObject> commandButtons = new List<GameObject>();
 
-        foreach (Unit unit in _selectedUnit)
-        {
-            List<Command> commands = clickableObject.GetAvailableCommands(unit);
+        List<Command> commands;
+        if (_selectedUnit.Count == 1) commands = clickableObject.GetAvailableCommands(_selectedUnit[0]);
+        else commands = clickableObject.GetAvailableCommands(_selectedUnit);
 
-            foreach (Command command in commands)
+        Dictionary<System.Type, List<Command>> commandByType = new Dictionary<System.Type, List<Command>>();
+
+        foreach (Command command in commands)
+        {
+            if (!commandByType.ContainsKey(command.GetType())) commandByType.Add(command.GetType(), new List<Command>());
+
+            commandByType[command.GetType()].Add(command);
+        }
+
+        foreach (KeyValuePair< System.Type, List <Command>> item in commandByType)
+        {
+            GameObject buttonInstance = UIManager.Instance.CreateCommandButton(item.Value[0].ToString());
+            Button button = buttonInstance.GetComponent<Button>();
+
+            foreach (Command command in item.Value)
             {
-                GameObject buttonInstance = UIManager.Instance.CreateCommandButton(command.ToUIString());
-                Button button = buttonInstance.GetComponent<Button>();
-                button.onClick.AddListener(() => unit.BlackBoard.ScheduleNormalCommand(command));
-                button.onClick.AddListener(() => Debug.Log("soy"));
-                commandButtons.Add(buttonInstance);
-            }    
+                button.onClick.AddListener(() => command.Unit.BlackBoard.ScheduleNormalCommand(command));
+            }
+
+            commandButtons.Add(buttonInstance);
         }
 
         return commandButtons;
