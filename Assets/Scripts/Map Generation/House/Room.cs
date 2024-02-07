@@ -39,6 +39,16 @@ public class Room : TreeMapNode, IEquatable<Room>
         _adjustedRooms.Add(room);
     }
 
+    public bool containsOutsideFacingWalls()
+    {
+        foreach (KeyValuePair<Sides, Wall> wall in Walls)
+        {
+            if (IsWallFacingOutside(wall.Value)) return true;
+        }
+
+        return false;
+    }
+
     public void FinalizeLayout()
     {
         Vector3 bottomLeft = Bounds.min;
@@ -120,13 +130,22 @@ public class Room : TreeMapNode, IEquatable<Room>
         return true;
     }
 
-    public void BuildFacade(GameObject wallInsidePrefab, GameObject wallOutsidePrefab, List<GameObject> windowPrefab, GameObject doorPrefab, GameObject parentInstance) 
+    public void BuildFacade(GameObject wallInsidePrefab, GameObject wallOutsidePrefab, List<GameObject> windowPrefab, GameObject insideDoorPrefab, bool shouldContainOutsideDoor, GameObject parentInstance) 
     {
+        int outsideConnections = 0;
         foreach (KeyValuePair<Sides, Wall> wall in Walls)
         {
-            if (IsWallFacingOutside(wall.Value)) wall.Value.BuildOutsideWall(Bounds.center, wallOutsidePrefab, windowPrefab, parentInstance);
-            else wall.Value.BuildIndoorsWall(Bounds.center, wallInsidePrefab, doorPrefab, parentInstance);
+            if (IsWallFacingOutside(wall.Value))
+            {
+                bool buildDoor = outsideConnections == 0 && shouldContainOutsideDoor ? true : false;
+
+                wall.Value.BuildOutsideWall(Bounds.center, wallOutsidePrefab, windowPrefab, buildDoor, insideDoorPrefab, parentInstance);
+
+                if (buildDoor) outsideConnections++;
+            }
+            else wall.Value.BuildIndoorsWall(Bounds.center, wallInsidePrefab, insideDoorPrefab, parentInstance);
         }
+
     }
 
     /// <summary>

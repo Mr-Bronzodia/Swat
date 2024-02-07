@@ -201,12 +201,16 @@ public class House
 
         foreach (Room room in Rooms)
         {
+            bool shouldContainOutsideDoor = room.containsOutsideFacingWalls() && (room.RoomType == RoomTypes.Livingroom || room.RoomType == RoomTypes.Connector);
             room.BuildFloor(GetRandomObject(houseTheme.Floor), _parentInstance);
+
             room.BuildFacade(GetRandomObject(houseTheme.InteriorWall),
                         GetRandomObject(houseTheme.ExtiriorWall),
                         houseTheme.ExteriorWindows,
                         GetRandomObject(houseTheme.Doors),
+                        shouldContainOutsideDoor,
                         _parentInstance);
+
            room.BuildRoof(houseTheme.Roof, 3f, _parentInstance);
         }
     }

@@ -147,9 +147,8 @@ public class Wall
         }
     }
 
-    public void BuildOutsideWall(Vector3 roomCentre, GameObject wallPrefab, List<GameObject> windowPrefabs, GameObject parentInstance)
+    public void BuildOutsideWall(Vector3 roomCentre, GameObject wallPrefab, List<GameObject> windowPrefabs, bool buildOutsideDoor, GameObject doorPrefab, GameObject parentInstance)
     {
-
         List<GameObject> suitableWindows = new List<GameObject>();
         foreach (GameObject window in windowPrefabs)
         {
@@ -161,7 +160,9 @@ public class Wall
 
         if (suitableWindows.Count == 0) suitableWindows.Add(windowPrefabs[0]);
 
-        GameObject windowPrefab = suitableWindows[UnityEngine.Random.Range(0, suitableWindows.Count)];
+        GameObject windowPrefab;
+        if (buildOutsideDoor) windowPrefab = doorPrefab;
+        else windowPrefab = suitableWindows[UnityEngine.Random.Range(0, suitableWindows.Count)];
 
         MeshRenderer windowRenderer = windowPrefab.GetComponentInChildren<MeshRenderer>();
         MeshRenderer wallRenderer = wallPrefab.GetComponentInChildren<MeshRenderer>();
@@ -175,8 +176,13 @@ public class Wall
         for (int i = 0; i < noWindows; i++)
         {
             Vector3 windowPos = Vector3.Lerp(StartPoint, EndPoint, (i + 0.5f) / noWindows);
+
+            if (i == 0 && buildOutsideDoor) _doorPositions.Add(windowPos);
+
             GameObject nextWindow = UnityEngine.Object.Instantiate(windowPrefab, windowPos, Quaternion.identity, parentInstance.transform);
+
             _windowPositions.Add(windowPos);
+
             nextWindow.transform.forward = (MiddlePoint - roomCentre).normalized;
         }
 
