@@ -12,6 +12,8 @@ public class UnitBlackBoard : MonoBehaviour
     public Queue<Command> CommandQueue { get; private set; }
     public Queue<Command> HighPriorityCommandQueue { get; private set; }
 
+    public Vector3 Position { get { return gameObject.transform.position; } }
+
     private void Awake()
     {
         CurrentHealth = MaxHealth;

@@ -33,16 +33,16 @@ public class ClickableTile : MonoBehaviour, IClickable
             worldPosition = ray.GetPoint(distance);
         }
 
-        int i = 0;
-        foreach(Unit unit in u)
-        {
-            Vector3 dirToTarget = new Vector3(1,0,0);
-            Vector3 finalPos = worldPosition + i * dirToTarget;
-            Command move = new MoveCommand(unit, finalPos);
-            results.Add(move);
+        //int i = 0;
+        //foreach(Unit unit in u)
+        //{
+        //    Vector3 dirToTarget = new Vector3(1,0,0);
+        //    Vector3 finalPos = worldPosition + i * dirToTarget;
+        //    Command move = new MoveCommand(unit, finalPos);
+        //    results.Add(move);
 
-            i += 3;
-        }
+        //    i += 1.5f;
+        //}
 
         TeamMoveSequence teamMoveSequence = new TeamMoveSequence(u[0], u, worldPosition);
         results.Add(teamMoveSequence);

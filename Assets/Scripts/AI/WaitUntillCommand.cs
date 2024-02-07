@@ -28,8 +28,11 @@ public class WaitUntillCommand : Command
 
     public override bool CheckCommandCompleted()
     {
-        Debug.Log("wait finished: " + _isOtherDone);
-        return _isOtherDone;
+        if (_isOtherDone) return true;
+
+        if (Unit.BlackBoard.CommandQueue.Count < 0) return true;
+
+        return false;
     }
 
     public override string ToUIString()

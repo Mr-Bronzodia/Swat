@@ -39,7 +39,7 @@ public class TeamMoveSequence : Command
         for (int i = 1; i < _team.Count; i++)
         {
             Unit unit = _team[i];
-            Vector3 target = lead.transform.position - i * leadForward;
+            Vector3 target = lead.BlackBoard.Position - i * leadForward;
 
             MoveCommand moveBehind = new MoveCommand(unit, target);
             unit.ScheduleNormalCommand(moveBehind);

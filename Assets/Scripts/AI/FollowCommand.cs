@@ -27,8 +27,8 @@ public class FollowCommand : Command
 
     public override void Update()
     {
-        Vector3 otherPosition = _unitToFollow.transform.position;
-        Vector3 myPosition = Unit.gameObject.transform.position;
+        Vector3 otherPosition = _unitToFollow.BlackBoard.Position;
+        Vector3 myPosition = Unit.BlackBoard.Position;
 
         float distance;
         if (Mathf.Approximately(_followDistance, 0)) distance = 1f;

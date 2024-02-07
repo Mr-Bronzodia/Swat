@@ -34,7 +34,6 @@ public class MoveCommand : Command
     {
         if (_terminateOnNextUpdate) return true;
 
-        Vector3 unitPos = Unit.transform.position;
         return Unit.NavAgent.remainingDistance <= 0.1f;
     }
 
@@ -52,7 +51,20 @@ public class MoveCommand : Command
     {
         if (Unit.NavAgent.isStopped) Unit.NavAgent.isStopped = false;
 
-        Unit.NavAgent.SetDestination(_target);
+        NavMeshHit navMeshHit;
+        Vector3 nearestPoint;
+        if (NavMesh.SamplePosition(_target, out navMeshHit, 3.2f, NavMesh.AllAreas))
+        {
+            nearestPoint = navMeshHit.position;
+        }
+        else
+        {
+            Debug.Log("Cant find near navmesh point in move command terminating eraly");
+            nearestPoint = Unit.BlackBoard.Position;
+            _terminateOnNextUpdate = true;
+        }
+
+        Unit.NavAgent.SetDestination(nearestPoint);
     }
 
     protected override void OnCommandEndExecute()
