@@ -50,28 +50,33 @@ public class Unit : MonoBehaviour, IClickable
 
     private void Update()
     {
-        if (BlackBoard.CurrentCommand == null && BlackBoard.CommandQueue.Count <= 0)
-        {
-            Idle idle = new Idle(this);
-            BlackBoard.ScheduleNormalCommand(idle);
-            BlackBoard.SetCurrentCommand(idle);
-        }
-
         _sinceLastAIUpdate++;
 
         if (_framesPerAIUpdate > _sinceLastAIUpdate) return;
 
-        if (BlackBoard.CurrentCommand == null)
+        // Execute High Priority Command Above else
+        if (BlackBoard.HighPriorityCommandQueue.Count > 0)
         {
-            Command nextCommand = BlackBoard.CommandQueue.Dequeue();
-            BlackBoard.CurrentCommand.ExecuteNext(nextCommand);
-            OnNewCommand?.Invoke(nextCommand);
+            Command command = BlackBoard.HighPriorityCommandQueue.Dequeue();
+            BlackBoard.CurrentCommand.ExecuteNext(command);
+            OnNewCommand?.Invoke(command);
+            BlackBoard.CurrentCommand.Update();
+            return;
+        }
+
+        //If unit just created make idle
+        if (BlackBoard.CurrentCommand == null && BlackBoard.CommandQueue.Count <= 0)
+        {
+            Idle idle = new Idle(this);
+            ScheduleNormalCommand(idle);
+            SetCurrentCommand(idle);
         }
 
         BlackBoard.CurrentCommand.Update();
 
         DebugUiManager.Instance.AddDebugText(GetHashCode(), gameObject.name + " AI command: " + BlackBoard.CurrentCommand.ToUIString());
 
+        // if current command finished process next
         if (BlackBoard.CurrentCommand.CheckCommandCompleted())
         {
             Command nextCommand;
@@ -86,6 +91,26 @@ public class Unit : MonoBehaviour, IClickable
         _sinceLastAIUpdate = 0;
     }
 
+    public void SetAIUpdateRate(int framesPreUpdate)
+    {
+        _framesPerAIUpdate = framesPreUpdate;
+    }
+
+    public void SetCurrentCommand(Command command)
+    {
+        BlackBoard.SetCurrent(command);
+    }
+
+    public void ScheduleNormalCommand(Command command)
+    {
+        BlackBoard.CommandQueue.Enqueue(command);
+    }
+
+    public void ScheduleHighCommand(Command command)
+    {
+        BlackBoard.HighPriorityCommandQueue.Enqueue(command);
+    }
+
     public List<Command> GetAvailableCommands(Unit other)
     {
         List<Command> commands = new List<Command>();
@@ -94,10 +119,10 @@ public class Unit : MonoBehaviour, IClickable
         if (BlackBoard.Team == other.BlackBoard.Team)
         {
             FollowCommand followCommand = new FollowCommand(other, this);
-            WaitToFinishCommand wait = new WaitToFinishCommand(other, this);
+            //WaitToFinishCommand wait = new WaitToFinishCommand(other, this);
 
             commands.Add(followCommand);
-            commands.Add(wait);
+            //commands.Add(wait);
         }
         //Enemy
         else

@@ -103,7 +103,7 @@ public class UnitController : MonoBehaviour
 
             foreach (Command command in item.Value)
             {
-                button.onClick.AddListener(() => command.Unit.BlackBoard.ScheduleNormalCommand(command));
+                button.onClick.AddListener(() => command.Unit.ScheduleNormalCommand(command));
             }
 
             commandButtons.Add(buttonInstance);

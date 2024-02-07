@@ -5,10 +5,12 @@ using UnityEngine;
 public class FollowCommand : Command
 {
     Unit _unitToFollow;
+    float _followDistance;
 
-    public FollowCommand(Unit unit, Unit other) : base(unit)
+    public FollowCommand(Unit unit, Unit unitToFollow, float distance = 0) : base(unit)
     {
-        _unitToFollow = other;
+        _unitToFollow = unitToFollow;
+        _followDistance = distance;
     }
 
     public override bool CheckCommandCompleted()
@@ -27,10 +29,15 @@ public class FollowCommand : Command
     {
         Vector3 otherPosition = _unitToFollow.transform.position;
         Vector3 myPosition = Unit.gameObject.transform.position;
-        if (Vector3.Distance(myPosition, otherPosition) < .9f) return;
+
+        float distance;
+        if (Mathf.Approximately(_followDistance, 0)) distance = 1f;
+        else distance = _followDistance;
+
+        if (Vector3.Distance(myPosition, otherPosition) < distance + 0.1f) return;
 
         Vector3 dirToTarget = (otherPosition - myPosition).normalized;
-        Unit.NavAgent.SetDestination(otherPosition - .8f * dirToTarget);
+        Unit.NavAgent.SetDestination(otherPosition - distance * dirToTarget);
     }
 
     protected override void OnCommandBeginExecute()

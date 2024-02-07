@@ -44,6 +44,9 @@ public class ClickableTile : MonoBehaviour, IClickable
             i += 3;
         }
 
+        TeamMoveSequence teamMoveSequence = new TeamMoveSequence(u[0], u, worldPosition);
+        results.Add(teamMoveSequence);
+
         return results;
     }
 }

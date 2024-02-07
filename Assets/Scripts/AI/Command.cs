@@ -25,7 +25,7 @@ public abstract class Command
     {
         OnCommandEndExecute();
 
-        Unit.BlackBoard.SetCurrentCommand(nextCommand);
+        Unit.SetCurrentCommand(nextCommand);
 
         nextCommand.OnCommandBeginExecute();
     }

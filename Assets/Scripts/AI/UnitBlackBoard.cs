@@ -19,18 +19,9 @@ public class UnitBlackBoard : MonoBehaviour
         HighPriorityCommandQueue = new Queue<Command>();
     }
 
-    public void SetCurrentCommand(Command command)
+    public void SetCurrent(Command newCommand)
     {
-        CurrentCommand = command;
+        CurrentCommand = newCommand;
     }
 
-    public void ScheduleNormalCommand(Command command)
-    {
-        CommandQueue.Enqueue(command);
-    }
-
-    public void ScheduleHighCommand(Command command)
-    {
-        HighPriorityCommandQueue.Enqueue(command);
-    }
 }
