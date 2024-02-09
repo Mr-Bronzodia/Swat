@@ -49,6 +49,7 @@ public class Wall
         _doorPositions.Add(pos);
     }
 
+
     public bool IsWallEmpty()
     {
         bool isEmpty = _doorPositions.Count == 0 && _windowPositions.Count == 0;
@@ -177,7 +178,7 @@ public class Wall
         {
             Vector3 windowPos = Vector3.Lerp(StartPoint, EndPoint, (i + 0.5f) / noWindows);
 
-            if (i == 0 && buildOutsideDoor) _doorPositions.Add(windowPos);
+            if (buildOutsideDoor) _doorPositions.Add(windowPos);
 
             GameObject nextWindow = UnityEngine.Object.Instantiate(windowPrefab, windowPos, Quaternion.identity, parentInstance.transform);
 
@@ -205,6 +206,19 @@ public class Wall
         }
 
         BuildWallSegment(_windowPositions[_windowPositions.Count - 1] + (windowWidth / 2) * wallDirection, EndPoint, roomCentre, wallPrefab, parentInstance);
+    }
+
+    public void BuildDoors(GameObject doorPrefab, Room room, GameObject parentInstance)
+    {
+        foreach (Vector3 doorPos in _doorPositions)
+        {
+            Collider[] hits = Physics.OverlapSphere(doorPos, 0.1f);
+
+            if (hits.Length > 1 ) continue;
+
+            GameObject door = UnityEngine.Object.Instantiate(doorPrefab,doorPos, Quaternion.identity, parentInstance.transform);
+            door.transform.forward = GetInsideVector(room);
+        }
     }
 
     public Vector3 GetInsideVector(Room room)

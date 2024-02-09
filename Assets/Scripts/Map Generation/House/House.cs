@@ -179,6 +179,7 @@ public class House
     }
 
 
+
     public void InstantiateHouse(HouseTheme houseTheme)
     {
 
@@ -209,7 +210,8 @@ public class House
                         houseTheme.ExteriorWindows,
                         GetRandomObject(houseTheme.Doors),
                         shouldContainOutsideDoor,
-                        _parentInstance);
+                        GetRandomObject(houseTheme.DoorObjects),
+                        _parentInstance) ;
 
            room.BuildRoof(houseTheme.Roof, 3f, _parentInstance);
         }

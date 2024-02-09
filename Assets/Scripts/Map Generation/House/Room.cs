@@ -130,7 +130,7 @@ public class Room : TreeMapNode, IEquatable<Room>
         return true;
     }
 
-    public void BuildFacade(GameObject wallInsidePrefab, GameObject wallOutsidePrefab, List<GameObject> windowPrefab, GameObject insideDoorPrefab, bool shouldContainOutsideDoor, GameObject parentInstance) 
+    public void BuildFacade(GameObject wallInsidePrefab, GameObject wallOutsidePrefab, List<GameObject> windowPrefab, GameObject doorFramePrefab, bool shouldContainOutsideDoor,GameObject doorPrefab, GameObject parentInstance) 
     {
         int outsideConnections = 0;
         foreach (KeyValuePair<Sides, Wall> wall in Walls)
@@ -139,11 +139,13 @@ public class Room : TreeMapNode, IEquatable<Room>
             {
                 bool buildDoor = outsideConnections == 0 && shouldContainOutsideDoor ? true : false;
 
-                wall.Value.BuildOutsideWall(Bounds.center, wallOutsidePrefab, windowPrefab, buildDoor, insideDoorPrefab, parentInstance);
+                wall.Value.BuildOutsideWall(Bounds.center, wallOutsidePrefab, windowPrefab, buildDoor, doorFramePrefab, parentInstance);
 
                 if (buildDoor) outsideConnections++;
             }
-            else wall.Value.BuildIndoorsWall(Bounds.center, wallInsidePrefab, insideDoorPrefab, parentInstance);
+            else wall.Value.BuildIndoorsWall(Bounds.center, wallInsidePrefab, doorFramePrefab, parentInstance);
+
+            wall.Value.BuildDoors(doorPrefab, this, parentInstance);
         }
 
     }
@@ -187,6 +189,7 @@ public class Room : TreeMapNode, IEquatable<Room>
 
             thisWallSide.AddDoorPosition(shorterWall.MiddlePoint);
             otherWallSide.AddDoorPosition(shorterWall.MiddlePoint);
+
             return;
         }
 

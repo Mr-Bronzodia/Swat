@@ -34,6 +34,8 @@ public class MoveCommand : Command
     {
         if (_terminateOnNextUpdate) return true;
 
+        //if (Unit.NavAgent.pathStatus == NavMeshPathStatus.PathPartial) return true;
+
         return Unit.NavAgent.remainingDistance <= 0.1f;
     }
 

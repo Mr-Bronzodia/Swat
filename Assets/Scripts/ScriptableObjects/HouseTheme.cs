@@ -28,4 +28,5 @@ public class HouseTheme : ScriptableObject
     public List<GameObject> Doors;
     public List<GameObject> Floor;
     public GameObject Roof;
+    public List<GameObject> DoorObjects;
 }
