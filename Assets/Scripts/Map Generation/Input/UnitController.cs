@@ -98,7 +98,7 @@ public class UnitController : MonoBehaviour
 
         foreach (KeyValuePair< System.Type, List <Command>> item in commandByType)
         {
-            GameObject buttonInstance = UIManager.Instance.CreateCommandButton(item.Value[0].ToString());
+            GameObject buttonInstance = UIManager.Instance.CreateCommandButton(item.Value[0].ToUIString());
             Button button = buttonInstance.GetComponent<Button>();
 
             foreach (Command command in item.Value)

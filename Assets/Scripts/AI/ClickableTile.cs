@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class ClickableTile : MonoBehaviour, IClickable
 {
@@ -44,8 +45,32 @@ public class ClickableTile : MonoBehaviour, IClickable
         //    i += 1.5f;
         //}
 
-        TeamMoveSequence teamMoveSequence = new TeamMoveSequence(u[0], u, worldPosition);
-        results.Add(teamMoveSequence);
+        List<Command> sequence = new List<Command>();
+
+        Unit lead = u[0];
+        Vector3 leadForward = lead.gameObject.transform.forward;
+
+        for (int i = 1; i < u.Count; i++)
+        {
+            Unit unit = u[i];
+            Vector3 target = lead.BlackBoard.Position - i * leadForward;
+
+            MoveCommand moveBehind = new MoveCommand(unit, target);
+            sequence.Add(moveBehind);
+
+            WaitUntillCommand leadWait = new WaitUntillCommand(lead, unit, typeof(FollowCommand));
+            sequence.Add(leadWait);
+
+            FollowCommand unitFollowLead = new FollowCommand(unit, lead, i);
+            sequence.Add(unitFollowLead);
+        }
+
+        MoveCommand leadMove = new MoveCommand(lead, worldPosition);
+        sequence.Add(leadMove);
+
+        SequencerCommand sequenceCommand = new SequencerCommand(lead, "Team Move", sequence);
+
+        results.Add(sequenceCommand);
 
         return results;
     }

@@ -4,28 +4,29 @@ using UnityEngine;
 
 public class ClickableCover : MonoBehaviour, IClickable
 {
-    [SerializeField]
-    List<Transform> _coverSpots;
 
     public List<Command> GetAvailableCommands(Unit unit)
     {
-        float lowestDistance = float.MaxValue;
-        Transform closestPosition = null;
 
-        foreach (Transform cover in _coverSpots)
-        {
-            float distance = Vector3.Distance(unit.gameObject.transform.position, cover.position);
-            if (distance > lowestDistance) continue;
-
-            lowestDistance = distance;
-            closestPosition = cover;
-        }
-
-        return new List<Command>() { new MoveCommand(unit, closestPosition.position) };
+        return new List<Command>() { new TakeCoverCommand(unit, gameObject.transform.position) };
     }
 
     public List<Command> GetAvailableCommands(List<Unit> units)
     {
-        throw new System.NotImplementedException();
+        List<Command> commands = new List<Command>();
+
+        Vector3 nextSpot = gameObject.transform.position - ((units.Count * 1.2f) / 2) * gameObject.transform.right;
+
+        float i = 1;
+        foreach (Unit unit in units)
+        {
+            nextSpot = nextSpot + i * gameObject.transform.right;
+            TakeCoverCommand takeCover = new TakeCoverCommand(unit, nextSpot);
+
+            commands.Add(takeCover);
+            i += .1f;
+        }
+
+        return commands;
     }
 }
