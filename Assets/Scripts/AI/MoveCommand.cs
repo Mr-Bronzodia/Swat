@@ -34,9 +34,8 @@ public class MoveCommand : Command
     {
         if (_terminateOnNextUpdate) return true;
 
-        //if (Unit.NavAgent.pathStatus == NavMeshPathStatus.PathPartial) return true;
 
-        return Unit.NavAgent.remainingDistance <= 0.1f;
+        return Vector3.Distance(Unit.BlackBoard.Position, _target) <= .2f;
     }
 
     public override string ToUIString()
@@ -53,11 +52,17 @@ public class MoveCommand : Command
     {
         if (Unit.NavAgent.isStopped) Unit.NavAgent.isStopped = false;
 
+        //NavMeshPath path = new NavMeshPath();   
+
+        //if (N)
+
+
         NavMeshHit navMeshHit;
         Vector3 nearestPoint;
-        if (NavMesh.SamplePosition(_target, out navMeshHit, 3.2f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(_target, out navMeshHit, 3.2f, 1))
         {
             nearestPoint = navMeshHit.position;
+            Unit.NavAgent.SetDestination(nearestPoint);
         }
         else
         {
@@ -66,7 +71,7 @@ public class MoveCommand : Command
             _terminateOnNextUpdate = true;
         }
 
-        Unit.NavAgent.SetDestination(nearestPoint);
+
     }
 
     protected override void OnCommandEndExecute()

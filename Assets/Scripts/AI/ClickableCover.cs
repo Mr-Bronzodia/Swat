@@ -15,12 +15,31 @@ public class ClickableCover : MonoBehaviour, IClickable
     {
         List<Command> commands = new List<Command>();
 
-        Vector3 nextSpot = gameObject.transform.position - ((units.Count * 1.2f) / 2) * gameObject.transform.right;
+        Vector3 directionVector;
 
+        RaycastHit hit;
+
+        float leftSpace = 0;
+        float rightSpace = 0;
+
+        if (Physics.Raycast(transform.position, transform.right, out hit, Mathf.Infinity))
+        {
+            rightSpace = Vector3.Distance(transform.position, hit.point);
+        }
+
+        if (Physics.Raycast(transform.position, -transform.right, out hit, Mathf.Infinity))
+        {
+            leftSpace = Vector3.Distance(transform.position, hit.point);
+        }
+
+        if (rightSpace > leftSpace) directionVector = transform.right;
+        else directionVector = -transform.right;
+
+        Vector3 nextSpot = gameObject.transform.position - (units.Count / 2f) * directionVector;
         float i = 1;
         foreach (Unit unit in units)
         {
-            nextSpot = nextSpot + i * gameObject.transform.right;
+            nextSpot = nextSpot + i * directionVector;
             TakeCoverCommand takeCover = new TakeCoverCommand(unit, nextSpot);
 
             commands.Add(takeCover);

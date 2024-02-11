@@ -38,7 +38,10 @@ public class TakeCoverCommand : Command
 
         NavMeshHit hit;
         Vector3 nearestPoint;
-        if (NavMesh.SamplePosition(_initialPosition, out hit, 3.2f, NavMesh.AllAreas))
+
+        Vector3 toCoverDir = (_initialPosition - Unit.BlackBoard.Position).normalized;
+
+        if (NavMesh.SamplePosition(_initialPosition - 1f * toCoverDir, out hit, .5f, NavMesh.AllAreas))
         {
             nearestPoint = hit.position;
         }

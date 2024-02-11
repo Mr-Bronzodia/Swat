@@ -20,14 +20,12 @@ public class NavMeshGenerator : MonoBehaviour
 
     public void GenerateEditorOnly()
     {
-        foreach (Transform child in gameObject.transform)
-        {
-            NavMeshSurface navMeshSurface;
 
-            if (child.TryGetComponent<NavMeshSurface>(out navMeshSurface))
-            {
-                navMeshSurface.BuildNavMesh();
-            }
+        NavMeshSurface navMeshSurface;
+
+        if (gameObject.TryGetComponent<NavMeshSurface>(out navMeshSurface))
+        {
+            navMeshSurface.BuildNavMesh();
         }
 
         WorldStateManager.Instance.UpdateWorldState(WorldState.NavMeshGenerated);
@@ -38,15 +36,13 @@ public class NavMeshGenerator : MonoBehaviour
         if (state != WorldState.NavMeshReady) return;
         if (!_enableNavGeneration) return;
 
-        foreach (Transform child in gameObject.transform)
-        {
-            NavMeshSurface navMeshSurface;
+        NavMeshSurface navMeshSurface;
 
-            if (child.TryGetComponent<NavMeshSurface>(out navMeshSurface))
-            {
-                navMeshSurface.BuildNavMesh();
-            }
+        if (gameObject.TryGetComponent<NavMeshSurface>(out navMeshSurface))
+        {
+            navMeshSurface.BuildNavMesh();
         }
+
 
         WorldStateManager.Instance.UpdateWorldState(WorldState.NavMeshGenerated);
     }

@@ -40,13 +40,19 @@ public class Unit : MonoBehaviour, IClickable
         _selectionVisual.SetActive(enabled);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
         Unit other;
-        if (!collision.gameObject.TryGetComponent<Unit>(out other)) return;
 
-        OnStopImmediately?.Invoke();
+        if (!collision.gameObject.TryGetComponent<Unit>(out other)) return;
+        if (BlackBoard.CurrentCommand.GetType() != typeof(Idle)) return;
+
+        Vector3 moveBackDir = (other.BlackBoard.Position - this.BlackBoard.Position).normalized;
+        Vector3 moveToPoint = this.BlackBoard.Position - 1f * moveBackDir;
+
+        this.ScheduleNormalCommand(new MoveCommand(this, moveToPoint));
     }
+
 
     private void Update()
     {
@@ -60,8 +66,6 @@ public class Unit : MonoBehaviour, IClickable
             Command command = BlackBoard.HighPriorityCommandQueue.Dequeue();
             BlackBoard.CurrentCommand.ExecuteNext(command);
             OnNewCommand?.Invoke(command);
-            BlackBoard.CurrentCommand.Update();
-            return;
         }
 
         //If unit just created make idle

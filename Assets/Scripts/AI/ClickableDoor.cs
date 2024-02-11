@@ -55,13 +55,46 @@ public class ClickableDoor : MonoBehaviour, IClickable, Iinteract
         List<Command> commands =  new List<Command>();
         Unit lead = units[0];
 
+        Vector3 directionVector;
 
-        for (int i = 1; i < units.Count; i++)
+        RaycastHit hit;
+
+        float leftSpace = 0;
+        float rightSpace = 0;
+
+        if (Physics.Raycast(transform.position, transform.right, out hit, Mathf.Infinity))
         {
-            
+            rightSpace = Vector3.Distance(transform.position, hit.point);
         }
 
-        return commands;
+        if (Physics.Raycast(transform.position, -transform.right, out hit, Mathf.Infinity))
+        {
+            leftSpace = Vector3.Distance(transform.position, hit.point);
+        }
+
+        if (rightSpace > leftSpace) directionVector = transform.right;
+        else directionVector = -transform.right;
+
+        Vector3 nextSpot = gameObject.transform.position + 1.2f * directionVector;
+
+        float margin = 1;
+        for (int i = 1; i < units.Count; i++)
+        {
+            nextSpot = nextSpot + margin * directionVector;
+            TakeCoverCommand takeCover = new TakeCoverCommand(units[i], nextSpot);
+            commands.Add(takeCover);
+            margin += .5f;
+        }
+
+        MoveCommand moveToDoor = new MoveCommand(lead, gameObject.transform.position);
+        commands.Add(moveToDoor);
+
+        InteractCommand openDoor = new InteractCommand(lead, this, 0.5f);
+        commands.Add(openDoor);
+
+        SequencerCommand sequence = new SequencerCommand(lead, "Team Open Door", commands);
+
+        return new List<Command>() { sequence };
     }
 
     public void Interact()

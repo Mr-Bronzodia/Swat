@@ -210,11 +210,24 @@ public class Wall
 
     public void BuildDoors(GameObject doorPrefab, Room room, GameObject parentInstance)
     {
+
         foreach (Vector3 doorPos in _doorPositions)
         {
             Collider[] hits = Physics.OverlapSphere(doorPos, 0.1f);
+            Debug.Log(hits.Length);
 
-            if (hits.Length > 1 ) continue;
+            ClickableDoor clickable;
+            int cDoor = 0;
+            foreach (Collider hit in hits) 
+            {
+                if (hit.TryGetComponent<ClickableDoor>(out clickable))
+                {
+                    cDoor++;
+                }
+            }
+
+
+            if (cDoor >= 1 ) continue;
 
             GameObject door = UnityEngine.Object.Instantiate(doorPrefab,doorPos, Quaternion.identity, parentInstance.transform);
             door.transform.forward = GetInsideVector(room);

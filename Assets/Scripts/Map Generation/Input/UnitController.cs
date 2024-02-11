@@ -91,12 +91,22 @@ public class UnitController : MonoBehaviour
 
         foreach (Command command in commands)
         {
+            //sequencer commands should be excluded from grouping
+            if (command.GetType() == typeof(SequencerCommand))
+            {
+                GameObject buttonInstance = UIManager.Instance.CreateCommandButton(command.ToUIString());
+                Button button = buttonInstance.GetComponent<Button>();
+                button.onClick.AddListener(() => command.Unit.ScheduleNormalCommand(command));
+                commandButtons.Add(buttonInstance);
+                continue;
+            }
+
             if (!commandByType.ContainsKey(command.GetType())) commandByType.Add(command.GetType(), new List<Command>());
 
             commandByType[command.GetType()].Add(command);
         }
 
-        foreach (KeyValuePair< System.Type, List <Command>> item in commandByType)
+        foreach (KeyValuePair<System.Type, List<Command>> item in commandByType)
         {
             GameObject buttonInstance = UIManager.Instance.CreateCommandButton(item.Value[0].ToUIString());
             Button button = buttonInstance.GetComponent<Button>();
@@ -108,6 +118,18 @@ public class UnitController : MonoBehaviour
 
             commandButtons.Add(buttonInstance);
         }
+
+        //foreach (Command command in commands)
+        //{
+        //    GameObject buttonInstance = UIManager.Instance.CreateCommandButton(command.ToUIString());
+        //    Button button = buttonInstance.GetComponent<Button>();
+
+
+        //    button.onClick.AddListener(() => command.Unit.ScheduleNormalCommand(command));
+
+
+        //    commandButtons.Add(buttonInstance);
+        //}
 
         return commandButtons;
     }
