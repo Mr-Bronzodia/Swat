@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent), typeof(UnitBlackBoard))]
 public class Unit : MonoBehaviour, IClickable
 {
     public UnitBlackBoard BlackBoard { get; private set; }
@@ -21,6 +22,7 @@ public class Unit : MonoBehaviour, IClickable
     private int _framesPerAIUpdate;
 
     private int _sinceLastAIUpdate;
+
 
     private void OnEnable()
     {
@@ -40,19 +42,10 @@ public class Unit : MonoBehaviour, IClickable
         _selectionVisual.SetActive(enabled);
     }
 
-    private void OnTriggerEnter(Collider collision)
+    public void RotateTowardPoint(Vector3 point)
     {
-        Unit other;
-
-        if (!collision.gameObject.TryGetComponent<Unit>(out other)) return;
-        if (BlackBoard.CurrentCommand.GetType() != typeof(Idle)) return;
-
-        Vector3 moveBackDir = (other.BlackBoard.Position - this.BlackBoard.Position).normalized;
-        Vector3 moveToPoint = this.BlackBoard.Position - 1f * moveBackDir;
-
-        this.ScheduleNormalCommand(new MoveCommand(this, moveToPoint));
+        transform.LookAt(point);
     }
-
 
     private void Update()
     {
@@ -65,6 +58,7 @@ public class Unit : MonoBehaviour, IClickable
         {
             Command command = BlackBoard.HighPriorityCommandQueue.Dequeue();
             BlackBoard.CurrentCommand.ExecuteNext(command);
+            SetCurrentCommand(command);
             OnNewCommand?.Invoke(command);
         }
 
@@ -123,15 +117,26 @@ public class Unit : MonoBehaviour, IClickable
         if (BlackBoard.Team == other.BlackBoard.Team)
         {
             FollowCommand followCommand = new FollowCommand(other, this);
-            //WaitToFinishCommand wait = new WaitToFinishCommand(other, this);
+
+            if (other == this)
+            {
+                StopCommand stop = new StopCommand(this, .1f);
+                commands.Add(stop);
+
+                ReloadCommand reload = new ReloadCommand(this, 2f);
+                commands.Add(reload);
+            }
 
             commands.Add(followCommand);
-            //commands.Add(wait);
         }
         //Enemy
         else
         {
+            NeutralizeEnemyCommand neutralize = new NeutralizeEnemyCommand(other, this, 0.3f);
+            commands.Add(neutralize);
 
+            ShootCommand shoot = new ShootCommand(other, this);
+            commands.Add(shoot);
         }
 
 

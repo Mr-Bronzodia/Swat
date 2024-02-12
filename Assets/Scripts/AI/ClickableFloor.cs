@@ -81,16 +81,6 @@ public class ClickableFloor : MonoBehaviour, IClickable
 
             Vector3 roomCentre = new Vector3(gameObject.transform.position.x, 1.5f, gameObject.transform.position.z);
 
-
-            //if (Physics.Raycast(roomCentre, gameObject.transform.forward,out hit, Mathf.Infinity))
-            //{
-            //    roomHeight = hit.distance * 1.5f;
-            //}
-            //if (Physics.Raycast(roomCentre, gameObject.transform.right, out hit, Mathf.Infinity))
-            //{
-            //    roomWidth = hit.distance * 1.5f;
-            //}
-
             MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
 
             float roomHeight = meshRenderer.bounds.size.z * .7f;
@@ -98,21 +88,14 @@ public class ClickableFloor : MonoBehaviour, IClickable
 
             Bounds roomBounds = new Bounds(roomCentre, new Vector3(roomWidth, 0, roomHeight));
 
-            //DrawBounds(_roomBounds);
-            //Debug.Break();
-
             Vector3 corner1 = new Vector3(roomCentre.x - roomWidth / 2, 0, roomCentre.z - roomHeight / 2);
             Vector3 corner2 = new Vector3(roomCentre.x + roomWidth / 2, 0, roomCentre.z - roomHeight / 2);
             Vector3 corner3 = new Vector3(roomCentre.x - roomWidth / 2, 0, roomCentre.z + roomHeight / 2);
             Vector3 corner4 = new Vector3(roomCentre.x + roomWidth / 2, 0, roomCentre.z + roomHeight / 2);
+
             List<Vector3> corners = new List<Vector3>() { corner1, corner2, corner3, corner4 };
             List<Vector3> sortedCorners = corners.OrderBy(o => Vector3.Distance(o, lead.BlackBoard.Position)).ToList();
 
-            foreach (Vector3 pos in corners)
-            {
-                Debug.DrawLine(roomCentre, pos);
-            }
-            Debug.Break();
 
             MoveCommand unit1ToFirstCorner = new MoveCommand(lead, sortedCorners[0]);
             breachSeq.Add(unit1ToFirstCorner);
@@ -145,36 +128,5 @@ public class ClickableFloor : MonoBehaviour, IClickable
         }
 
         return results;
-    }
-
-    void DrawBounds(Bounds b, float delay = 0)
-    {
-        // bottom
-        var p1 = new Vector3(b.min.x, b.min.y, b.min.z);
-        var p2 = new Vector3(b.max.x, b.min.y, b.min.z);
-        var p3 = new Vector3(b.max.x, b.min.y, b.max.z);
-        var p4 = new Vector3(b.min.x, b.min.y, b.max.z);
-
-        Debug.DrawLine(p1, p2, Color.blue, delay);
-        Debug.DrawLine(p2, p3, Color.red, delay);
-        Debug.DrawLine(p3, p4, Color.yellow, delay);
-        Debug.DrawLine(p4, p1, Color.magenta, delay);
-        // top
-        var p5 = new Vector3(b.min.x, b.max.y, b.min.z);
-        var p6 = new Vector3(b.max.x, b.max.y, b.min.z);
-        var p7 = new Vector3(b.max.x, b.max.y, b.max.z);
-
-        var p8 = new Vector3(b.min.x, b.max.y, b.max.z);
-
-        Debug.DrawLine(p5, p6, Color.blue, delay);
-        Debug.DrawLine(p6, p7, Color.red, delay);
-        Debug.DrawLine(p7, p8, Color.yellow, delay);
-        Debug.DrawLine(p8, p5, Color.magenta, delay);
-
-        // sides
-        Debug.DrawLine(p1, p5, Color.white, delay);
-        Debug.DrawLine(p2, p6, Color.gray, delay);
-        Debug.DrawLine(p3, p7, Color.green, delay);
-        Debug.DrawLine(p4, p8, Color.cyan, delay);
     }
 }

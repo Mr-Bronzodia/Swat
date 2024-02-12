@@ -26,7 +26,7 @@ public class ClickableDoor : MonoBehaviour, IClickable, Iinteract
     {
         if (transform.localRotation == _desiredRotation) return;
 
-        transform.localRotation = Quaternion.Lerp(transform.localRotation, _desiredRotation, Time.deltaTime * 3f);
+        transform.localRotation = Quaternion.Slerp(transform.localRotation, _desiredRotation, Time.deltaTime * 3f);
     }
 
     private void OnEnable()
@@ -42,7 +42,7 @@ public class ClickableDoor : MonoBehaviour, IClickable, Iinteract
         MoveCommand moveToDoor = new MoveCommand(unit, gameObject.transform.position);
         commands.Add(moveToDoor);
 
-        InteractCommand openDoor = new InteractCommand(unit, this, 0.5f);
+        InteractCommand openDoor = new InteractCommand(unit, this, 0.5f, gameObject.transform.position);
         commands.Add(openDoor);
 
         SequencerCommand sequenceCommand = new SequencerCommand(unit,"Open Door", commands);
@@ -89,7 +89,7 @@ public class ClickableDoor : MonoBehaviour, IClickable, Iinteract
         MoveCommand moveToDoor = new MoveCommand(lead, gameObject.transform.position);
         commands.Add(moveToDoor);
 
-        InteractCommand openDoor = new InteractCommand(lead, this, 0.5f);
+        InteractCommand openDoor = new InteractCommand(lead, this, 0.5f, gameObject.transform.position);
         commands.Add(openDoor);
 
         SequencerCommand sequence = new SequencerCommand(lead, "Team Open Door", commands);

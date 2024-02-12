@@ -214,7 +214,6 @@ public class Wall
         foreach (Vector3 doorPos in _doorPositions)
         {
             Collider[] hits = Physics.OverlapSphere(doorPos, 0.1f);
-            Debug.Log(hits.Length);
 
             ClickableDoor clickable;
             int cDoor = 0;

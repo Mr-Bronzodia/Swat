@@ -8,11 +8,13 @@ public class InteractCommand : Command
     float _delay;
     float _currentTime;
     bool _isDone = false;
+    Vector3 _interactionLocation;
 
 
-    public InteractCommand(Unit unit, Iinteract interactionObject, float delay) : base(unit)
+    public InteractCommand(Unit unit, Iinteract interactionObject, float delay, Vector3 interactionLocation) : base(unit)
     {
-       _interactionObject = interactionObject;
+        _interactionObject = interactionObject;
+        _interactionLocation = interactionLocation;
         _delay = delay;
     }
 
@@ -40,6 +42,6 @@ public class InteractCommand : Command
 
     protected override void OnCommandEndExecute()
     {
-        _interactionObject.Interact();
+        if (Vector3.Distance(Unit.BlackBoard.Position, _interactionLocation) < .5f) _interactionObject.Interact();
     }
 }

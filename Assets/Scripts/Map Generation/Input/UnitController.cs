@@ -14,6 +14,9 @@ public class UnitController : MonoBehaviour
     private Vector2 _selectorStartPosition;
     private Vector2 _selectorEndPosition;
 
+    [SerializeField]
+    private bool ALLOW_ENEMY_CONTROL;
+
     private void Awake()
     {
         _selectedUnit = new List<Unit>();
@@ -43,7 +46,7 @@ public class UnitController : MonoBehaviour
     {
         Rect selectionRect = new Rect();
 
-        if (Input.mousePosition.x < _selectorStartPosition.x )
+        if (Input.mousePosition.x < _selectorStartPosition.x)
         {
             selectionRect.xMin = Input.mousePosition.x;
             selectionRect.xMax = _selectorStartPosition.x;
@@ -54,7 +57,7 @@ public class UnitController : MonoBehaviour
             selectionRect.xMax = Input.mousePosition.x;
         }
 
-        if (Input.mousePosition.y < _selectorStartPosition.y )
+        if (Input.mousePosition.y < _selectorStartPosition.y)
         {
             selectionRect.yMin = Input.mousePosition.y;
             selectionRect.yMax = _selectorStartPosition.y;
@@ -71,13 +74,29 @@ public class UnitController : MonoBehaviour
         {
             Unit unit = UnitManager.Instance.GetUnitAtIndex(i, playerTeam);
             Vector2 unitScreenPos = Camera.main.WorldToScreenPoint(unit.gameObject.transform.position);
-            
+
             if (selectionRect.Contains(unitScreenPos))
             {
                 AddUnitToSelected(unit);
             }
         }
+
+        if (ALLOW_ENEMY_CONTROL)
+        {
+            for (int i = 0; i < UnitManager.Instance.GetTeamSize(Team.Red); i++)
+            {
+                Unit unit = UnitManager.Instance.GetUnitAtIndex(i, Team.Red);
+                Vector2 unitScreenPos = Camera.main.WorldToScreenPoint(unit.gameObject.transform.position);
+
+                if (selectionRect.Contains(unitScreenPos))
+                {
+                    AddUnitToSelected(unit);
+
+                }
+            }
+        }
     }
+
 
     private List<GameObject> GetAvailableCommands(IClickable clickableObject)
     {
@@ -113,7 +132,8 @@ public class UnitController : MonoBehaviour
 
             foreach (Command command in item.Value)
             {
-                button.onClick.AddListener(() => command.Unit.ScheduleNormalCommand(command));
+                if (item.Key == typeof(StopCommand)) button.onClick.AddListener(() => command.Unit.ScheduleHighCommand(command));
+                else button.onClick.AddListener(() => command.Unit.ScheduleNormalCommand(command));
             }
 
             commandButtons.Add(buttonInstance);
