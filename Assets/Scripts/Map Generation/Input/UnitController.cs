@@ -158,6 +158,19 @@ public class UnitController : MonoBehaviour
 
     private void Update()
     {
+        foreach(Unit selected in _selectedUnit)
+        {
+            string queue = selected.gameObject.name + " Queue [";
+
+            foreach (Command command in selected.BlackBoard.CommandQueue)
+            {
+                queue += command.ToUIString() + ", ";
+            }
+            queue += "]";
+
+            DebugUiManager.Instance.AddDebugText(selected.GetHashCode() + 1, queue);
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             _selectorStartPosition = Input.mousePosition;

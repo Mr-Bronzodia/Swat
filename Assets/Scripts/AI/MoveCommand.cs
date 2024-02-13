@@ -54,7 +54,7 @@ public class MoveCommand : Command
 
         NavMeshHit navMeshHit;
         Vector3 nearestPoint;
-        if (NavMesh.SamplePosition(_target, out navMeshHit, .7f, 1))
+        if (NavMesh.SamplePosition(_target, out navMeshHit, 1.5f, 1))
         {
             nearestPoint = navMeshHit.position;
         }
@@ -68,7 +68,7 @@ public class MoveCommand : Command
         NavMeshPath path = new NavMeshPath();
         if (NavMesh.CalculatePath(Unit.BlackBoard.Position, nearestPoint, 1, path))
         {
-            if (path.status == NavMeshPathStatus.PathComplete)
+            if (path.status != NavMeshPathStatus.PathInvalid)
             {
                 Unit.NavAgent.SetPath(path);
             }

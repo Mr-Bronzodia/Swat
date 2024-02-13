@@ -19,7 +19,7 @@ public class ShootCommand : Command
     {
         if (_terminateEarly) return true; 
 
-        return Unit.BlackBoard.CommandQueue.Count >= 1 || Unit.BlackBoard.Weapon.RemainingBullets == 0;
+        return Unit.BlackBoard.Weapon.RemainingBullets == 0;
     }
 
     public override string ToUIString()

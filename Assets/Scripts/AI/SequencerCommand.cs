@@ -31,9 +31,31 @@ public class SequencerCommand : Command
 
     protected override void OnCommandBeginExecute()
     {
-        foreach (var command in _commands)
+        Dictionary<Unit, List<Command>> commandsByUnit = new Dictionary<Unit, List<Command>>();
+
+        foreach (Command command in _commands)
         {
-            command.Unit.ScheduleNormalCommand(command);
+            if (!commandsByUnit.ContainsKey(command.Unit)) commandsByUnit.Add(command.Unit, new List<Command>());
+
+            commandsByUnit[command.Unit].Add(command);
+        }
+
+        foreach (var entry in commandsByUnit)
+        {
+            Command[] queueCopy = entry.Key.BlackBoard.CommandQueue.ToArray();
+            entry.Key.BlackBoard.CommandQueue.Clear();
+
+            foreach (Command command in entry.Value)
+            {
+                entry.Key.ScheduleNormalCommand(command);
+            }
+
+            foreach(var command in queueCopy)
+            {
+                entry.Key.ScheduleNormalCommand(command);
+            }
+
+
         }
     }
 

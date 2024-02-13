@@ -23,6 +23,8 @@ public class Unit : MonoBehaviour, IClickable
 
     private int _sinceLastAIUpdate;
 
+    private bool _isGamePaused;
+
 
     private void OnEnable()
     {
@@ -34,7 +36,28 @@ public class Unit : MonoBehaviour, IClickable
 
         UnitManager.Instance.AddUnit(this);
 
+        PauseManager.Instance.OnPauseStart += Pause;
+        PauseManager.Instance.OnPauseEnd += UnPause;
+
         _sinceLastAIUpdate = 0;
+    }
+
+    private void OnDisable()
+    {
+        PauseManager.Instance.OnPauseStart -= Pause;
+        PauseManager.Instance.OnPauseEnd -= UnPause;
+    }
+
+    private void Pause() 
+    {
+        _isGamePaused = true;
+        NavAgent.isStopped = true;
+    }
+
+    private void UnPause()
+    {
+        _isGamePaused = false;
+        NavAgent.isStopped = false;
     }
 
     public void SetSelectionVisual(bool enabled)
@@ -49,6 +72,8 @@ public class Unit : MonoBehaviour, IClickable
 
     private void Update()
     {
+        if (_isGamePaused) return;
+
         _sinceLastAIUpdate++;
 
         if (_framesPerAIUpdate > _sinceLastAIUpdate) return;

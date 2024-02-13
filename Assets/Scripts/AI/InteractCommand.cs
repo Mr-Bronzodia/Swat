@@ -42,6 +42,6 @@ public class InteractCommand : Command
 
     protected override void OnCommandEndExecute()
     {
-        if (Vector3.Distance(Unit.BlackBoard.Position, _interactionLocation) < .5f) _interactionObject.Interact();
+        if (Vector3.Distance(Unit.BlackBoard.Position, _interactionLocation) < 1f) _interactionObject.Interact();
     }
 }
