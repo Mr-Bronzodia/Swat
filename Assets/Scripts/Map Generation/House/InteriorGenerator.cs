@@ -82,9 +82,9 @@ public class InteriorGenerator : MonoBehaviour, ISubscriber
         IsSubscribed = false;
     }
 
-    private void WorldListener(WorldState state)
+    private void WorldListener(EWorldState state)
     {
-        if (state == WorldState.PlotsGenerated) Generate();
+        if (state == EWorldState.PlotsGenerated) Generate();
     }
 
     /// <summary>
@@ -148,7 +148,7 @@ public class InteriorGenerator : MonoBehaviour, ISubscriber
             }
             Gizmos.color = Color.green;
 
-            foreach (KeyValuePair<Sides, Wall> wall in room.Walls)
+            foreach (KeyValuePair<ESides, Wall> wall in room.Walls)
             {
                 if (!_showRoomDoors) continue;
                 foreach (Vector3 doorPos in wall.Value._doorPositions)

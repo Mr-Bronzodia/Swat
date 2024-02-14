@@ -50,6 +50,8 @@ public class PauseManager : MonoBehaviour
             {
                 OnPauseStart?.Invoke();
                 _desiredVinetteAmount = .7f;
+
+                GameManager.Instance.NoPause++;
             }
             else
             {

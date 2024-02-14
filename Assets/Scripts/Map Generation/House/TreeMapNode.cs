@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class TreeMapNode 
 {
-    public RoomTypes RoomType { get; set; }
+    public ERoomTypes RoomType { get; set; }
 
     public float Width;
 
@@ -17,7 +17,7 @@ public class TreeMapNode
     public List<TreeMapNode> Children;
 
 
-    public TreeMapNode(RoomTypes roomType, float width, float height)
+    public TreeMapNode(ERoomTypes roomType, float width, float height)
     {
         RoomType = roomType;
         Children = new List<TreeMapNode>();

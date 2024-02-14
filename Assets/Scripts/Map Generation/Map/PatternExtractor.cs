@@ -99,8 +99,8 @@ public class PatternExtractor
                 //Top Connection Match
                 if (tile.TopConnection && other.BottomConnection)
                 {
-                    tile.AddNeighbors(Sides.Up, other);
-                    other.AddNeighbors(Sides.Down, tile);
+                    tile.AddNeighbors(ESides.Up, other);
+                    other.AddNeighbors(ESides.Down, tile);
                 }
 
                 //if (!tile.TopConnection && !other.BottomConnection)
@@ -111,15 +111,15 @@ public class PatternExtractor
 
                 if (!tile.TopConnection)
                 {
-                    tile.AddNeighbors(Sides.Up, fillTile);
-                    fillTile.AddNeighbors(Sides.Down, tile);
+                    tile.AddNeighbors(ESides.Up, fillTile);
+                    fillTile.AddNeighbors(ESides.Down, tile);
                 }
 
                 //Bottom Connection Match
                 if (tile.BottomConnection && other.TopConnection)
                 {
-                    tile.AddNeighbors(Sides.Down, other);
-                    other.AddNeighbors(Sides.Up, tile);
+                    tile.AddNeighbors(ESides.Down, other);
+                    other.AddNeighbors(ESides.Up, tile);
                 }
 
                 //if (!tile.BottomConnection && !other.TopConnection)
@@ -130,16 +130,16 @@ public class PatternExtractor
 
                 if (!tile.BottomConnection)
                 {
-                    tile.AddNeighbors(Sides.Down, fillTile);
-                    fillTile.AddNeighbors(Sides.Up, tile);
+                    tile.AddNeighbors(ESides.Down, fillTile);
+                    fillTile.AddNeighbors(ESides.Up, tile);
                 }
 
 
                 //Right Connection Match
                 if (tile.RightConnection && other.LeftConnection)
                 {
-                    tile.AddNeighbors(Sides.Right, other);
-                    other.AddNeighbors(Sides.Left, tile);
+                    tile.AddNeighbors(ESides.Right, other);
+                    other.AddNeighbors(ESides.Left, tile);
                 }
 
                 //if (!tile.RightConnection && !other.LeftConnection)
@@ -151,15 +151,15 @@ public class PatternExtractor
 
                 if (!tile.RightConnection)
                 {
-                    tile.AddNeighbors(Sides.Right, fillTile);
-                    fillTile.AddNeighbors(Sides.Left, tile);
+                    tile.AddNeighbors(ESides.Right, fillTile);
+                    fillTile.AddNeighbors(ESides.Left, tile);
                 }
 
                 //Left Connection Match
                 if (tile.LeftConnection && other.RightConnection)
                 {
-                    tile.AddNeighbors(Sides.Left, other);
-                    other.AddNeighbors(Sides.Right, tile);
+                    tile.AddNeighbors(ESides.Left, other);
+                    other.AddNeighbors(ESides.Right, tile);
                 }
 
 
@@ -171,8 +171,8 @@ public class PatternExtractor
 
                 if (!tile.LeftConnection)
                 {
-                    tile.AddNeighbors(Sides.Left, fillTile);
-                    fillTile.AddNeighbors(Sides.Right, tile);
+                    tile.AddNeighbors(ESides.Left, fillTile);
+                    fillTile.AddNeighbors(ESides.Right, tile);
                 }
             }
         }

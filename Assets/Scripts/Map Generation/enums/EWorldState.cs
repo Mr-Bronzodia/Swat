@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum WorldState 
+public enum EWorldState 
 {
     Empty,
     MapGenerated,
     PlotsGenerated,
     HousesGenerated,
 
-    NavMeshReady,
+    ReadyToGenerateNavMesh,
     NavMeshGenerated,
     Ready
 }

@@ -68,7 +68,7 @@ public class UnitController : MonoBehaviour
             selectionRect.yMax = Input.mousePosition.y;
         }
 
-        Team playerTeam = GameManager.Instance.PlayerTeam;
+        ETeam playerTeam = GameManager.Instance.PlayerTeam;
 
         for (int i = 0; i < UnitManager.Instance.GetTeamSize(playerTeam); i++)
         {
@@ -83,9 +83,9 @@ public class UnitController : MonoBehaviour
 
         if (ALLOW_ENEMY_CONTROL)
         {
-            for (int i = 0; i < UnitManager.Instance.GetTeamSize(Team.Red); i++)
+            for (int i = 0; i < UnitManager.Instance.GetTeamSize(ETeam.Red); i++)
             {
-                Unit unit = UnitManager.Instance.GetUnitAtIndex(i, Team.Red);
+                Unit unit = UnitManager.Instance.GetUnitAtIndex(i, ETeam.Red);
                 Vector2 unitScreenPos = Camera.main.WorldToScreenPoint(unit.gameObject.transform.position);
 
                 if (selectionRect.Contains(unitScreenPos))

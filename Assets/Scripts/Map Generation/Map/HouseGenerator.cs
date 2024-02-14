@@ -52,10 +52,10 @@ public class HouseGenerator : MonoBehaviour, ISubscriber
         IsSubscribed = false;
     }
 
-    private void WorldListener(WorldState state)
+    private void WorldListener(EWorldState state)
     {
-        if (state == WorldState.MapGenerated) FindSuitablePlotPosition();
-        if (state == WorldState.Empty) RegeneratePlots();
+        if (state == EWorldState.MapGenerated) FindSuitablePlotPosition();
+        if (state == EWorldState.Empty) RegeneratePlots();
     }
 
     /// <summary>
@@ -117,13 +117,13 @@ public class HouseGenerator : MonoBehaviour, ISubscriber
             {
                 if (plotA.Height > 1)
                 {  
-                    plotA.side = Sides.Left;
+                    plotA.side = ESides.Left;
                     plotA.Grow(_tileToReplace);
                     if (plotA.IsValid(_minPlotSize)) CheckOverlap(plotA);
                 }
                 if (plotB.Height > 1)
                 {
-                    plotB.side = Sides.Right;
+                    plotB.side = ESides.Right;
                     plotB.Grow(_tileToReplace);
                     if (plotB.IsValid(_minPlotSize)) CheckOverlap(plotB);
                 }
@@ -159,13 +159,13 @@ public class HouseGenerator : MonoBehaviour, ISubscriber
             {
                 if (plotA.Width > 1)
                 { 
-                    plotA.side = Sides.Down;
+                    plotA.side = ESides.Down;
                     plotA.Grow(_tileToReplace);
                     if (plotA.IsValid(_minPlotSize)) CheckOverlap(plotA);
                 }
                 if (plotB.Width > 1)
                 {    
-                    plotB.side = Sides.Up;
+                    plotB.side = ESides.Up;
                     plotB.Grow(_tileToReplace);
                     if (plotB.IsValid(_minPlotSize)) CheckOverlap(plotB);
                 }
@@ -313,7 +313,7 @@ public class HouseGenerator : MonoBehaviour, ISubscriber
 
     public void NotifyTaskCompleted()
     {
-        WorldStateManager.Instance.UpdateWorldState(WorldState.PlotsGenerated);
+        WorldStateManager.Instance.UpdateWorldState(EWorldState.PlotsGenerated);
         WorldStateManager.Instance.NotifyComplete();
     }
 }

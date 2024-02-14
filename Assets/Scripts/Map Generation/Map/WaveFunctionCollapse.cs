@@ -181,7 +181,7 @@ public class WaveFunctionCollapse : MonoBehaviour, ISubscriber
             DestroyImmediate(transform.GetChild(0).gameObject);
         }
 
-        WorldStateManager.Instance.UpdateWorldState(WorldState.Empty);
+        WorldStateManager.Instance.UpdateWorldState(EWorldState.Empty);
         _isSubscribed = false;
         WorldStateManager.Instance.ResetSubscribers();
     }
@@ -245,6 +245,6 @@ public class WaveFunctionCollapse : MonoBehaviour, ISubscriber
     public void NotifyTaskCompleted()
     {
         WorldStateManager.Instance.NotifyComplete();
-        WorldStateManager.Instance.UpdateWorldState(WorldState.MapGenerated);
+        WorldStateManager.Instance.UpdateWorldState(EWorldState.MapGenerated);
     }
 }

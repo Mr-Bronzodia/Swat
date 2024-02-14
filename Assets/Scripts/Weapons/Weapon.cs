@@ -19,6 +19,8 @@ public class Weapon : MonoBehaviour
     private float _recoil;
     [SerializeField]
     private int _magazineSize;
+    [SerializeField]
+    private Transform _barrel;
 
     private int _remainingBullets;
 
@@ -42,12 +44,12 @@ public class Weapon : MonoBehaviour
         float directionModifier = Recoil / accuracy;
         Vector3 recoilVector = new Vector3(Random.Range(-directionModifier / 2, directionModifier / 2), Random.Range(-directionModifier, directionModifier), 0f);
 
-        Vector3 direction = initialDirection + recoilVector;
+        Vector3 direction = (initialDirection + recoilVector).normalized;
 
         _remainingBullets--;
 
-        Debug.DrawRay(transform.position, direction * 100f, Color.red, 3);
-        if (Physics.Raycast(transform.position, direction, out hit, Mathf.Infinity))
+        Debug.DrawRay(_barrel.position, direction * 100f, Color.red, 3);
+        if (Physics.Raycast(_barrel.position, direction, out hit, Mathf.Infinity))
         {
             IDamageable damageable;
             if (!hit.collider.gameObject.TryGetComponent<IDamageable>(out damageable)) return;

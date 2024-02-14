@@ -28,12 +28,12 @@ public class NavMeshGenerator : MonoBehaviour
             navMeshSurface.BuildNavMesh();
         }
 
-        WorldStateManager.Instance.UpdateWorldState(WorldState.NavMeshGenerated);
+        WorldStateManager.Instance.UpdateWorldState(EWorldState.NavMeshGenerated);
     }
 
-    private void GenerateNavMesh(WorldState state)
+    private void GenerateNavMesh(EWorldState state)
     {
-        if (state != WorldState.NavMeshReady) return;
+        if (state != EWorldState.ReadyToGenerateNavMesh) return;
         if (!_enableNavGeneration) return;
 
         NavMeshSurface navMeshSurface;
@@ -44,6 +44,6 @@ public class NavMeshGenerator : MonoBehaviour
         }
 
 
-        WorldStateManager.Instance.UpdateWorldState(WorldState.NavMeshGenerated);
+        WorldStateManager.Instance.UpdateWorldState(EWorldState.NavMeshGenerated);
     }
 }

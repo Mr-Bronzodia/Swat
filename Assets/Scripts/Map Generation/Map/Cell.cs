@@ -109,7 +109,7 @@ public class Cell : IComparable<Cell>
         {
             if (!parentGrid[Index.x, Index.y + 1].IsCollapsed)
             {
-                parentGrid[Index.x, Index.y + 1].PossibleTiles = Tile.GetNeighbors(Sides.Up).ToList();
+                parentGrid[Index.x, Index.y + 1].PossibleTiles = Tile.GetNeighbors(ESides.Up).ToList();
                 Debug.DrawLine(GetWorldSpacePosition(), parentGrid[Index.x, Index.y + 1].GetWorldSpacePosition(), Color.green, 0.5f, false);
             }
         }
@@ -119,7 +119,7 @@ public class Cell : IComparable<Cell>
         {
             if (!parentGrid[Index.x, Index.y - 1].IsCollapsed)
             {
-                parentGrid[Index.x, Index.y - 1].PossibleTiles = Tile.GetNeighbors(Sides.Down).ToList();
+                parentGrid[Index.x, Index.y - 1].PossibleTiles = Tile.GetNeighbors(ESides.Down).ToList();
                 Debug.DrawLine(GetWorldSpacePosition() , parentGrid[Index.x, Index.y - 1].GetWorldSpacePosition(), Color.green, 0.5f, false);
 
             }
@@ -130,7 +130,7 @@ public class Cell : IComparable<Cell>
         {
             if (!parentGrid[Index.x + 1, Index.y].IsCollapsed)
             {
-                parentGrid[Index.x + 1, Index.y].PossibleTiles = Tile.GetNeighbors(Sides.Right).ToList();
+                parentGrid[Index.x + 1, Index.y].PossibleTiles = Tile.GetNeighbors(ESides.Right).ToList();
                 Debug.DrawLine(GetWorldSpacePosition(), parentGrid[Index.x + 1, Index.y].GetWorldSpacePosition(), Color.green, 0.5f, false);
 
             }
@@ -143,7 +143,7 @@ public class Cell : IComparable<Cell>
             if (!parentGrid[Index.x - 1, Index.y].IsCollapsed)
             {
 
-                parentGrid[Index.x - 1, Index.y].PossibleTiles = Tile.GetNeighbors(Sides.Left).ToList();
+                parentGrid[Index.x - 1, Index.y].PossibleTiles = Tile.GetNeighbors(ESides.Left).ToList();
                 Debug.DrawLine(GetWorldSpacePosition(), parentGrid[Index.x - 1, Index.y].GetWorldSpacePosition(), Color.green, 0.5f, false);
 
             }
@@ -168,7 +168,7 @@ public class Cell : IComparable<Cell>
         {
             if (parentGrid[Index.x, Index.y + 1].IsCollapsed)
             {
-                collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x, Index.y + 1].Tile.GetNeighbors(Sides.Down)).ToList();
+                collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x, Index.y + 1].Tile.GetNeighbors(ESides.Down)).ToList();
             }
             else parentGrid[Index.x, Index.y + 1].AddCellToSortedList(touchedCells);
         }
@@ -178,7 +178,7 @@ public class Cell : IComparable<Cell>
         {
             if (parentGrid[Index.x, Index.y - 1].IsCollapsed)
             {
-                collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x, Index.y - 1].Tile.GetNeighbors(Sides.Up)).ToList();
+                collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x, Index.y - 1].Tile.GetNeighbors(ESides.Up)).ToList();
             }
             else parentGrid[Index.x, Index.y - 1].AddCellToSortedList(touchedCells);
         }
@@ -188,7 +188,7 @@ public class Cell : IComparable<Cell>
         {
             if (parentGrid[Index.x + 1, Index.y].IsCollapsed)
             {
-                collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x + 1, Index.y].Tile.GetNeighbors(Sides.Left)).ToList();
+                collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x + 1, Index.y].Tile.GetNeighbors(ESides.Left)).ToList();
             }
             else parentGrid[Index.x + 1, Index.y].AddCellToSortedList(touchedCells);
         }
@@ -199,7 +199,7 @@ public class Cell : IComparable<Cell>
 
             if (parentGrid[Index.x - 1, Index.y].IsCollapsed)
             {
-                collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x - 1, Index.y].Tile.GetNeighbors(Sides.Right)).ToList();
+                collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x - 1, Index.y].Tile.GetNeighbors(ESides.Right)).ToList();
             }
             else parentGrid[Index.x - 1, Index.y].AddCellToSortedList(touchedCells);
 

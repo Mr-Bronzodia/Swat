@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ObjectTag
+public enum EObjectTag
 {
     Chair,
     NightStand,
@@ -25,7 +25,7 @@ public enum ObjectTag
     Prop
 }
 
-public enum DescriptorTags
+public enum EDescriptorTags
 {
     Big,
     Small,
@@ -36,7 +36,7 @@ public enum DescriptorTags
     WallAdjusted
 }
 
-public enum SearchMode
+public enum ESearchMode
 {
     RequireAll,
     RequireOne,

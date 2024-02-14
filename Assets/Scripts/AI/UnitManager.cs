@@ -8,6 +8,7 @@ public class UnitManager : MonoBehaviour
 
     private List<Unit> _blueTeam = new List<Unit>();
     private List<Unit> _redTeam = new List<Unit>();
+    private List<Unit> _hostage = new List<Unit>();
 
 
     private void Awake()
@@ -17,26 +18,45 @@ public class UnitManager : MonoBehaviour
 
     public void AddUnit(Unit unit)
     {
-        if (unit.BlackBoard.Team == Team.Red) _redTeam.Add(unit);
-        else _blueTeam.Add(unit);
+        if (unit.BlackBoard.Team == ETeam.Red) _redTeam.Add(unit);
+        else if (unit.BlackBoard.Team == ETeam.Blue)_blueTeam.Add(unit);
+        else _hostage.Add(unit);
+    }
+
+    public void InflictMoraleDamageTeam(Unit source, float amount)
+    {
+        if (source.BlackBoard.Team == ETeam.Red)
+        {
+            foreach (Unit unit in _redTeam)
+            {
+                unit.ReceiveMoraleDamage(amount);
+            }
+        }
+        else
+        {
+            foreach (Unit unit in _blueTeam)
+            {
+                unit.ReceiveMoraleDamage( amount);
+            }
+        }
     }
 
 
-    public int GetTeamSize(Team team)
+    public int GetTeamSize(ETeam team)
     {
-        if (team == Team.Red) return _redTeam.Count;
+        if (team == ETeam.Red) return _redTeam.Count;
 
-        if (team == Team.Blue) return _blueTeam.Count;
+        if (team == ETeam.Blue) return _blueTeam.Count;
 
         Debug.LogError("Inquiring about non existing team Size");
         return 0;
     }
 
-    public Unit GetUnitAtIndex(int index, Team team)
+    public Unit GetUnitAtIndex(int index, ETeam team)
     {
-        if (team == Team.Red) return _redTeam[index];
+        if (team == ETeam.Red) return _redTeam[index];
 
-        if (team == Team.Blue) return _blueTeam[index];
+        if (team == ETeam.Blue) return _blueTeam[index];
 
         Debug.LogError("Out of Index Team call");
         return null;

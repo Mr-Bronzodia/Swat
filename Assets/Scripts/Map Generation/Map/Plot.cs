@@ -5,7 +5,7 @@ using UnityEngine;
 public class Plot 
 {
     public Bounds bounds;
-    public Sides side;
+    public ESides side;
 
     public Cell StartingCell;
 
@@ -46,7 +46,7 @@ public class Plot
 
         switch (side)
         {
-            case Sides.Left:
+            case ESides.Left:
                 for (int i = 0; i < _maxPlotSize.x; i++)
                 {
                     if (StartingCell.Index.x - i <= 0) break;
@@ -64,7 +64,7 @@ public class Plot
 
                 }
                 break;
-            case Sides.Right:
+            case ESides.Right:
                 for (int i = 0; i < _maxPlotSize.x; i++)
                 {
                     if (StartingCell.Index.x + i >= _worldGrid.GetLength(0)) break;
@@ -80,7 +80,7 @@ public class Plot
 
                 }
                 break;
-            case Sides.Up:
+            case ESides.Up:
                 for (int i = 0; i < _maxPlotSize.y; i++)
                 {
                     if (StartingCell.Index.y + i >= _worldGrid.GetLength(1)) break;
@@ -96,7 +96,7 @@ public class Plot
 
                 }
                 break;
-            case Sides.Down:
+            case ESides.Down:
                 for (int i = 0; i < _maxPlotSize.y; i++)
                 {
                     if (StartingCell.Index.y - i <= 0) break;
@@ -146,19 +146,19 @@ public class Plot
 
         switch (side)
         {
-            case Sides.Left:
+            case ESides.Left:
 
                 bottomLeftIndex = new Vector2Int(SideCell.Index.x, SideCell.Index.y);
                 break;
-            case Sides.Right:
+            case ESides.Right:
 
                 bottomLeftIndex = new Vector2Int(StartingCell.Index.x, StartingCell.Index.y);
                 break;
-            case Sides.Up:
+            case ESides.Up:
 
                 bottomLeftIndex = new Vector2Int(StartingCell.Index.x, StartingCell.Index.y);
                 break;
-            case Sides.Down:
+            case ESides.Down:
 
                 bottomLeftIndex = new Vector2Int(SideCell.Index.x, SideCell.Index.y);
                 break;

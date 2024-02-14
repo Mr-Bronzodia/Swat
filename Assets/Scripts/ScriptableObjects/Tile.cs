@@ -91,20 +91,20 @@ public class Tile : ScriptableObject
     ///</summary>
     ///<param name="side">Which side to add the neighbour to.</param>
     ///<param name="Neighbors">Tile type</param>
-    public void AddNeighbors(Sides side,Tile Neighbors)
+    public void AddNeighbors(ESides side,Tile Neighbors)
     {
         switch (side)
         {
-            case Sides.Up:
+            case ESides.Up:
                 if (!_upNeighbors.Contains(Neighbors)) _upNeighbors.Add(Neighbors);
                 break;
-            case Sides.Down:
+            case ESides.Down:
                 if (!_downNeighbors.Contains(Neighbors)) _downNeighbors.Add(Neighbors);
                 break;
-            case Sides.Left:
+            case ESides.Left:
                 if (!_leftNeighbors.Contains(Neighbors)) _leftNeighbors.Add(Neighbors);
                 break;
-            case Sides.Right:
+            case ESides.Right:
                 if (!_rightNeighbors.Contains(Neighbors)) _rightNeighbors.Add(Neighbors);
                 break;
             default:
@@ -116,22 +116,22 @@ public class Tile : ScriptableObject
     ///<summary>
     ///Returns all possible neighbours connections for this tile.
     ///</summary>
-    public List<Tile> GetNeighbors(Sides side)
+    public List<Tile> GetNeighbors(ESides side)
     {
         List<Tile> result = new List<Tile>();
 
         switch (side)
         {
-            case Sides.Up:
+            case ESides.Up:
                 result = _upNeighbors;
                 break;
-            case Sides.Down:
+            case ESides.Down:
                 result = _downNeighbors;
                 break;
-            case Sides.Left:
+            case ESides.Left:
                 result = _leftNeighbors;
                 break;
-            case Sides.Right:
+            case ESides.Right:
                 result = _rightNeighbors;
                 break;
             default:

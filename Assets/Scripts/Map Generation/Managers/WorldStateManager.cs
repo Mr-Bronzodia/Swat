@@ -5,19 +5,19 @@ using UnityEngine;
 
 public class WorldStateManager : MonoBehaviour
 {
-    private WorldState _worldState;
+    private EWorldState _worldState;
     private int _subscribers = 0;
     private int _subscribersCompleted = 0;
 
     public static WorldStateManager Instance;
-    public Action<WorldState> OnWorldStateChanged;
+    public Action<EWorldState> OnWorldStateChanged;
 
     private void OnEnable()
     {
         Instance = this;
     }
 
-    public void UpdateWorldState(WorldState newWorldState)
+    public void UpdateWorldState(EWorldState newWorldState)
     {
         _worldState = newWorldState;
         DebugUiManager.Instance.AddDebugText(3, "World State: " + _worldState.ToString());
@@ -45,6 +45,6 @@ public class WorldStateManager : MonoBehaviour
     {
         _subscribersCompleted++;
         DebugUiManager.Instance.AddDebugText(2, "Subscriber Completed: " + _subscribersCompleted);
-        if (_subscribersCompleted == _subscribers && _worldState == WorldState.PlotsGenerated) UpdateWorldState(WorldState.NavMeshReady);
+        if (_subscribersCompleted == _subscribers && _worldState == EWorldState.PlotsGenerated) UpdateWorldState(EWorldState.ReadyToGenerateNavMesh);
     }
 }

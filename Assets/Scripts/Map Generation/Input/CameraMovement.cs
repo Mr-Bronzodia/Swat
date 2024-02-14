@@ -69,22 +69,26 @@ public class CameraMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
             _nextPosition += (transform.forward * _movementSpeed);
+            GameManager.Instance.CameraTravelDistance += (transform.forward * _movementSpeed).magnitude;
             _followUnit = null;
         }
         if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
             _nextPosition += (transform.forward * -_movementSpeed);
+            GameManager.Instance.CameraTravelDistance += (transform.forward * _movementSpeed).magnitude;
             _followUnit = null;
         }
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             _nextPosition += (transform.right * -_movementSpeed);
+            GameManager.Instance.CameraTravelDistance += (transform.right * _movementSpeed).magnitude;
             _followUnit = null;
         }
 
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
             _nextPosition += (transform.right * _movementSpeed);
+            GameManager.Instance.CameraTravelDistance += (transform.right * _movementSpeed).magnitude;
             _followUnit = null;
         }
 
@@ -92,7 +96,7 @@ public class CameraMovement : MonoBehaviour
         {
             _sinceLastLock = 0;
 
-            Team playerTeam = GameManager.Instance.PlayerTeam;
+            ETeam playerTeam = GameManager.Instance.PlayerTeam;
             if (_followIndex + 1 >= UnitManager.Instance.GetTeamSize(playerTeam)) _followIndex = 0;
             else _followIndex++;
 

@@ -46,24 +46,24 @@ public class FurnitureGenerator : MonoBehaviour, ISubscriber
         {
             switch (room.RoomType)
             {
-                case RoomTypes.Root:
+                case ERoomTypes.Root:
                     break;
-                case RoomTypes.Kitchen:
+                case ERoomTypes.Kitchen:
                     break;
-                case RoomTypes.Bedroom:
+                case ERoomTypes.Bedroom:
                     break;
-                case RoomTypes.Bathroom:
+                case ERoomTypes.Bathroom:
                     GenerateBathroom(room);
                     break;
-                case RoomTypes.Connector:
+                case ERoomTypes.Connector:
                     break;
-                case RoomTypes.Livingroom:
+                case ERoomTypes.Livingroom:
                     break;
-                case RoomTypes.StorageArea:
+                case ERoomTypes.StorageArea:
                     break;
-                case RoomTypes.Laundry:
+                case ERoomTypes.Laundry:
                     break;
-                case RoomTypes.Office:
+                case ERoomTypes.Office:
                     break;
             }
         }
@@ -71,13 +71,13 @@ public class FurnitureGenerator : MonoBehaviour, ISubscriber
         NotifyTaskCompleted();
     }
 
-    private List<Furniture> FindFurnitureByTag(RoomTypes roomType, ObjectTag objectTag, List<DescriptorTags> descriptorTags, SearchMode mode)
+    private List<Furniture> FindFurnitureByTag(ERoomTypes roomType, EObjectTag objectTag, List<EDescriptorTags> descriptorTags, ESearchMode mode)
     {
         List<Furniture> results = new List<Furniture>();
 
         switch (mode)
         {
-            case SearchMode.RequireAll:
+            case ESearchMode.RequireAll:
 
                 for (int i = 0; i < _furniture.Length; i++)
                 {
@@ -87,7 +87,7 @@ public class FurnitureGenerator : MonoBehaviour, ISubscriber
 
                     bool shouldAddFurniture = true;
 
-                    foreach (DescriptorTags tag in descriptorTags)
+                    foreach (EDescriptorTags tag in descriptorTags)
                     {
                         if (!_furniture[i].DescriptorTags.Contains(tag))
                         {
@@ -99,14 +99,14 @@ public class FurnitureGenerator : MonoBehaviour, ISubscriber
                 }
 
                     break;
-            case SearchMode.RequireOne:
+            case ESearchMode.RequireOne:
                 for (int i = 0; i < _furniture.Length; i++)
                 {
                     if (!_furniture[i].RoomTags.Contains(roomType)) continue;
 
                     if (_furniture[i].ObjectTag != objectTag) continue;
 
-                    foreach (DescriptorTags tag in descriptorTags)
+                    foreach (EDescriptorTags tag in descriptorTags)
                     {
                         if (_furniture[i].DescriptorTags.Contains(tag))
                         {
@@ -116,7 +116,7 @@ public class FurnitureGenerator : MonoBehaviour, ISubscriber
                     }
                 }
                 break;
-            case SearchMode.BlackList:
+            case ESearchMode.BlackList:
                 for (int i = 0; i < _furniture.Length; i++)
                 {
                     if (!_furniture[i].RoomTags.Contains(roomType)) continue;
@@ -125,7 +125,7 @@ public class FurnitureGenerator : MonoBehaviour, ISubscriber
 
                     bool shouldAddFurniture = true;
 
-                    foreach (DescriptorTags tag in descriptorTags)
+                    foreach (EDescriptorTags tag in descriptorTags)
                     {
                         if (_furniture[i].DescriptorTags.Contains(tag))
                         {
@@ -141,7 +141,7 @@ public class FurnitureGenerator : MonoBehaviour, ISubscriber
         return results;
     }
 
-    private List<Furniture> FindAllForRoom(RoomTypes roomType, ObjectTag objectTag)
+    private List<Furniture> FindAllForRoom(ERoomTypes roomType, EObjectTag objectTag)
     {
         List<Furniture> results = new List<Furniture>();
 
@@ -156,13 +156,13 @@ public class FurnitureGenerator : MonoBehaviour, ISubscriber
         return results;
     }
 
-    private List<Furniture> FindFurnitureByTag(RoomTypes roomType, ObjectTag objectTag, DescriptorTags descriptorTags, SearchMode mode)
+    private List<Furniture> FindFurnitureByTag(ERoomTypes roomType, EObjectTag objectTag, EDescriptorTags descriptorTags, ESearchMode mode)
     {
         List<Furniture> results = new List<Furniture>();
 
         switch (mode)
         {
-            case SearchMode.RequireAll:
+            case ESearchMode.RequireAll:
 
                 for (int i = 0; i < _furniture.Length; i++)
                 {
@@ -178,7 +178,7 @@ public class FurnitureGenerator : MonoBehaviour, ISubscriber
                 }
 
                 break;
-            case SearchMode.RequireOne:
+            case ESearchMode.RequireOne:
                 for (int i = 0; i < _furniture.Length; i++)
                 {
                     if (!_furniture[i].RoomTags.Contains(roomType)) continue;
@@ -192,7 +192,7 @@ public class FurnitureGenerator : MonoBehaviour, ISubscriber
                         }
                 }
                 break;
-            case SearchMode.BlackList:
+            case ESearchMode.BlackList:
                 for (int i = 0; i < _furniture.Length; i++)
                 {
                     if (!_furniture[i].RoomTags.Contains(roomType)) continue;
@@ -220,7 +220,7 @@ public class FurnitureGenerator : MonoBehaviour, ISubscriber
         Vector3 toiletLocation = Vector3.zero;
 
         List<Wall> doorlessWall = new List<Wall>();
-        foreach (KeyValuePair<Sides, Wall> wall in bathroom.Walls)
+        foreach (KeyValuePair<ESides, Wall> wall in bathroom.Walls)
         {
             if (!wall.Value.ContainsDoor()) 
             {
@@ -236,19 +236,19 @@ public class FurnitureGenerator : MonoBehaviour, ISubscriber
 
         doorlessWall.Sort((x,y) => x.Length.CompareTo(y.Length));
 
-        List<DescriptorTags> descriptors = new List<DescriptorTags>();
+        List<EDescriptorTags> descriptors = new List<EDescriptorTags>();
 
         if (bathroom.Size >= SMALL)
         {
 
-            Furniture toilet = GetRandom(FindFurnitureByTag(RoomTypes.Bathroom,
-                                                ObjectTag.Toilet,
-                                                DescriptorTags.Small,
-                                                SearchMode.RequireOne));
+            Furniture toilet = GetRandom(FindFurnitureByTag(ERoomTypes.Bathroom,
+                                                EObjectTag.Toilet,
+                                                EDescriptorTags.Small,
+                                                ESearchMode.RequireOne));
 
-            Furniture bath = GetRandom(FindFurnitureByTag(RoomTypes.Bathroom, ObjectTag.Shower, DescriptorTags.Small, SearchMode.RequireOne));
+            Furniture bath = GetRandom(FindFurnitureByTag(ERoomTypes.Bathroom, EObjectTag.Shower, EDescriptorTags.Small, ESearchMode.RequireOne));
 
-            Furniture basin = GetRandom(FindFurnitureByTag(RoomTypes.Bathroom, ObjectTag.Sink, DescriptorTags.Small, SearchMode.RequireOne));
+            Furniture basin = GetRandom(FindFurnitureByTag(ERoomTypes.Bathroom, EObjectTag.Sink, EDescriptorTags.Small, ESearchMode.RequireOne));
 
             Wall startWall = null;
             if (emptyWalls.Count <= 0) startWall = doorlessWall[0];
@@ -272,11 +272,11 @@ public class FurnitureGenerator : MonoBehaviour, ISubscriber
                 }
             }
 
-            Furniture showermat = GetRandom(FindFurnitureByTag(RoomTypes.Bathroom, ObjectTag.Carpet, DescriptorTags.Small, SearchMode.RequireOne));
+            Furniture showermat = GetRandom(FindFurnitureByTag(ERoomTypes.Bathroom, EObjectTag.Carpet, EDescriptorTags.Small, ESearchMode.RequireOne));
             SpawnOpposite(showermat, showerInstance, parentRoomInstance, .1f, .5f);
         }
-        else if (bathroom.Size >= MEDIUM) descriptors.Add(DescriptorTags.Medium);
-        else if (bathroom.Size >= BIG) descriptors.Add(DescriptorTags.Big);
+        else if (bathroom.Size >= MEDIUM) descriptors.Add(EDescriptorTags.Medium);
+        else if (bathroom.Size >= BIG) descriptors.Add(EDescriptorTags.Big);
 
         if (_attachCameraToRoom) Camera.main.transform.position = bathroom.Bounds.center + new Vector3(0, 5.8f, 0f);
 

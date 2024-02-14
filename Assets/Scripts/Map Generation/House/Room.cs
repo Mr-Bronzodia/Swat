@@ -12,18 +12,18 @@ public class Room : TreeMapNode, IEquatable<Room>
 {
     public Bounds Bounds { get; private set; }
     public List<Room> ConnectedRooms { get; private set; }
-    public Dictionary<Sides, Wall> Walls { get; private set; }
+    public Dictionary<ESides, Wall> Walls { get; private set; }
 
     private List<Room> _adjustedRooms;
 
     private readonly int ANGLETHRESHOLD = 35;
 
 
-    public Room(RoomTypes roomType, float width, float height, Bounds bounds) : base(roomType, width, height)
+    public Room(ERoomTypes roomType, float width, float height, Bounds bounds) : base(roomType, width, height)
     {
         ConnectedRooms = new List<Room>();
         Bounds = bounds;
-        Walls = new Dictionary<Sides, Wall>();
+        Walls = new Dictionary<ESides, Wall>();
 
         _adjustedRooms = new List<Room>();
     }
@@ -41,7 +41,7 @@ public class Room : TreeMapNode, IEquatable<Room>
 
     public bool containsOutsideFacingWalls()
     {
-        foreach (KeyValuePair<Sides, Wall> wall in Walls)
+        foreach (KeyValuePair<ESides, Wall> wall in Walls)
         {
             if (IsWallFacingOutside(wall.Value)) return true;
         }
@@ -56,14 +56,14 @@ public class Room : TreeMapNode, IEquatable<Room>
         Vector3 topRight = Bounds.max;
         Vector3 bottomRight = new Vector3(Bounds.max.x, Bounds.center.y, Bounds.min.z);
 
-        Wall topWall = new Wall(topLeft, topRight, Sides.Up);
-        Walls.Add(Sides.Up, topWall);
-        Wall leftWall = new Wall(bottomLeft, topLeft, Sides.Left);
-        Walls.Add(Sides.Left, leftWall);
-        Wall rightWall = new Wall(topRight, bottomRight, Sides.Right);
-        Walls.Add(Sides.Right, rightWall);
-        Wall bottomWall = new Wall(bottomRight, bottomLeft, Sides.Down);
-        Walls.Add(Sides.Down, bottomWall);
+        Wall topWall = new Wall(topLeft, topRight, ESides.Up);
+        Walls.Add(ESides.Up, topWall);
+        Wall leftWall = new Wall(bottomLeft, topLeft, ESides.Left);
+        Walls.Add(ESides.Left, leftWall);
+        Wall rightWall = new Wall(topRight, bottomRight, ESides.Right);
+        Walls.Add(ESides.Right, rightWall);
+        Wall bottomWall = new Wall(bottomRight, bottomLeft, ESides.Down);
+        Walls.Add(ESides.Down, bottomWall);
     }
 
     public void BuildFloor(GameObject floorPrefab, GameObject parentInstance)
@@ -133,7 +133,7 @@ public class Room : TreeMapNode, IEquatable<Room>
     public void BuildFacade(GameObject wallInsidePrefab, GameObject wallOutsidePrefab, List<GameObject> windowPrefab, GameObject doorFramePrefab, bool shouldContainOutsideDoor,GameObject doorPrefab, GameObject parentInstance) 
     {
         int outsideConnections = 0;
-        foreach (KeyValuePair<Sides, Wall> wall in Walls)
+        foreach (KeyValuePair<ESides, Wall> wall in Walls)
         {
             if (IsWallFacingOutside(wall.Value))
             {
@@ -182,8 +182,8 @@ public class Room : TreeMapNode, IEquatable<Room>
 
         if (Vector3.Angle(otherDirection, upVector) < ANGLETHRESHOLD)
         {
-            thisWallSide = Walls[Sides.Up];
-            otherWallSide = other.Walls[Sides.Down];
+            thisWallSide = Walls[ESides.Up];
+            otherWallSide = other.Walls[ESides.Down];
 
             Wall shorterWall = thisWallSide.Length < otherWallSide.Length ? thisWallSide : otherWallSide;
 
@@ -195,8 +195,8 @@ public class Room : TreeMapNode, IEquatable<Room>
 
         if (Vector3.Angle(otherDirection, rightVector) < ANGLETHRESHOLD)
         {
-            thisWallSide = Walls[Sides.Right];
-            otherWallSide = other.Walls[Sides.Left];
+            thisWallSide = Walls[ESides.Right];
+            otherWallSide = other.Walls[ESides.Left];
 
             Wall shorterWall = thisWallSide.Length < otherWallSide.Length ? thisWallSide : otherWallSide;
 

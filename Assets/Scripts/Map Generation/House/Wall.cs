@@ -9,7 +9,7 @@ public class Wall
 {
     public Vector3 StartPoint {  get; private set; }
     public Vector3 EndPoint { get; private set; }
-    public Sides Side { get; private set; }
+    public ESides Side { get; private set; }
     public Vector3 MiddlePoint { get { return Vector3.Lerp(StartPoint, EndPoint, .5f); } private set { MiddlePoint = value; } }
     
     public float Length { get {return Vector3.Distance(StartPoint, EndPoint); } }
@@ -17,7 +17,7 @@ public class Wall
     public List<Vector3> _doorPositions;
     private List<Vector3> _windowPositions;
 
-    public Wall(Vector3 startPoint, Vector3 endPoint, Sides side)
+    public Wall(Vector3 startPoint, Vector3 endPoint, ESides side)
     {
         StartPoint = startPoint;
         EndPoint = endPoint;
@@ -27,18 +27,18 @@ public class Wall
         _windowPositions = new List<Vector3>();
     }
 
-    public static Sides GetOppositeSide(Sides sides)
+    public static ESides GetOppositeSide(ESides sides)
     {
         switch (sides)
         {
-            case Sides.Up:
-                return Sides.Down;
-            case Sides.Down:
-                return Sides.Up;
-            case Sides.Left:
-                return Sides.Right;
-            case Sides.Right:
-                return Sides.Left;
+            case ESides.Up:
+                return ESides.Down;
+            case ESides.Down:
+                return ESides.Up;
+            case ESides.Left:
+                return ESides.Right;
+            case ESides.Right:
+                return ESides.Left;
         }
 
         throw new SystemException("Can't find opposite side of " + sides.ToString() + " in Walls.cs");
