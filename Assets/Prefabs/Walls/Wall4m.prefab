@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5042380748437594471}
   - component: {fileID: 8552910553768257176}
   - component: {fileID: 6787113938111245992}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall4m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 9122220915069135739}
   - component: {fileID: 5920623234195235118}
   - component: {fileID: 8005292739837089974}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall4mSkirting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +175,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6258557884557376308}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall4m
   m_TagString: Untagged
   m_Icon: {fileID: 0}

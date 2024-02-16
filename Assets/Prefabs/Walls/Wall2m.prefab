@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4269923809408611303}
   - component: {fileID: 649495653857690504}
   - component: {fileID: 9161218528821400525}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall2m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 5125848886446348173}
   - component: {fileID: 6396422396614913610}
   - component: {fileID: 6312222094705649751}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall2mSkirting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +175,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3788151808490848932}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall2m
   m_TagString: Untagged
   m_Icon: {fileID: 0}

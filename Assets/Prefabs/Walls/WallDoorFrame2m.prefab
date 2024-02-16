@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6416282346150226165}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: OffMeshLinkStart
   m_TagString: Untagged
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 5588095047237779830}
   - component: {fileID: 8230980438893599232}
   - component: {fileID: 4042521293551297682}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallDoor2mSkirting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 4024703589138821994}
   - component: {fileID: 6298782370927990735}
   - component: {fileID: 5458065740288545595}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallDoor2m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -247,10 +247,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1695865830153619670}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: OffMeshLinkEnd
   m_TagString: Untagged
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -278,7 +278,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6465292270957508001}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallDoorFrame2m
   m_TagString: Untagged
   m_Icon: {fileID: 0}

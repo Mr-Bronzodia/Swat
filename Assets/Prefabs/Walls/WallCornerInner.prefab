@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 762632037584470982}
   - component: {fileID: 6881610610042700186}
   - component: {fileID: 7002587487717828126}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallCornerInner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7079217861586154424}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallCornerInner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 275830729601061137}
   - component: {fileID: 6594400834661637446}
   - component: {fileID: 354116144942231369}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallCornerInnerSkirting
   m_TagString: Untagged
   m_Icon: {fileID: 0}

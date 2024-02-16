@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6594668457180463056}
   - component: {fileID: 858615622426877534}
   - component: {fileID: 1473485209910274200}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallWindow2mSkirting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1507073945385840591}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallWindow2m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 2093614395091678109}
   - component: {fileID: 4567677850683269699}
   - component: {fileID: 5822346701904807551}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WindowFrame2m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 7216767998333754609}
   - component: {fileID: 3220618398156708670}
   - component: {fileID: 1380389065410257515}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallWindow2m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -318,7 +318,7 @@ GameObject:
   - component: {fileID: 6683729134735948311}
   - component: {fileID: 3696159237274888028}
   - component: {fileID: 4864056607816146403}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WindowGlass2m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -400,6 +400,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -9036956567699738537, guid: 7b993b5437c36da42a57c50b3986453d,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -9036956567699738537, guid: 7b993b5437c36da42a57c50b3986453d,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -470,6 +475,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 7b993b5437c36da42a57c50b3986453d,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7b993b5437c36da42a57c50b3986453d,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -478,6 +488,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 3252fda813d817e4a8cdc21a1aa09354, type: 2}
+    - target: {fileID: 6250995865942746429, guid: 7b993b5437c36da42a57c50b3986453d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6250995865942746429, guid: 7b993b5437c36da42a57c50b3986453d,
         type: 3}
       propertyPath: m_StaticEditorFlags

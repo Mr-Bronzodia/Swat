@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 344858266106086778}
   - component: {fileID: 5102196197334527525}
   - component: {fileID: 3243578531280366922}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WindowGlass4m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 5393656255384885552}
   - component: {fileID: 702080094383907413}
   - component: {fileID: 8527830158142913024}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WindowFrame4m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +175,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3558255350054072299}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallWindow4m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -213,7 +213,7 @@ GameObject:
   - component: {fileID: 6237410564997448707}
   - component: {fileID: 2615325709666845848}
   - component: {fileID: 3464590970664912972}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallWindow4mSkirting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -297,7 +297,7 @@ GameObject:
   - component: {fileID: 6129680412512143290}
   - component: {fileID: 2540649273976549508}
   - component: {fileID: 6763384063341600298}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallWindow4m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -465,6 +465,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: a4ce96baccb03d24e8484ae0d02b6c3f, type: 2}
     - target: {fileID: 152516691373475781, guid: 4ff10f1bd3a9db247a6b5338659a3817,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 152516691373475781, guid: 4ff10f1bd3a9db247a6b5338659a3817,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -475,8 +480,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4ff10f1bd3a9db247a6b5338659a3817,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4ff10f1bd3a9db247a6b5338659a3817,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 2593286588717250939, guid: 4ff10f1bd3a9db247a6b5338659a3817,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2593286588717250939, guid: 4ff10f1bd3a9db247a6b5338659a3817,
         type: 3}

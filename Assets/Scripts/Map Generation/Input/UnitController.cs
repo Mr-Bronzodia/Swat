@@ -14,6 +14,8 @@ public class UnitController : MonoBehaviour
     private Vector2 _selectorStartPosition;
     private Vector2 _selectorEndPosition;
 
+    private LayerMask _layerMask;
+
     [SerializeField]
     private bool ALLOW_ENEMY_CONTROL;
 
@@ -22,6 +24,7 @@ public class UnitController : MonoBehaviour
         _selectedUnit = new List<Unit>();
         _selectorStartPosition = Vector2.zero;
         _selectorEndPosition = Vector2.zero;
+        _layerMask = LayerMask.GetMask("Obstacle") | LayerMask.GetMask("Character");
     }
 
     private void AddUnitToSelected(Unit unit)
@@ -221,7 +224,7 @@ public class UnitController : MonoBehaviour
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, _layerMask))
             {
                 IClickable clickableObject;
                 if (!hit.collider.gameObject.TryGetComponent<IClickable>(out clickableObject)) return;

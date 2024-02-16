@@ -12,8 +12,8 @@ TagManager:
   - Water
   - UI
   - Camere Ignore Layer
-  - GroundLayer
-  - Selectable
+  - Obstacle
+  - Character
   - 
   - 
   - 

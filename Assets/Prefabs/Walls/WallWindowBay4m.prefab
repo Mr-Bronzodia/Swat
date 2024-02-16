@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8801518006989473337}
   - component: {fileID: 6809271742745222478}
   - component: {fileID: 5107634878221153503}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallWindowBay4mCeling
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 2621055091893652139}
   - component: {fileID: 7234656684896586071}
   - component: {fileID: 2666417221110561877}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WindowBayGlass4m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 649034220513324471}
   - component: {fileID: 8928269293971903159}
   - component: {fileID: 2863961485163149750}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FloorBayWindow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -261,7 +261,7 @@ GameObject:
   - component: {fileID: 958029265979024993}
   - component: {fileID: 8807870284690021286}
   - component: {fileID: 2413897034026063050}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallWindowBay4m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -366,7 +366,7 @@ GameObject:
   - component: {fileID: 2683284144984873374}
   - component: {fileID: 8008508338850232154}
   - component: {fileID: 2030723272047921513}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WindowBayFrame4m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -449,7 +449,7 @@ GameObject:
   - component: {fileID: 8790476667169087801}
   - component: {fileID: 1107802959074035889}
   - component: {fileID: 2613483776498188261}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallWindowBay4mSkirting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -530,7 +530,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9129912355462327020}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallWindowBay4m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -629,6 +629,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 42d01a673d17e624995eb1892ca9f067,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 42d01a673d17e624995eb1892ca9f067,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -639,8 +644,18 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 3252fda813d817e4a8cdc21a1aa09354, type: 2}
     - target: {fileID: 1989617146762761045, guid: 42d01a673d17e624995eb1892ca9f067,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1989617146762761045, guid: 42d01a673d17e624995eb1892ca9f067,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432096183101497955, guid: 42d01a673d17e624995eb1892ca9f067,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2432096183101497955, guid: 42d01a673d17e624995eb1892ca9f067,
         type: 3}
