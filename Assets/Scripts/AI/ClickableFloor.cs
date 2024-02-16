@@ -102,26 +102,27 @@ public class ClickableFloor : MonoBehaviour, IClickable
             MoveCommand unit1ToSecondCorner = new MoveCommand(lead, sortedCorners[2]);
             breachSeq.Add(unit1ToSecondCorner);
 
+            WaitForSecoundCommand unit1Wait = new WaitForSecoundCommand(units[1], .5f);
+            breachSeq.Add(unit1Wait);
             MoveCommand unit2ToOppositeCorner = new MoveCommand(units[1], sortedCorners[1]);
             breachSeq.Add(unit2ToOppositeCorner);
             MoveCommand unit2ToSecondCorner = new MoveCommand(units[1], sortedCorners[3]);
             breachSeq.Add(unit2ToSecondCorner);
-            WaitToFinishCommand unit1Wait = new WaitToFinishCommand(units[1], lead);
-            breachSeq.Add(unit1Wait);
 
+            WaitForSecoundCommand unit2Wait = new WaitForSecoundCommand(units[2], 1f);
+            breachSeq.Add(unit2Wait);
             MoveCommand unit3ToFirstCorner = new MoveCommand(units[2], sortedCorners[0]);
             breachSeq.Add(unit3ToFirstCorner);
             MoveCommand unit3HalfCorner = new MoveCommand(units[2], Vector3.Lerp(sortedCorners[0], sortedCorners[2], .5f));
             breachSeq.Add(unit3HalfCorner);
-            WaitToFinishCommand unit2Wait = new WaitToFinishCommand(units[2], units[1]);
-            breachSeq.Add(unit2Wait);
 
+
+            WaitForSecoundCommand unit3Wait = new WaitForSecoundCommand(units[3], 1.5f);
+            breachSeq.Add(unit3Wait);
             MoveCommand unit4ToOpposite = new MoveCommand(units[3], sortedCorners[1]);
             breachSeq.Add(unit4ToOpposite);
             MoveCommand unit4ToSecond = new MoveCommand(units[3], Vector3.Lerp(sortedCorners[1], sortedCorners[3], .5f));
             breachSeq.Add(unit4ToSecond);
-            WaitToFinishCommand unit3Wait = new WaitToFinishCommand(units[3], units[2]);
-            breachSeq.Add(unit3Wait);
 
             SequencerCommand breachSequence = new SequencerCommand(lead, "Breach Room", breachSeq);
             results.Add(breachSequence);

@@ -204,6 +204,25 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
             
         }
 
+        else if (BlackBoard.Team == ETeam.Hostage)
+        {
+            FollowCommand followTeam = new FollowCommand(this, other);
+            commands.Add(followTeam);
+
+            if (BlackBoard.CurrentCommand.GetType() == typeof(SurrenderCommand))
+            {
+                StopCommand stopHostage = new StopCommand(this, .1f);
+
+                SequencerCommand seq = new SequencerCommand(this, "Free", new List<Command>() { stopHostage });
+                commands.Add(seq);
+            }
+            else
+            {
+                StopCommand stopHostage = new StopCommand(this, .1f);
+                commands.Add(stopHostage);
+            }
+        }
+
 
         return commands;
     }

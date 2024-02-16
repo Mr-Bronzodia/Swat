@@ -49,7 +49,7 @@ public class PauseManager : MonoBehaviour
             if (_paused)
             {
                 OnPauseStart?.Invoke();
-                _desiredVinetteAmount = .7f;
+                _desiredVinetteAmount = .9f;
 
                 GameManager.Instance.NoPause++;
             }
