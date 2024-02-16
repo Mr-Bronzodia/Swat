@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+//using UnityEngine.UIElements;
 
 public class UIManager : MonoBehaviour
 {
@@ -28,12 +29,15 @@ public class UIManager : MonoBehaviour
     private Vector2 _selectorStartPosition;
     private Vector2 _selectorEndPosition;
 
+    private Vector2 _lastOpenPosition;
+
     // Start is called before the first frame update
     void Start()
     {
         if (Instance == null) Instance = this;
 
         _controlParentRect = _controlPanelParent.GetComponent<RectTransform>();
+        _lastOpenPosition = Vector2.zero;
     }
 
     // Update is called once per frame
@@ -57,6 +61,10 @@ public class UIManager : MonoBehaviour
             _selectorEndPosition = Vector2.zero;
             UpdateSelectorBoxVisual();
         }
+
+        if (!IsCommandMenuOpen) return;
+
+        if (Vector2.Distance(_lastOpenPosition, Input.mousePosition) > 200f) CloseCommandMenu();
     }
 
     private void UpdateSelectorBoxVisual()
@@ -101,6 +109,7 @@ public class UIManager : MonoBehaviour
         _controlParentRect.sizeDelta = new Vector2(_buttonSize.x * 1.2f, (_buttonSize.y + BUTTON_PADDING) * buttons.Count);
         _controlParentRect.position = screenSpacePos - new Vector2(0, _controlParentRect.sizeDelta.y / 2);
 
+        _lastOpenPosition = Input.mousePosition;
         IsCommandMenuOpen = true;
     }
 
