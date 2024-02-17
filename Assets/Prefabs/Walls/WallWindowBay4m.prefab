@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 2621055091893652139}
   - component: {fileID: 7234656684896586071}
   - component: {fileID: 2666417221110561877}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: WindowBayGlass4m
   m_TagString: Untagged
   m_Icon: {fileID: 0}

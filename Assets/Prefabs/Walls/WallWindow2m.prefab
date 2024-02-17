@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 7216767998333754609}
   - component: {fileID: 3220618398156708670}
   - component: {fileID: 1380389065410257515}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: WallWindow2m
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -14,10 +14,10 @@ public class UnitVisionEditor : Editor
         Vector3 viewAngleA = unitVision.DirectionFromAngle(-unitVision.ViewAngle / 2, false);
         Vector3 viewAngleB = unitVision.DirectionFromAngle(unitVision.ViewAngle / 2, false);
 
-        Handles.DrawWireArc(unitVision.HeadTransform.position, Vector3.up, viewAngleA, unitVision.ViewAngle, unitVision.ViewRadius);
+        Handles.DrawWireArc(unitVision.transform.position, Vector3.up, viewAngleA, unitVision.ViewAngle, unitVision.ViewRadius);
 
-        Handles.DrawLine(unitVision.HeadTransform.position, unitVision.HeadTransform.position + viewAngleA * unitVision.ViewRadius);
-        Handles.DrawLine(unitVision.HeadTransform.position, unitVision.HeadTransform.position + viewAngleB * unitVision.ViewRadius);
+        Handles.DrawLine(unitVision.transform.position, unitVision.transform.position + viewAngleA * unitVision.ViewRadius);
+        Handles.DrawLine(unitVision.transform.position, unitVision.transform.position + viewAngleB * unitVision.ViewRadius);
 
         Handles.color = Color.red;
         foreach (Transform visible in unitVision._visibleTargetsList)

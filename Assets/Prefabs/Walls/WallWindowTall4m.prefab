@@ -199,7 +199,7 @@ GameObject:
   - component: {fileID: 5435790915148182618}
   - component: {fileID: 3795896736126444827}
   - component: {fileID: 1547430105782896453}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: WindowTallGlass4m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
