@@ -36,6 +36,8 @@ public class NeutralizeEnemyCommand : Command
 
         if ( Vector3.Distance(myPosition, otherPosition) <= distance + .3f) 
         {
+            Unit.RotateTowardPoint(otherPosition);
+
             NeutralizedCommand enemyNeutralize = new NeutralizedCommand(_other);
             _other.ScheduleHighCommand(enemyNeutralize);
 

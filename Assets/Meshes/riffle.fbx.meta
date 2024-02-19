@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d55b6acbe80b0214c9680991c28f4b3e
+guid: dcd80cb609b8ae8479c149d93f0e7bed
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,13 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Object_84.001_Bake1_baked
-    second: {fileID: 2100000, guid: df6054007445b914084e3416592c7a4f, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Object_85_Bake1_baked
-    second: {fileID: 2100000, guid: 7058d4430918e1340b3434ccdaaed69a, type: 2}
+      name: M4A1-S_Custom_-_SET_1.001
+    second: {fileID: 2100000, guid: 48e3cadeb6b81e6498b2e5ae8aea8d83, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -34,7 +29,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 3
+    animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -88,7 +83,7 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
-  importAnimation: 0
+  importAnimation: 1
   humanDescription:
     serializedVersion: 3
     human: []
@@ -103,13 +98,13 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 1
+    hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
-  animationType: 3
+  animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0

@@ -186,7 +186,7 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
                 //unit has a weapon
                 if (BlackBoard.Weapon != null)
                 {
-                    ReloadCommand reload = new ReloadCommand(this, 2f);
+                    ReloadCommand reload = new ReloadCommand(this, 1.9f);
                     commands.Add(reload);
                 }   
             }
@@ -194,7 +194,8 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
         //Enemy
         else if (BlackBoard.Team == ETeam.Red)
         {
-            NeutralizeEnemyCommand neutralize = new NeutralizeEnemyCommand(other, this, 0.3f);
+
+            NeutralizeEnemyCommand neutralize = new NeutralizeEnemyCommand(other, this, 2.4f);
             commands.Add(neutralize);
 
             ShootCommand shoot = new ShootCommand(other, this);
