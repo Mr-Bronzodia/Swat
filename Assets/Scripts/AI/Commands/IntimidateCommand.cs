@@ -31,7 +31,7 @@ public class IntimidateCommand : Command
 
     protected override void OnCommandBeginExecute()
     {
-        
+        Unit.RotateTowardPoint(_other.BlackBoard.Position);
     }
 
     protected override void OnCommandEndExecute()

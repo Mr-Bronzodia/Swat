@@ -78,7 +78,8 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
 
     public void RotateTowardPoint(Vector3 point)
     {
-        transform.LookAt(point);
+        //transform.LookAt(point);
+        transform.forward = (point - transform.position).normalized;
     }
 
     public void ReceiveMoraleDamage(float damage)
@@ -199,7 +200,7 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
             ShootCommand shoot = new ShootCommand(other, this);
             commands.Add(shoot);
 
-            IntimidateCommand intimidate = new IntimidateCommand(other, this, .3f);
+            IntimidateCommand intimidate = new IntimidateCommand(other, this, 1f);
             commands.Add(intimidate);
             
         }
