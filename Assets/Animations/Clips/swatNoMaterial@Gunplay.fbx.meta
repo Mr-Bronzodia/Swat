@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ea92f617eb5a2e04aab29dd435b40bad
+guid: c6dbb031aaaec224190d369ab952e589
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -33,20 +33,20 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Shooting Gun
+      name: Gunplay
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 159
+      lastFrame: 23
       wrapMode: 0
-      orientationOffsetY: -60
+      orientationOffsetY: 40
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
