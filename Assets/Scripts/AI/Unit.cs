@@ -86,9 +86,6 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
     {
         float adjustedAmount = damage - (damage * BlackBoard.MoraleResistance);
 
-        Debug.Log(adjustedAmount);
-        Debug.Log(BlackBoard.Morale);
-
         BlackBoard.SetMorale(BlackBoard.Morale - adjustedAmount);
     }
 

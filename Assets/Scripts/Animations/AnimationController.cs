@@ -9,6 +9,9 @@ public class AnimationController : MonoBehaviour
     private Animator _animator;
     private Unit _unit;
 
+    [SerializeField]
+    private bool _isHoldingShield;
+
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -67,6 +70,7 @@ public class AnimationController : MonoBehaviour
         _animator.SetBool("Kneeling", false);
         _animator.SetBool("Intimidate", false);
         _animator.SetBool("Shooting", false);
+        _animator.SetBool("PistolAndShiled", _isHoldingShield);
 
         if (commandType == typeof(InteractCommand)) _animator.SetTrigger("Interacting");
         if (commandType == typeof(TakeCoverCommand)) _animator.SetBool("TakingCover", true);
