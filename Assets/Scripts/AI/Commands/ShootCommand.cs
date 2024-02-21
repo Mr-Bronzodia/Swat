@@ -35,6 +35,7 @@ public class ShootCommand : Command
         if (_currentSotDelay > _delayPerShot )
         {
             Unit.BlackBoard.Weapon.Shoot((_other.BlackBoard.Position - Unit.BlackBoard.Position).normalized, Unit.BlackBoard.Accuracy); 
+            UIManager.Instance.UpdateAmmoUIAmmoCount(Unit.GetHashCode(), Unit.BlackBoard.Weapon.MagazineSize, Unit.BlackBoard.Weapon.RemainingBullets);
             _currentSotDelay = 0;
         }
     }

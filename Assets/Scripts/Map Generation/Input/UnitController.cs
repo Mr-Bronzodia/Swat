@@ -33,6 +33,7 @@ public class UnitController : MonoBehaviour
 
         _selectedUnit.Add(unit);
         unit.SetSelectionVisual(true);
+        UIManager.Instance.EnableUISlot(unit.GetHashCode());
     }
 
     private void ClearSelected()
@@ -40,6 +41,7 @@ public class UnitController : MonoBehaviour
         foreach (Unit unit in _selectedUnit)
         {
             unit.SetSelectionVisual(false);
+            UIManager.Instance.DisableUISlot(unit.GetHashCode());
         }
 
         _selectedUnit.Clear();
@@ -141,18 +143,6 @@ public class UnitController : MonoBehaviour
 
             commandButtons.Add(buttonInstance);
         }
-
-        //foreach (Command command in commands)
-        //{
-        //    GameObject buttonInstance = UIManager.Instance.CreateCommandButton(command.ToUIString());
-        //    Button button = buttonInstance.GetComponent<Button>();
-
-
-        //    button.onClick.AddListener(() => command.Unit.ScheduleNormalCommand(command));
-
-
-        //    commandButtons.Add(buttonInstance);
-        //}
 
         return commandButtons;
     }

@@ -34,5 +34,6 @@ public class ReloadCommand : Command
     protected override void OnCommandEndExecute()
     {
         Unit.BlackBoard.Weapon.Reload();
+        UIManager.Instance.UpdateAmmoUIAmmoCount(Unit.GetHashCode(), Unit.BlackBoard.Weapon.MagazineSize, Unit.BlackBoard.Weapon.RemainingBullets);
     }
 }

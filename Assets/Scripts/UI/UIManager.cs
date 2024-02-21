@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.Assertions;
 //using UnityEngine.UIElements;
 
 public class UIManager : MonoBehaviour
@@ -21,24 +22,53 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     public GameObject _controlPanelParent;
 
+    [SerializeField]
+    private GameObject _selectedPanelPrefab;
+
+    [SerializeField]
+    private GameObject _commandIconPrefab;
+
+    [SerializeField]
+    private Canvas _mainCanvas;
+
     private RectTransform _controlParentRect;
 
+    private Dictionary<int, SelectedPanel> _unitUISlots;
+    private int _enabledSlotsCount = 0;
+
     public bool IsCommandMenuOpen {  get; private set; }
+
     private const float BUTTON_PADDING = 10f;
+    private const float ENABLED_PADDING = 150f;
 
     private Vector2 _selectorStartPosition;
     private Vector2 _selectorEndPosition;
 
     private Vector2 _lastOpenPosition;
 
+    private Vector2 _selectedRestPosition;
+
     // Start is called before the first frame update
     void Start()
     {
-        if (Instance == null) Instance = this;
-
         _controlParentRect = _controlPanelParent.GetComponent<RectTransform>();
         _lastOpenPosition = Vector2.zero;
     }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+            _unitUISlots = new Dictionary<int, SelectedPanel>();
+
+        }
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -75,6 +105,59 @@ public class UIManager : MonoBehaviour
         _unitDragSelectorRect.position = boxCentre;
         _unitDragSelectorRect.sizeDelta = boxSize;
 
+    }
+
+    public void EnableUISlot(int ID)
+    {
+        if (!_unitUISlots.ContainsKey(ID)) return;
+
+        GameObject selectedInstance = _unitUISlots[ID].gameObject;
+
+        RectTransform rectTransform = selectedInstance.GetComponent<RectTransform>();
+        rectTransform.position = new Vector2(rectTransform.position.x, rectTransform.position.y + (_enabledSlotsCount * ENABLED_PADDING));
+        _enabledSlotsCount++;
+
+        selectedInstance.SetActive(true);
+    }
+
+    public void DisableUISlot(int ID)
+    {
+        if (!_unitUISlots.ContainsKey(ID)) return;
+
+        GameObject selectedInstance = _unitUISlots[ID].gameObject;
+
+        RectTransform rectTransform = selectedInstance.GetComponent<RectTransform>();
+        rectTransform.position = _selectedRestPosition;
+        _enabledSlotsCount--;
+
+        selectedInstance.SetActive(false);
+    }
+
+    public void RegisterUISlot(int ID)
+    {
+        if (_unitUISlots.ContainsKey(ID)) return;
+
+        GameObject selectionPanelInstance = Instantiate(_selectedPanelPrefab, _mainCanvas.transform);
+        selectionPanelInstance.SetActive(false);
+        _selectedRestPosition = selectionPanelInstance.GetComponent<RectTransform>().position;
+        SelectedPanel selectedPanel = selectionPanelInstance.GetComponent<SelectedPanel>();
+
+
+        _unitUISlots.Add(ID, selectedPanel);
+    }
+
+    public void UpdateUIHealth(int ID, float currentHealth, float maxHealth)
+    {
+        if (!_unitUISlots.ContainsKey(ID)) return;
+
+        _unitUISlots[ID].HealthSlider.value = currentHealth / maxHealth;
+    }
+
+    public void UpdateAmmoUIAmmoCount(int ID, float maxAmmo, float currentAmmo)
+    {
+        if (!_unitUISlots.ContainsKey(ID)) return;
+
+        _unitUISlots[ID].AmmoCountText.text = currentAmmo + "/" + maxAmmo;
     }
 
     public GameObject CreateCommandButton(string buttonText)

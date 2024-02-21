@@ -33,6 +33,9 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
 
     private void Start()
     {
+        if (BlackBoard.Team == GameManager.Instance.PlayerTeam) UIManager.Instance.RegisterUISlot(GetHashCode());
+        if (BlackBoard.Team == GameManager.Instance.PlayerTeam) UIManager.Instance.UpdateAmmoUIAmmoCount(GetHashCode(), BlackBoard.Weapon.MagazineSize, BlackBoard.Weapon.RemainingBullets);
+
         if (!_isHostage) return;
 
         SurrenderCommand hostageSurrender = new SurrenderCommand(this);
@@ -78,8 +81,8 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
 
     public void RotateTowardPoint(Vector3 point)
     {
-        //transform.LookAt(point);
-        transform.forward = (point - transform.position).normalized;
+        transform.LookAt(point);
+        //transform.forward = (point - transform.position).normalized;
     }
 
     public void ReceiveMoraleDamage(float damage)
@@ -213,7 +216,6 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
 
         }
 
-
         return commands;
     }
 
@@ -225,5 +227,6 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
     public void ReceiveDamage(float damage)
     {
         BlackBoard.CurrentHealth -= damage;
+        UIManager.Instance.UpdateUIHealth(GetHashCode(), BlackBoard.CurrentHealth, BlackBoard.MaxHealth);
     }
 }
