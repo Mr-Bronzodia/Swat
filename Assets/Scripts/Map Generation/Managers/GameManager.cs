@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    private Vector3 _unitSpawnPoint;
 
     public ETeam PlayerTeam;
 
@@ -15,6 +16,9 @@ public class GameManager : MonoBehaviour
     public bool IsGameWon { get; private set; } = false;
     public float CameraTravelDistance { get;  set; }
     public int NoPause {  get; set; }
+    public Vector3 SpawnPoint { get => _unitSpawnPoint; }
+    public int HostageCount { get; set; }
+    public int RescuedHostagesCount { get; set; }
 
     private void Awake()
     {
@@ -29,6 +33,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SetSpawnPoint(Vector3 spawnPoint)
+    {
+        _unitSpawnPoint = spawnPoint;
+    }
+
     private void OnApplicationQuit()
     {
         Debug.Log("DeadUnits: " + DeadUnits);
@@ -36,6 +45,11 @@ public class GameManager : MonoBehaviour
         Debug.Log("NoCommandsIssued: " + NoCommandsIssued);
         Debug.Log("GameTime: " + GameTime);
         Debug.Log("CameraTravelDistance: " + CameraTravelDistance);
+    }
+
+    private void OnDrawGizmos()
+    {
+        
     }
 
 }

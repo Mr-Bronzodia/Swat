@@ -15,6 +15,8 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
 
     public Action OnStopImmediately;
 
+    public bool IsHostage { get => _isHostage; }
+
     public NavMeshAgent NavAgent { get; private set; }
 
     [SerializeField]
@@ -40,6 +42,7 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
 
         SurrenderCommand hostageSurrender = new SurrenderCommand(this);
         SetCurrentCommand(hostageSurrender);
+        GameManager.Instance.HostageCount++;
     }
 
     private void OnEnable()

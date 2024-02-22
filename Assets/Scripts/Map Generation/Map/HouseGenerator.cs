@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(WaveFunctionCollapse))]
 public class HouseGenerator : MonoBehaviour, ISubscriber
@@ -107,6 +108,13 @@ public class HouseGenerator : MonoBehaviour, ISubscriber
                 continuous++;
             }
         }
+
+        Vector3 spawnPoint = Vector3.zero;
+
+        if (verticalRoads.Count > horizontalRoads.Count) spawnPoint = verticalRoads[Random.Range(0, verticalRoads.Count)].Item2.GetWorldSpacePosition();
+        else spawnPoint = horizontalRoads[Random.Range(0, horizontalRoads.Count)].Item2.GetWorldSpacePosition();
+
+        GameManager.Instance.SetSpawnPoint(spawnPoint);
 
         Plot plotA = new Plot(_cellGrid, _maxPlotSize);
         Plot plotB = new Plot(_cellGrid, _maxPlotSize);

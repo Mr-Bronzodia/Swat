@@ -34,29 +34,13 @@ public class ClickableTile : MonoBehaviour, IClickable
             worldPosition = ray.GetPoint(distance);
         }
 
-        //int i = 0;
-        //foreach(Unit unit in u)
-        //{
-        //    Vector3 dirToTarget = new Vector3(1,0,0);
-        //    Vector3 finalPos = worldPosition + i * dirToTarget;
-        //    Command move = new MoveCommand(unit, finalPos);
-        //    results.Add(move);
-
-        //    i += 1.5f;
-        //}
-
         List<Command> sequence = new List<Command>();
 
         Unit lead = u[0];
-        Vector3 leadForward = lead.gameObject.transform.forward;
 
         for (int i = 1; i < u.Count; i++)
         {
             Unit unit = u[i];
-            Vector3 target = lead.BlackBoard.Position - i * leadForward;
-
-            MoveCommand moveBehind = new MoveCommand(unit, target);
-            sequence.Add(moveBehind);
 
             WaitUntillCommand leadWait = new WaitUntillCommand(lead, unit, typeof(FollowCommand));
             sequence.Add(leadWait);
