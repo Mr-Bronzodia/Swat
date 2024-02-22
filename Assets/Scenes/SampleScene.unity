@@ -7144,7 +7144,12 @@ PrefabInstance:
     - target: {fileID: 1381359375739968101, guid: f96ec8f35f0dd684eae7494d52cba514,
         type: 3}
       propertyPath: RegenrateOnPlay
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1381359375739968101, guid: f96ec8f35f0dd684eae7494d52cba514,
+        type: 3}
+      propertyPath: BuildNavMeshOnPlay
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1851420196594956627, guid: f96ec8f35f0dd684eae7494d52cba514,
         type: 3}

@@ -36,8 +36,8 @@ public class InteriorGenerator : MonoBehaviour, ISubscriber
     {
         WorldStateManager.Instance.OnWorldStateChanged += WorldListener;
 
-        Subscribe();
-        IsSubscribed = true;
+        //Subscribe();
+        //IsSubscribed = true;
     }
 
     private void OnDisable()
@@ -165,13 +165,11 @@ public class InteriorGenerator : MonoBehaviour, ISubscriber
     public void Subscribe()
     {
         WorldStateManager.Instance.AddSubscriber();
-        Debug.Log("subscribed" + gameObject.name);
     }
 
     public void NotifyTaskCompleted()
     {
         WorldStateManager.Instance.NotifyComplete();
-        Debug.Log("Generated");
         OnRoomsGenerated?.Invoke();
     }
 }
