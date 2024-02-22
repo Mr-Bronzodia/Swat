@@ -31,6 +31,12 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Canvas _mainCanvas;
 
+    [SerializeField]
+    private TMP_Text _taskText;
+
+    [SerializeField]
+    private TMP_Text _taskCount;
+
     private RectTransform _controlParentRect;
 
     private Dictionary<int, SelectedPanel> _unitUISlots;
@@ -53,6 +59,18 @@ public class UIManager : MonoBehaviour
     {
         _controlParentRect = _controlPanelParent.GetComponent<RectTransform>();
         _lastOpenPosition = Vector2.zero;
+        _taskCount.text = "0/" + GameManager.Instance.HostageCount;
+       
+    }
+
+    private void OnEnable()
+    {
+        GameManager.Instance.OnHostageRescued += UpdateRescuedCount;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnHostageRescued -= UpdateRescuedCount;
     }
 
     private void Awake()
@@ -68,6 +86,8 @@ public class UIManager : MonoBehaviour
 
         }
     }
+
+    private void UpdateRescuedCount() => _taskCount.text = GameManager.Instance.RescuedHostagesCount + "/" + GameManager.Instance.HostageCount;
 
 
     // Update is called once per frame
@@ -104,6 +124,7 @@ public class UIManager : MonoBehaviour
 
         _unitDragSelectorRect.position = boxCentre;
         _unitDragSelectorRect.sizeDelta = boxSize;
+        
 
     }
 

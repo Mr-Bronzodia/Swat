@@ -12,7 +12,7 @@ public class RescuePoint : MonoBehaviour
         if (!unit.IsHostage) return;
 
         unit.gameObject.SetActive(false);
-        GameManager.Instance.RescuedHostagesCount++;
+        GameManager.Instance.HostageRescued();
 
     }
 }

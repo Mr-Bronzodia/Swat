@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,8 +6,10 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private Vector3 _unitSpawnPoint;
+    private int _rescuedHostages = 0;
 
     public ETeam PlayerTeam;
+    public Action OnHostageRescued;
 
     public static GameManager Instance { get; private set; }
     public int DeadUnits { get; set; } = 0;
@@ -18,7 +21,7 @@ public class GameManager : MonoBehaviour
     public int NoPause {  get; set; }
     public Vector3 SpawnPoint { get => _unitSpawnPoint; }
     public int HostageCount { get; set; }
-    public int RescuedHostagesCount { get; set; }
+    public int RescuedHostagesCount { get => _rescuedHostages; }
 
     private void Awake()
     {
@@ -36,6 +39,12 @@ public class GameManager : MonoBehaviour
     public void SetSpawnPoint(Vector3 spawnPoint)
     {
         _unitSpawnPoint = spawnPoint;
+    }
+
+    public void HostageRescued()
+    {
+        _rescuedHostages++;
+        OnHostageRescued?.Invoke();
     }
 
     private void OnApplicationQuit()
