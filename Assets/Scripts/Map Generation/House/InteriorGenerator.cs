@@ -165,11 +165,13 @@ public class InteriorGenerator : MonoBehaviour, ISubscriber
     public void Subscribe()
     {
         WorldStateManager.Instance.AddSubscriber();
+        Debug.Log("subscribed" + gameObject.name);
     }
 
     public void NotifyTaskCompleted()
     {
         WorldStateManager.Instance.NotifyComplete();
+        Debug.Log("Generated");
         OnRoomsGenerated?.Invoke();
     }
 }

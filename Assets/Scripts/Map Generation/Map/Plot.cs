@@ -39,8 +39,8 @@ public class Plot
     public void Grow(Tile replacementTile)
     {
         if (StartingCell == null) return;
-        if (StartingCell.Index.x + Width > _worldGrid.GetLength(0) | StartingCell.Index.x + Width < 0) return;
-        if (StartingCell.Index.y + Height > _worldGrid.GetLength(1) | StartingCell.Index.y + Height < 0) return;
+        if (StartingCell.Index.x + Width > _worldGrid.GetLength(0) - 1 | StartingCell.Index.x + Width < 0) return;
+        if (StartingCell.Index.y + Height > _worldGrid.GetLength(1) - 1| StartingCell.Index.y + Height < 0) return;
 
         EndingCell = _worldGrid[StartingCell.Index.x + Width, StartingCell.Index.y + Height];
 
@@ -167,12 +167,13 @@ public class Plot
                 break;
         }
 
-
+        if (PlotGrid.GetLength(0) - 1 <= Mathf.Abs(Width) - 1) return;
+        if (PlotGrid.GetLength(1) - 1 <= Mathf.Abs(Height) - 1) return;
         
 
-        for (int x  = 0; x < Mathf.Abs(Width); x++)
+        for (int x = 0; x < Mathf.Abs(Width) - 1; x++)
         {
-            for (int y = 0; y < Mathf.Abs(Height); y++)
+            for (int y = 0; y < Mathf.Abs(Height) - 1; y++)
             {
                 PlotGrid[x,y] = _worldGrid[bottomLeftIndex.x + x, bottomLeftIndex.y + y];
             }

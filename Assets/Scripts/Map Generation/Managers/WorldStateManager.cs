@@ -45,6 +45,7 @@ public class WorldStateManager : MonoBehaviour
     {
         _subscribersCompleted++;
         DebugUiManager.Instance.AddDebugText(2, "Subscriber Completed: " + _subscribersCompleted);
+        Debug.Log(_subscribersCompleted);
         if (_subscribersCompleted == _subscribers && _worldState == EWorldState.PlotsGenerated) UpdateWorldState(EWorldState.ReadyToGenerateNavMesh);
     }
 }

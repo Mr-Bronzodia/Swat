@@ -29,7 +29,7 @@ public class FurnitureGenerator : MonoBehaviour, ISubscriber
     {
         gameObject.GetComponent<InteriorGenerator>().OnRoomsGenerated += GenerateFurniture;
         _furniture = Resources.LoadAll<Furniture>(FURNITUREDIR);
-        Subscribe();
+        //Subscribe();
     }
 
     private void OnDisable()
@@ -68,7 +68,7 @@ public class FurnitureGenerator : MonoBehaviour, ISubscriber
             }
         }
 
-        NotifyTaskCompleted();
+        //NotifyTaskCompleted();
     }
 
     private List<Furniture> FindFurnitureByTag(ERoomTypes roomType, EObjectTag objectTag, List<EDescriptorTags> descriptorTags, ESearchMode mode)

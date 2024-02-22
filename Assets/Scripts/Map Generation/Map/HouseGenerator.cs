@@ -7,7 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(WaveFunctionCollapse))]
 public class HouseGenerator : MonoBehaviour, ISubscriber
 {
-    private const float SPACINGMODIFIER = .8f;
+    private const float SPACING_MODIFIER = .8f;
     private WaveFunctionCollapse _waveFunctionCollapse;
     private List<Plot> _plots;
     private Cell[,] _cellGrid;
@@ -228,7 +228,7 @@ public class HouseGenerator : MonoBehaviour, ISubscriber
                     Bounds houseBounds = houseCollider.bounds;
 
                     houseBounds.center = nextPos;
-                    houseBounds.size = new Vector3((plotWidthDir.magnitude / noPlots) * SPACINGMODIFIER, 0, plotHeightDir.magnitude * SPACINGMODIFIER);
+                    houseBounds.size = new Vector3((plotWidthDir.magnitude / noPlots) * SPACING_MODIFIER, 0, (plotWidthDir.magnitude / noPlots) * SPACING_MODIFIER);
                     houseCollider.size = houseBounds.size;
                 }
                 else
@@ -293,14 +293,14 @@ public class HouseGenerator : MonoBehaviour, ISubscriber
         {
             if (plot.PlotGrid == null) continue;
 
-            Gizmos.color = plot.DEBUGCOLOR;
-            for (int x = 0; x < plot.PlotGrid.GetLength(0); x++)
-            {
-                for (int y = 0; y < plot.PlotGrid.GetLength(1); y++)
-                {
-                    Gizmos.DrawSphere(plot.PlotGrid[x, y].GetWorldSpacePosition(), 0.2f);
-                }
-            }
+            //Gizmos.color = plot.DEBUGCOLOR;
+            //for (int x = 0; x < plot.PlotGrid.GetLength(0) - 1; x++)
+            //{
+            //    for (int y = 0; y < plot.PlotGrid.GetLength(1) - 1; y++)
+            //    {
+            //        Gizmos.DrawSphere(plot.PlotGrid[x, y].GetWorldSpacePosition(), 0.2f);
+            //    }
+            //}
 
             Gizmos.color = Color.white;
         }
