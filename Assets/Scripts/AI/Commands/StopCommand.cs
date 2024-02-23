@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class StopCommand : Command
 {
-    private bool _isDone = false;
-    private float _timeToElapse;
-    private float _currentTimeElapsed = 0;
+    protected bool _isDone = false;
+    protected float _timeToElapse;
+    protected float _currentTimeElapsed = 0;
 
     public StopCommand(Unit unit, float time) : base(unit)
     {

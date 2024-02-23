@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     private Vector3 _unitSpawnPoint;
     private int _rescuedHostages = 0;
+    private Bounds[] _enemyControlledAreas;
 
     public ETeam PlayerTeam;
     public Action OnHostageRescued;
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviour
     public Vector3 SpawnPoint { get => _unitSpawnPoint; }
     public int HostageCount { get; set; }
     public int RescuedHostagesCount { get => _rescuedHostages; }
+    public Bounds[] EnemyAreas { get => _enemyControlledAreas; }
 
     private void Awake()
     {
@@ -40,6 +42,11 @@ public class GameManager : MonoBehaviour
     public void SetSpawnPoint(Vector3 spawnPoint)
     {
         _unitSpawnPoint = spawnPoint;
+    }
+
+    public void SetEnemyControlledAreas(Bounds[] areas)
+    {
+        _enemyControlledAreas = areas;
     }
 
     public void SetFailState()

@@ -109,13 +109,6 @@ public class HouseGenerator : MonoBehaviour, ISubscriber
             }
         }
 
-        Vector3 spawnPoint = Vector3.zero;
-
-        if (verticalRoads.Count > horizontalRoads.Count) spawnPoint = verticalRoads[Random.Range(0, verticalRoads.Count)].Item2.GetWorldSpacePosition();
-        else spawnPoint = horizontalRoads[Random.Range(0, horizontalRoads.Count)].Item2.GetWorldSpacePosition();
-
-        GameManager.Instance.SetSpawnPoint(spawnPoint);
-
         Plot plotA = new Plot(_cellGrid, _maxPlotSize);
         Plot plotB = new Plot(_cellGrid, _maxPlotSize);
 
@@ -197,6 +190,20 @@ public class HouseGenerator : MonoBehaviour, ISubscriber
             }
 
         }
+
+        if (_plots.Count == 0)
+        {
+            _waveFunctionCollapse.GenerateTilemap();
+            Debug.Log("regenerated");
+            return;
+        }
+
+        Vector3 spawnPoint = Vector3.zero;
+
+        if (verticalRoads.Count > horizontalRoads.Count) spawnPoint = verticalRoads[Random.Range(0, verticalRoads.Count)].Item2.GetWorldSpacePosition();
+        else spawnPoint = horizontalRoads[Random.Range(0, horizontalRoads.Count)].Item2.GetWorldSpacePosition();
+
+        GameManager.Instance.SetSpawnPoint(spawnPoint);
 
 
         foreach (Plot plot in _plots)

@@ -16,6 +16,10 @@ public class WorldStateManager : MonoBehaviour
     private GameObject[] _playerUnitsPrefabs;
     [SerializeField]
     private GameObject _playerCarPrefab;
+    [SerializeField]
+    private GameObject[] _enemyUnitPrefabs;
+    [SerializeField]
+    private GameObject[] _hostagePrefabs;
 
     public static WorldStateManager Instance;
     public Action<EWorldState> OnWorldStateChanged;
@@ -63,7 +67,7 @@ public class WorldStateManager : MonoBehaviour
         DebugUiManager.Instance.AddDebugText(3, "World State: " + _worldState.ToString());
     }
 
-    public void SpawnPlayerUnits()
+    private void SpawnPlayerUnits()
     {
         Vector3 spawnPoint = GameManager.Instance.SpawnPoint;
 
@@ -79,6 +83,42 @@ public class WorldStateManager : MonoBehaviour
         }
     }
 
+     private void SpawnHostages()
+     {
+        int hostagesCount = Random.Range(1, 3);
+        Bounds[] controlledAreas = GameManager.Instance.EnemyAreas;
+
+        for (int i = 0; i < hostagesCount; i++)
+        {
+            Vector3 spawnPosition = RandomPointInBounds(controlledAreas[Random.Range(0, controlledAreas.Length - 1)]);
+            GameObject prefab = _hostagePrefabs[Random.Range(0, _hostagePrefabs.Length - 1)];
+            GameObject hostage = Instantiate(prefab, spawnPosition, Quaternion.identity);
+        }
+
+     }
+
+    public static Vector3 RandomPointInBounds(Bounds bounds)
+    {
+        return new Vector3(
+            Random.Range(bounds.min.x, bounds.max.x),
+            Random.Range(bounds.min.y, bounds.max.y),
+            Random.Range(bounds.min.z, bounds.max.z)
+        );
+    }
+
+    private void SpawnEnemyUnits()
+    {
+        int enemyCount = Random.Range(2, 5);
+        Bounds[] controlledAreas = GameManager.Instance.EnemyAreas;
+
+        for (int i = 0; i < enemyCount; i++)
+        {
+            Vector3 spawnPosition = RandomPointInBounds(controlledAreas[Random.Range(0, controlledAreas.Length - 1)]);
+            GameObject prefab = _enemyUnitPrefabs[Random.Range(0, _enemyUnitPrefabs.Length - 1)];
+            GameObject enemy = Instantiate(prefab, spawnPosition, Quaternion.identity);
+        }
+    }
+
     public void NotifyComplete()
     {
         _subscribersCompleted++;
@@ -86,6 +126,11 @@ public class WorldStateManager : MonoBehaviour
 
         if (_subscribersCompleted == _subscribers && _worldState == EWorldState.PlotsGenerated) UpdateWorldState(EWorldState.ReadyToGenerateNavMesh);
 
-        if (_worldState == EWorldState.NavMeshGenerated) SpawnPlayerUnits();
+        if (_worldState == EWorldState.NavMeshGenerated)
+        {
+            SpawnPlayerUnits();
+            SpawnEnemyUnits();
+            SpawnHostages();
+        }
     }
 }

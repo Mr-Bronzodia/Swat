@@ -67,6 +67,15 @@ public class InteriorGenerator : MonoBehaviour, ISubscriber
 
         Rooms = house.Rooms;
 
+        Bounds[] areas = new Bounds[house.Rooms.Count];
+
+        for (int i = 0; i < house.Rooms.Count; i++)
+        {
+            areas[i] = house.Rooms[i].Bounds;
+        }
+
+        GameManager.Instance.SetEnemyControlledAreas(areas);
+
         NotifyTaskCompleted();
     }
 
