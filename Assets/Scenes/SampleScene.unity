@@ -3643,6 +3643,9 @@ MonoBehaviour:
   _mainCanvas: {fileID: 1687477970}
   _taskText: {fileID: 676242446}
   _taskCount: {fileID: 2027140792}
+  _controls: {fileID: 880189242}
+  _statisticScreenPrefab: {fileID: 5966546969262825104, guid: b6df165222ac7f344965ba91511c542a,
+    type: 3}
 --- !u!1 &1251399218
 GameObject:
   m_ObjectHideFlags: 0

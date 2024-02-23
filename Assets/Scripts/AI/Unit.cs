@@ -109,6 +109,7 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
             BlackBoard.CurrentCommand.ExecuteNext(dead);
             SetCurrentCommand(dead);
             OnNewCommand?.Invoke(dead);
+            if (IsHostage) GameManager.Instance.SetFailState();
         }
 
         // Execute High Priority Command Above else

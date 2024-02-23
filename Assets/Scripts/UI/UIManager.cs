@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
+using Codice.Client.Common.GameUI;
 //using UnityEngine.UIElements;
 
 public class UIManager : MonoBehaviour
@@ -37,6 +38,12 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TMP_Text _taskCount;
 
+    [SerializeField]
+    private GameObject _controls;
+
+    [SerializeField]
+    private GameObject _statisticScreenPrefab;
+
     private RectTransform _controlParentRect;
 
     private Dictionary<int, SelectedPanel> _unitUISlots;
@@ -66,11 +73,13 @@ public class UIManager : MonoBehaviour
     private void OnEnable()
     {
         GameManager.Instance.OnHostageRescued += UpdateRescuedCount;
+        GameManager.Instance.OnGameEnd += DisplayStatScreen;
     }
 
     private void OnDisable()
     {
         GameManager.Instance.OnHostageRescued -= UpdateRescuedCount;
+        GameManager.Instance.OnGameEnd += DisplayStatScreen;
     }
 
     private void Awake()
@@ -88,6 +97,16 @@ public class UIManager : MonoBehaviour
     }
 
     private void UpdateRescuedCount() => _taskCount.text = GameManager.Instance.RescuedHostagesCount + "/" + GameManager.Instance.HostageCount;
+
+    private void DisplayStatScreen()
+    {
+        _controls.SetActive(false);
+        _taskText.transform.parent.gameObject.SetActive(false);
+
+        GameObject endScreenInstance = Instantiate(_statisticScreenPrefab, _mainCanvas.transform);
+        StatisticCard card = endScreenInstance.GetComponent<StatisticCard>();
+        card.UpdateStatistics();
+    }
 
 
     // Update is called once per frame

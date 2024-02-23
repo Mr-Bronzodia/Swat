@@ -10,13 +10,14 @@ public class GameManager : MonoBehaviour
 
     public ETeam PlayerTeam;
     public Action OnHostageRescued;
+    public Action OnGameEnd;
 
     public static GameManager Instance { get; private set; }
     public int DeadUnits { get; set; } = 0;
     public int CapturedUnits { get; set; } = 0;
     public int NoCommandsIssued { get; set; } = 0;
     public float GameTime { get => Time.timeSinceLevelLoad; }
-    public bool IsGameWon { get; private set; } = false;
+    public bool IsGameWon { get; private set; } = true;
     public float CameraTravelDistance { get;  set; }
     public int NoPause {  get; set; }
     public Vector3 SpawnPoint { get => _unitSpawnPoint; }
@@ -41,10 +42,17 @@ public class GameManager : MonoBehaviour
         _unitSpawnPoint = spawnPoint;
     }
 
+    public void SetFailState()
+    {
+        IsGameWon = false;
+        OnGameEnd?.Invoke();
+    }
+
     public void HostageRescued()
     {
         _rescuedHostages++;
         OnHostageRescued?.Invoke();
+        if (HostageCount == RescuedHostagesCount) OnGameEnd?.Invoke();
     }
 
     private void OnApplicationQuit()

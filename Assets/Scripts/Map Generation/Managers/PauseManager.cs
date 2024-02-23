@@ -10,7 +10,8 @@ using UnityEngine.Rendering.Universal;
 public class PauseManager : MonoBehaviour
 {
     private bool _paused = false;
-    private float _desiredVinetteAmount = .1f;
+    private float _desiredVignetteAmount = .1f;
+    private bool _processUpdates = true;
 
     [SerializeField]
     private Volume _volume;
@@ -38,28 +39,56 @@ public class PauseManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        GameManager.Instance.OnGameEnd += FinalPause;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnGameEnd -= FinalPause;
+    }
+
+    private void Pause()
+    {
+        OnPauseStart?.Invoke();
+        _desiredVignetteAmount = .9f;
+
+        GameManager.Instance.NoPause++;
+    }
+
+    private void FinalPause()
+    {
+        Pause();
+        _processUpdates = false;
+    }
+
+    private void UnPause()
+    {
+        OnPauseEnd?.Invoke();
+        _desiredVignetteAmount = .1f;
+    }
+
 
     // Update is called once per frame
     void Update()
     {
+        if (!_processUpdates) return;
+
         if (Input.GetKeyUp(KeyCode.Space))
         {
             _paused = !_paused;
 
             if (_paused)
             {
-                OnPauseStart?.Invoke();
-                _desiredVinetteAmount = .9f;
-
-                GameManager.Instance.NoPause++;
+                Pause();
             }
             else
             {
-                OnPauseEnd?.Invoke();
-                _desiredVinetteAmount = .1f;
+                UnPause();
             }
         }
 
-        _vignette.intensity.value = Mathf.Lerp(_vignette.intensity.value, _desiredVinetteAmount, Time.deltaTime);
+        _vignette.intensity.value = Mathf.Lerp(_vignette.intensity.value, _desiredVignetteAmount, Time.deltaTime);
     }
 }
