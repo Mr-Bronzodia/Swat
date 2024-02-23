@@ -104,7 +104,7 @@ PrefabInstance:
     - target: {fileID: 5605199137127833489, guid: a2db8f3ca9253874db205e243de70492,
         type: 3}
       propertyPath: _magazineSize
-      value: 999
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 5605199137127833489, guid: a2db8f3ca9253874db205e243de70492,
         type: 3}
@@ -112,6 +112,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6466588998676924254, guid: c8fc4e66358cbfd44a20932ad5276f4e,
         type: 3}
+    - target: {fileID: 5605199137127833489, guid: a2db8f3ca9253874db205e243de70492,
+        type: 3}
+      propertyPath: _damagePerShot
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7076720291172622581, guid: a2db8f3ca9253874db205e243de70492,
         type: 3}
       propertyPath: m_Controller
@@ -166,6 +171,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -13.019
+      objectReference: {fileID: 0}
+    - target: {fileID: 8111484583747880791, guid: a2db8f3ca9253874db205e243de70492,
+        type: 3}
+      propertyPath: _shouldDrawViewMesh
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

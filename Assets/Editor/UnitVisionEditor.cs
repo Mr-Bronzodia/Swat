@@ -19,10 +19,10 @@ public class UnitVisionEditor : Editor
         Handles.DrawLine(unitVision.transform.position, unitVision.transform.position + viewAngleA * unitVision.ViewRadius);
         Handles.DrawLine(unitVision.transform.position, unitVision.transform.position + viewAngleB * unitVision.ViewRadius);
 
-        Handles.color = Color.red;
-        foreach (Transform visible in unitVision._visibleTargetsList)
-        {
-            Handles.DrawWireCube(visible.position, Vector3.one);
-        }
+        //Handles.color = Color.red;
+        //foreach (Transform visible in unitVision._visibleTargetsList)
+        //{
+        //    Handles.DrawWireCube(visible.position, Vector3.one);
+        //}
     }
 }

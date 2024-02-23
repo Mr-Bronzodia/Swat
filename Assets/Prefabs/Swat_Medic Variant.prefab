@@ -163,6 +163,11 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 4f0541d4d40b6a541868bd3f49459868, type: 2}
+    - target: {fileID: 8111484583747880791, guid: a2db8f3ca9253874db205e243de70492,
+        type: 3}
+      propertyPath: _shouldDrawViewMesh
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7532533987470353538, guid: a2db8f3ca9253874db205e243de70492, type: 3}
@@ -290,10 +295,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Shotgun
   _fireRate: 5
-  _damagePerShot: 10
+  _damagePerShot: 100
   _effectiveRange: 5
-  _recoil: 0.1
-  _magazineSize: 15
+  _recoil: 0.119
+  _magazineSize: 3
   _barrel: {fileID: 216015336847879147}
   _impactEffect: {fileID: 1360532380266640310, guid: 7350af33cb7c6ce46842b6e32ed5f5ae,
     type: 3}

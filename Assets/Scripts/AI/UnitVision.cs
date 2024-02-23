@@ -9,6 +9,7 @@ public class UnitVision : MonoBehaviour
 {
     private LayerMask _characterMask;
     private LayerMask _obstacleMask;
+    private Unit _thisUnit;
 
     private Mesh _viewMesh;
 
@@ -20,10 +21,12 @@ public class UnitVision : MonoBehaviour
     private float _meshResolution;
     [SerializeField]
     private MeshFilter _viewMeshFilter;
+    [SerializeField]
+    private bool _shouldDrawViewMesh = true;
 
     public float ViewRadius { get => _viewRadius; }
     public float ViewAngle { get => _viewAngle; }
-    public List<Transform> _visibleTargetsList;
+    public List<Unit> _visibleTargetsList;
 
 
     private struct ViewCastInfo
@@ -57,7 +60,8 @@ public class UnitVision : MonoBehaviour
         _characterMask = LayerMask.GetMask("Character");
         _obstacleMask = LayerMask.GetMask("Obstacle");
 
-        _visibleTargetsList = new List<Transform>();
+        _visibleTargetsList = new List<Unit>();
+        _thisUnit = gameObject.GetComponent<Unit>();
     }
 
     private void Start()
@@ -67,6 +71,7 @@ public class UnitVision : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (!_shouldDrawViewMesh) return;
         DrawViewMesh();
     }
 
@@ -94,9 +99,17 @@ public class UnitVision : MonoBehaviour
 
             float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
-            if (Physics.Raycast(transform.position, directionToTarget, distanceToTarget, _obstacleMask)) continue;  
+            if (Physics.Raycast(transform.position, directionToTarget, distanceToTarget, _obstacleMask)) continue;
 
-            _visibleTargetsList.Add(target);
+            Unit t = targetsInRadius[i].GetComponent<Unit>();
+
+            if (t == _thisUnit) continue;
+
+            if (t.IsHostage) continue;
+
+            if (_thisUnit.BlackBoard.Team == t.BlackBoard.Team) continue;
+
+            _visibleTargetsList.Add(targetsInRadius[i].GetComponent<Unit>());
         }
 
     }

@@ -265,7 +265,7 @@ MonoBehaviour:
   _fireRate: 5
   _damagePerShot: 10
   _effectiveRange: 5
-  _recoil: 0.1
+  _recoil: 0.043
   _magazineSize: 15
   _barrel: {fileID: 2822058127407709354}
   _impactEffect: {fileID: 1360532380266640310, guid: 7350af33cb7c6ce46842b6e32ed5f5ae,
@@ -384,6 +384,11 @@ PrefabInstance:
     - target: {fileID: 7840322666029234351, guid: a2db8f3ca9253874db205e243de70492,
         type: 3}
       propertyPath: _isHoldingShield
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8111484583747880791, guid: a2db8f3ca9253874db205e243de70492,
+        type: 3}
+      propertyPath: _shouldDrawViewMesh
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

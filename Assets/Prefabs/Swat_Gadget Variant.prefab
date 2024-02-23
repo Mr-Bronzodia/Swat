@@ -127,10 +127,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Glock-18
   _fireRate: 20
-  _damagePerShot: 30
+  _damagePerShot: 10
   _effectiveRange: 5
   _recoil: 0.086
-  _magazineSize: 999
+  _magazineSize: 60
   _barrel: {fileID: 5046017289306962425}
   _impactEffect: {fileID: 1360532380266640310, guid: 7350af33cb7c6ce46842b6e32ed5f5ae,
     type: 3}
@@ -256,6 +256,11 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 4f0541d4d40b6a541868bd3f49459868, type: 2}
+    - target: {fileID: 8111484583747880791, guid: a2db8f3ca9253874db205e243de70492,
+        type: 3}
+      propertyPath: _shouldDrawViewMesh
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8177080853395375926, guid: a2db8f3ca9253874db205e243de70492,
         type: 3}
       propertyPath: _team

@@ -61,6 +61,8 @@ public class UIManager : MonoBehaviour
 
     private Vector2 _selectedRestPosition;
 
+    private bool soy = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -112,6 +114,12 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!soy)
+        {
+            UpdateRescuedCount();
+            soy = true;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             _selectorStartPosition = Input.mousePosition;
