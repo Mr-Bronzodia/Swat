@@ -225,7 +225,54 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
 
     public List<Command> GetAvailableCommands(List<Unit> units)
     {
-        throw new NotImplementedException();
+        List<Command> commands = new List<Command>();
+
+
+        foreach (Unit unit in units)
+        {
+            //Ally
+            if (BlackBoard.Team == ETeam.Blue)
+            {
+                FollowCommand followCommand = new FollowCommand(unit, this);
+                commands.Add(followCommand);
+
+                StopCommand stop = new StopCommand(this, .1f);
+                commands.Add(stop);
+
+                    //unit has a weapon
+                if (BlackBoard.Weapon != null)
+                {
+                    ReloadCommand reload = new ReloadCommand(this, 1.9f);
+                    commands.Add(reload);
+                }
+            }
+            //Enemy
+            else if (BlackBoard.Team == ETeam.Red)
+            {
+
+                NeutralizeEnemyCommand neutralize = new NeutralizeEnemyCommand(unit, this, 2.4f);
+                commands.Add(neutralize);
+
+                ShootCommand shoot = new ShootCommand(unit, this);
+                commands.Add(shoot);
+
+                IntimidateCommand intimidate = new IntimidateCommand(unit, this, 1f);
+                commands.Add(intimidate);
+
+            }
+
+            else if (BlackBoard.Team == ETeam.Hostage)
+            {
+                FollowCommand followTeam = new FollowCommand(this, unit);
+                commands.Add(followTeam);
+
+                StopCommand stopHostage = new StopCommand(this, .1f);
+                commands.Add(stopHostage);
+
+            }
+        }
+
+        return commands;
     }
 
     public void ReceiveDamage(float damage)

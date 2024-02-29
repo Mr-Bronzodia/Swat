@@ -40,7 +40,7 @@ public class MoveCommand : Command
 
     public override string ToUIString()
     {
-        return "Move to " + _target.ToString();
+        return "Move";
     }
 
     public override void Update()

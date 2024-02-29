@@ -6,6 +6,10 @@ using UnityEngine.UI;
 using TMPro;
 using static UnityEngine.UI.CanvasScaler;
 using static PlasticPipe.PlasticProtocol.Messages.NegotiationCommand;
+using UnityEngine.Assertions;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
+using UnityEditor;
 
 public class UnitController : MonoBehaviour
 {
@@ -15,9 +19,24 @@ public class UnitController : MonoBehaviour
     private Vector2 _selectorEndPosition;
 
     private LayerMask _layerMask;
+    private Texture _defaultLUT;
+    private ColorLookup _colorLookupEffect;
+    private bool _isUsingDrone;
+    private float _keyLockTime = .4f;
+    private float _sinceLastLock = 0f;
 
     [SerializeField]
     private bool ALLOW_ENEMY_CONTROL;
+    [SerializeField]
+    private Texture _heatSignatureTex;
+    [SerializeField]
+    private GameObject _droneInstance;
+    [SerializeField]
+    private GameObject _cameraRig;
+    [SerializeField]
+    private Volume _volume;
+    [SerializeField]
+    private GameObject _revealAllInstance;
 
 
     private void Awake()
@@ -26,6 +45,17 @@ public class UnitController : MonoBehaviour
         _selectorStartPosition = Vector2.zero;
         _selectorEndPosition = Vector2.zero;
         _layerMask = LayerMask.GetMask("Obstacle") | LayerMask.GetMask("Character");
+
+        Assert.IsNotNull(_heatSignatureTex, "Heat signature LUT is not assigned");
+        Assert.IsNotNull(_droneInstance, "Drone Instance is not assigned");
+        Assert.IsNotNull(_cameraRig, "Camera rig is not assigned");
+        Assert.IsNotNull(_volume, "volume is not assigned");
+        Assert.IsNotNull(_revealAllInstance, "Reveal all instance not set is not assigned");
+
+        _volume.profile.TryGet<ColorLookup>(out _colorLookupEffect);
+        _defaultLUT = _colorLookupEffect.texture.value;
+        _droneInstance.SetActive(false);
+        _revealAllInstance.SetActive(false);
     }
 
     private void AddUnitToSelected(Unit unit)
@@ -148,10 +178,43 @@ public class UnitController : MonoBehaviour
         return commandButtons;
     }
 
+    private void ToggleDroneView()
+    {
+        if (_isUsingDrone)
+        {
+            _isUsingDrone = false;
+            
+            _colorLookupEffect.texture.value = _defaultLUT;
+
+            Cursor.visible = true;
+            _revealAllInstance.SetActive(false);
+            _droneInstance.SetActive(false);
+        }
+        else
+        {
+            _isUsingDrone = true;
+
+            _colorLookupEffect.texture.value = _heatSignatureTex;
+            Cursor.visible = false;
+            _revealAllInstance.SetActive(true);
+            _droneInstance.SetActive(true);
+        }
+    }
+
     
 
     private void Update()
     {
+        if (_sinceLastLock < _keyLockTime + 1f) _sinceLastLock += Time.deltaTime;
+
+        if (Input.GetKey(KeyCode.B) && _sinceLastLock >= _keyLockTime)
+        {
+            _sinceLastLock = 0;
+            ToggleDroneView();
+        }
+
+        if (_isUsingDrone) return;
+
         foreach(Unit selected in _selectedUnit)
         {
             string queue = selected.gameObject.name + " Queue [";

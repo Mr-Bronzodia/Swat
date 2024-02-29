@@ -24,7 +24,7 @@ public class NeutralizeEnemyCommand : Command
 
     public override string ToUIString()
     {
-        return "Neutralize Enemy";
+        return "Melee Knockout";
     }
 
     public override void Update()
