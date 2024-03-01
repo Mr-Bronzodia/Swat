@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 344858266106086778}
   - component: {fileID: 5102196197334527525}
   - component: {fileID: 3243578531280366922}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WindowGlass4m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -297,7 +297,7 @@ GameObject:
   - component: {fileID: 6129680412512143290}
   - component: {fileID: 2540649273976549508}
   - component: {fileID: 6763384063341600298}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallWindow4m
   m_TagString: Untagged
   m_Icon: {fileID: 0}

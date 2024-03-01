@@ -24,6 +24,7 @@ public class UnitController : MonoBehaviour
     private bool _isUsingDrone;
     private float _keyLockTime = .4f;
     private float _sinceLastLock = 0f;
+    private float _defaultLUTContribution;
 
     [SerializeField]
     private bool ALLOW_ENEMY_CONTROL;
@@ -56,6 +57,7 @@ public class UnitController : MonoBehaviour
         _defaultLUT = _colorLookupEffect.texture.value;
         _droneInstance.SetActive(false);
         _revealAllInstance.SetActive(false);
+        _defaultLUTContribution = _colorLookupEffect.contribution.value;
     }
 
     private void AddUnitToSelected(Unit unit)
@@ -187,6 +189,7 @@ public class UnitController : MonoBehaviour
             _colorLookupEffect.texture.value = _defaultLUT;
 
             Cursor.visible = true;
+            _colorLookupEffect.contribution.value = _defaultLUTContribution;
             _revealAllInstance.SetActive(false);
             _droneInstance.SetActive(false);
         }
@@ -195,6 +198,7 @@ public class UnitController : MonoBehaviour
             _isUsingDrone = true;
 
             _colorLookupEffect.texture.value = _heatSignatureTex;
+            _colorLookupEffect.contribution.value = 1f;
             Cursor.visible = false;
             _revealAllInstance.SetActive(true);
             _droneInstance.SetActive(true);
