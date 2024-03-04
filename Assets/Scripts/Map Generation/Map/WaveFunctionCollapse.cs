@@ -71,7 +71,7 @@ public class WaveFunctionCollapse : MonoBehaviour, ISubscriber
             for (int y = 0; y < _gridSizeY; y++)
             {
                 _grid[x, y] = new Cell(new Vector2Int(x, y), CellSize);
-                _grid[x, y] = new Cell(new Vector2Int(x, y), CellSize);
+                //_grid[x, y] = new Cell(new Vector2Int(x, y), CellSize);
                 _emptyCells.Add(_grid[x, y]);
             }
         }

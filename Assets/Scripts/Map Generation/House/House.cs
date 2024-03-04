@@ -180,7 +180,7 @@ public class House
 
 
 
-    public void InstantiateHouse(HouseTheme houseTheme)
+    public void InstantiateHouse()
     {
 
         bool isLayoutValid = false;
@@ -203,17 +203,38 @@ public class House
         foreach (Room room in Rooms)
         {
             bool shouldContainOutsideDoor = room.containsOutsideFacingWalls() && (room.RoomType == ERoomTypes.Livingroom || room.RoomType == ERoomTypes.Connector);
-            room.BuildFloor(GetRandomObject(houseTheme.Floor), _parentInstance);
 
-            room.BuildFacade(GetRandomObject(houseTheme.InteriorWall),
-                        GetRandomObject(houseTheme.ExtiriorWall),
-                        houseTheme.ExteriorWindows,
-                        GetRandomObject(houseTheme.Doors),
+            Furniture floor = AssetManager.GetRandom(AssetManager.Instance.FindAssetByTag(room.RoomType, EObjectTag.Floor, EDescriptorTags.Interior, ESearchMode.RequireOne));
+
+            room.BuildFloor(floor.Prefab, _parentInstance);
+
+            Furniture interiorWall = AssetManager.GetRandom(AssetManager.Instance.FindAssetByTag(room.RoomType, EObjectTag.Wall, EDescriptorTags.Interior, ESearchMode.RequireOne));
+            Furniture exteriorWall = AssetManager.GetRandom(AssetManager.Instance.FindAssetByTag(ERoomTypes.Any, EObjectTag.Wall, EDescriptorTags.Exterior, ESearchMode.RequireOne));
+
+            Furniture doorFrame = AssetManager.GetRandom(AssetManager.Instance.FindAssetByTag(room.RoomType, EObjectTag.DoorFrame, EDescriptorTags.Interior, ESearchMode.RequireOne));
+
+            Furniture door = AssetManager.GetRandom(AssetManager.Instance.FindAssetByTag(room.RoomType, EObjectTag.Door, EDescriptorTags.Interior, ESearchMode.RequireOne));
+
+            Furniture roof = AssetManager.GetRandom(AssetManager.Instance.FindAssetByTag(room.RoomType, EObjectTag.Roof, EDescriptorTags.Exterior, ESearchMode.RequireOne));
+
+            List<GameObject> windowsPrefabs = new List<GameObject>();
+
+            List<Furniture> windows = AssetManager.Instance.FindAssetByTag(room.RoomType, EObjectTag.Window, EDescriptorTags.Exterior, ESearchMode.RequireOne);
+
+            foreach (Furniture window in windows)
+            {
+                windowsPrefabs.Add(window.Prefab);
+            }
+
+                room.BuildFacade(interiorWall.Prefab,
+                        exteriorWall.Prefab,
+                        windowsPrefabs,
+                        doorFrame.Prefab,
                         shouldContainOutsideDoor,
-                        GetRandomObject(houseTheme.DoorObjects),
-                        _parentInstance) ;
+                        door.Prefab,
+                        _parentInstance);
 
-           room.BuildRoof(houseTheme.Roof, 3f, _parentInstance);
+           room.BuildRoof(roof.Prefab, 3f, _parentInstance);
         }
     }
 }

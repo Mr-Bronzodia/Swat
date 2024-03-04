@@ -61,9 +61,7 @@ public class InteriorGenerator : MonoBehaviour, ISubscriber
 
         House house = new House(collider.bounds, this.gameObject);
 
-        HouseTheme[] themes = Resources.LoadAll<HouseTheme>("HouseThemes");
-
-        house.InstantiateHouse(themes[UnityEngine.Random.Range(0, themes.Length)]);
+        house.InstantiateHouse();
 
         Rooms = house.Rooms;
 

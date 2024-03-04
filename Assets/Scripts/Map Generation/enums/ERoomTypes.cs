@@ -16,7 +16,8 @@ public enum ERoomTypes
     Livingroom,
     StorageArea,
     Laundry,
-    Office
+    Office,
+    Any
 }
 
 public struct PreferedConnections

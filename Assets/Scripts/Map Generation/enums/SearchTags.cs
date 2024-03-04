@@ -22,7 +22,13 @@ public enum EObjectTag
     Carpet,
     Light,
     Mirror,
-    Prop
+    Prop,
+    Wall,
+    DoorFrame,
+    Door,
+    Window,
+    Floor,
+    Roof
 }
 
 public enum EDescriptorTags
@@ -33,7 +39,9 @@ public enum EDescriptorTags
     Standing,
     Hanging,
     Corner,
-    WallAdjusted
+    WallAdjusted,
+    Interior,
+    Exterior
 }
 
 public enum ESearchMode
