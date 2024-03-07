@@ -71,7 +71,6 @@ public class WaveFunctionCollapse : MonoBehaviour, ISubscriber
             for (int y = 0; y < _gridSizeY; y++)
             {
                 _grid[x, y] = new Cell(new Vector2Int(x, y), CellSize);
-                //_grid[x, y] = new Cell(new Vector2Int(x, y), CellSize);
                 _emptyCells.Add(_grid[x, y]);
             }
         }
@@ -92,7 +91,6 @@ public class WaveFunctionCollapse : MonoBehaviour, ISubscriber
 
         //Collapses first cell to start the propagation. Cell position is random 
         Cell startingCell = _grid[UnityEngine.Random.Range(0, _gridSizeX), UnityEngine.Random.Range(0, _gridSizeY)];
-
 
         startingCell.Collapse(_grid, _touchedCells);
 

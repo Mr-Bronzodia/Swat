@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: WindowBig
   m_EditorClassIdentifier: 
   Prefab: {fileID: 8500586381493956694, guid: 94dee45fe843aa543b410fcaa3596d89, type: 3}
-  RoomTags: 
-  ObjectTag: 0
-  DescriptorTags: 
+  RoomTags: 09000000
+  ObjectTag: 22
+  DescriptorTags: 08000000

@@ -85,6 +85,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5605199137127833489, guid: a2db8f3ca9253874db205e243de70492,
         type: 3}
+      propertyPath: _fireSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 7a394e8d2ccd7684fab510fe9f7218fa, type: 3}
+    - target: {fileID: 5605199137127833489, guid: a2db8f3ca9253874db205e243de70492,
+        type: 3}
+      propertyPath: _reloadSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 690f97772e4ee9d409adfbc6ba31a076, type: 3}
+    - target: {fileID: 5605199137127833489, guid: a2db8f3ca9253874db205e243de70492,
+        type: 3}
       propertyPath: _trailEffect
       value: 
       objectReference: {fileID: 2238261753284721133, guid: d347de7672c43c442821e5aab4697fef,
@@ -117,6 +127,11 @@ PrefabInstance:
       propertyPath: _damagePerShot
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 5605199137127833489, guid: a2db8f3ca9253874db205e243de70492,
+        type: 3}
+      propertyPath: _emptyClickSound
+      value: 
+      objectReference: {fileID: 8300000, guid: f012ca614233df54a9faed3f578ed8b6, type: 3}
     - target: {fileID: 7076720291172622581, guid: a2db8f3ca9253874db205e243de70492,
         type: 3}
       propertyPath: m_Controller

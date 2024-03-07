@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79dd3039ed0796f4f83b5787837d9ed8, type: 3}
   m_Name: Roof
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 0}
-  RoomTags: 
-  ObjectTag: 0
-  DescriptorTags: 
+  Prefab: {fileID: 156976217076831411, guid: 5f2d6bc3ac6628941be235b7c399aca3, type: 3}
+  RoomTags: 09000000
+  ObjectTag: 24
+  DescriptorTags: 08000000

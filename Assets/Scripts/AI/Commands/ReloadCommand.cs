@@ -28,7 +28,7 @@ public class ReloadCommand : Command
 
     protected override void OnCommandBeginExecute()
     {
-        
+        Unit.BlackBoard.Weapon.PlaySoundReload();
     }
 
     protected override void OnCommandEndExecute()

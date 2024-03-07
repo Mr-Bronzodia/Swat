@@ -274,6 +274,9 @@ MonoBehaviour:
     type: 3}
   _trailEffect: {fileID: 2238261753284721133, guid: d347de7672c43c442821e5aab4697fef,
     type: 3}
+  _fireSound: {fileID: 8300000, guid: 8802ec54173d35648b8a752bba05411c, type: 3}
+  _reloadSound: {fileID: 8300000, guid: 690f97772e4ee9d409adfbc6ba31a076, type: 3}
+  _emptyClickSound: {fileID: 8300000, guid: f012ca614233df54a9faed3f578ed8b6, type: 3}
 --- !u!1001 &9040545105683364799
 PrefabInstance:
   m_ObjectHideFlags: 0

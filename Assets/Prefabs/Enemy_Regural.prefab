@@ -324,6 +324,9 @@ MonoBehaviour:
     type: 3}
   _trailEffect: {fileID: 2238261753284721133, guid: d347de7672c43c442821e5aab4697fef,
     type: 3}
+  _fireSound: {fileID: 8300000, guid: ef30912510db7ca44aba1ec17526ea8c, type: 3}
+  _reloadSound: {fileID: 8300000, guid: 690f97772e4ee9d409adfbc6ba31a076, type: 3}
+  _emptyClickSound: {fileID: 8300000, guid: f012ca614233df54a9faed3f578ed8b6, type: 3}
 --- !u!4 &6825994634206213181 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b6a6c750bf9a68542a56ed77840170fd,

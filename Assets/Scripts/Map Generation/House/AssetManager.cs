@@ -11,6 +11,8 @@ public class AssetManager : MonoBehaviour
 
     private void Awake()
     {
+        _furniture = Resources.LoadAll<Furniture>(FURNITUREDIR);
+
         if (Instance != null && Instance != this)
         {
             Destroy(this);
@@ -18,8 +20,6 @@ public class AssetManager : MonoBehaviour
         else
         {
             Instance = this;
-            _furniture = Resources.LoadAll<Furniture>(FURNITUREDIR);
-
         }
     }
 
@@ -122,11 +122,7 @@ public class AssetManager : MonoBehaviour
 
                     if (_furniture[i].ObjectTag != objectTag) continue;
 
-                    if (_furniture[i].DescriptorTags.Contains(descriptorTags))
-                    {
-                        results.Add(_furniture[i]);
-                        break;
-                    }
+                    if (_furniture[i].DescriptorTags.Contains(descriptorTags)) results.Add(_furniture[i]);
                 }
 
                 break;
@@ -137,11 +133,7 @@ public class AssetManager : MonoBehaviour
 
                     if (_furniture[i].ObjectTag != objectTag) continue;
 
-                    if (_furniture[i].DescriptorTags.Contains(descriptorTags))
-                    {
-                        results.Add(_furniture[i]);
-                        break;
-                    }
+                    if (_furniture[i].DescriptorTags.Contains(descriptorTags)) results.Add(_furniture[i]);
                 }
                 break;
             case ESearchMode.BlackList:

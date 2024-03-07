@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79dd3039ed0796f4f83b5787837d9ed8, type: 3}
   m_Name: WallMedium
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 0}
-  RoomTags: 
-  ObjectTag: 0
-  DescriptorTags: 
+  Prefab: {fileID: 4191345815147214161, guid: dd8531eb516f95e40bce6dc3c0ba4525, type: 3}
+  RoomTags: 09000000
+  ObjectTag: 22
+  DescriptorTags: 08000000

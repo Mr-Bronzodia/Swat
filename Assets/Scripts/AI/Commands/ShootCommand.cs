@@ -43,6 +43,8 @@ public class ShootCommand : Command
     protected override void OnCommandBeginExecute()
     {
         Unit.RotateTowardPoint(_other.BlackBoard.Position);
+
+        if (Unit.BlackBoard.Weapon.RemainingBullets <= 0 ) Unit.BlackBoard.Weapon.PlaySoundEmpty();
     }
 
     protected override void OnCommandEndExecute()

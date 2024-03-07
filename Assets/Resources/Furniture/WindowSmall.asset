@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79dd3039ed0796f4f83b5787837d9ed8, type: 3}
   m_Name: WindowSmall
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 0}
-  RoomTags: 
-  ObjectTag: 0
-  DescriptorTags: 
+  Prefab: {fileID: 2279352922884568437, guid: 7a6f862ca8c727d4c8a3ef7bc92f4b5d, type: 3}
+  RoomTags: 09000000
+  ObjectTag: 22
+  DescriptorTags: 08000000

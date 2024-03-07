@@ -170,7 +170,7 @@ public class Cell : IComparable<Cell>
             {
                 collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x, Index.y + 1].Tile.GetNeighbors(ESides.Down)).ToList();
             }
-            else parentGrid[Index.x, Index.y + 1].AddCellToSortedList(touchedCells);
+            else parentGrid[Index.x, Index.y + 1].SortAndAdd(touchedCells);
         }
 
         //Bottom
@@ -180,7 +180,7 @@ public class Cell : IComparable<Cell>
             {
                 collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x, Index.y - 1].Tile.GetNeighbors(ESides.Up)).ToList();
             }
-            else parentGrid[Index.x, Index.y - 1].AddCellToSortedList(touchedCells);
+            else parentGrid[Index.x, Index.y - 1].SortAndAdd(touchedCells);
         }
 
         //Right
@@ -190,7 +190,7 @@ public class Cell : IComparable<Cell>
             {
                 collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x + 1, Index.y].Tile.GetNeighbors(ESides.Left)).ToList();
             }
-            else parentGrid[Index.x + 1, Index.y].AddCellToSortedList(touchedCells);
+            else parentGrid[Index.x + 1, Index.y].SortAndAdd(touchedCells);
         }
 
         //Left
@@ -201,7 +201,7 @@ public class Cell : IComparable<Cell>
             {
                 collapsePossibilities = collapsePossibilities.AsQueryable().Intersect(parentGrid[Index.x - 1, Index.y].Tile.GetNeighbors(ESides.Right)).ToList();
             }
-            else parentGrid[Index.x - 1, Index.y].AddCellToSortedList(touchedCells);
+            else parentGrid[Index.x - 1, Index.y].SortAndAdd(touchedCells);
 
         }
 
@@ -209,13 +209,13 @@ public class Cell : IComparable<Cell>
         if (collapsePossibilities.Count > 0)
         {
             //Calculating probability 
-            float max_probability = 0.0f;
+            float probabilitySum = 0.0f;
             foreach (Tile tile in collapsePossibilities)
             {
-                max_probability += tile.GetTileWeight();   
+                probabilitySum += tile.GetTileWeight();   
             }
 
-            float diceRoll = UnityEngine.Random.Range(0.0f, max_probability);
+            float diceRoll = UnityEngine.Random.Range(0.0f, probabilitySum);
 
             float cumulative = 0.0f;
 
@@ -243,13 +243,13 @@ public class Cell : IComparable<Cell>
         NotifyNeighbours(parentGrid);
     }
 
-    private void AddCellToSortedList(List<Cell> sortedList)
+    private void SortAndAdd(List<Cell> sortedList)
     {
         for (int i = 0; i < sortedList.Count; i++)
         {
             Cell otherCell = sortedList[i];
 
-            if (this.CompareTo(otherCell) == 1)
+            if (this.CompareTo(otherCell) >= 0)
             {
                 sortedList.Insert(i, this);
                 return;

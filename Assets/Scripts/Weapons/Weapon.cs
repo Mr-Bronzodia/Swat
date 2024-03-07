@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.VFX;
+using UnityEngine.Audio;
 
 public class Weapon : MonoBehaviour
 {
@@ -29,6 +30,12 @@ public class Weapon : MonoBehaviour
     private VisualEffect _muzzleEffect;
     [SerializeField]
     private TrailRenderer _trailEffect;
+    [SerializeField]
+    private AudioClip _fireSound;
+    [SerializeField]
+    private AudioClip _reloadSound;
+    [SerializeField]
+    private AudioClip _emptyClickSound;
 
     private int _remainingBullets;
     private ObjectPool<VisualEffect> _impactPool;
@@ -154,6 +161,8 @@ public class Weapon : MonoBehaviour
         muzzleFlash.transform.position = _barrel.position;
         muzzleFlash.Play();
 
+        AudioManager.Instance.PlaySoundAtPoint(_fireSound, gameObject.transform.position);
+
         TrailRenderer trailRenderer = _trailPool.Get();
         trailRenderer.transform.position = _barrel.position;
         trailRenderer.AddPosition(_barrel.position);
@@ -183,5 +192,15 @@ public class Weapon : MonoBehaviour
     public void Reload()
     {
         _remainingBullets = _magazineSize;
+    }
+
+    public void PlaySoundReload()
+    {
+        AudioManager.Instance.PlaySoundAtPoint(_reloadSound, gameObject.transform.position);
+    }
+
+    public void PlaySoundEmpty()
+    {
+        AudioManager.Instance.PlaySoundAtPoint(_emptyClickSound, gameObject.transform.position);
     }
 }

@@ -49,7 +49,7 @@ public class SquerifiedTreeMap
         if (childList.Count > 0)
         {
 
-            if (ShouldContinueRow(currentRow, childList[0].Size, childList[childList.Count - 1].Size, GetLenghtOfShorterSide(parentBounds)))
+            if (ShouldContinueRow(currentRow, childList[0].Size, childList[childList.Count - 1].Size, GetLengthOfShorterSide(parentBounds)))
             {
                 currentRow.Add(childList[0], new Bounds(Vector3.zero, Vector3.zero));
                 childList.RemoveAt(0);
@@ -81,7 +81,7 @@ public class SquerifiedTreeMap
             totalSize += room.Key.Size;
         }
 
-        float proportion = totalSize / GetLenghtOfShorterSide(parentBounds);
+        float proportion = totalSize / GetLengthOfShorterSide(parentBounds);
 
         float offset = 0;
 
@@ -123,7 +123,6 @@ public class SquerifiedTreeMap
         {
             parentBounds.min = new Vector3(parentBounds.min.x, parentBounds.min.y, parentBounds.min.z + proportion);
         }
-
     }
 
     /// <summary>
@@ -160,7 +159,7 @@ public class SquerifiedTreeMap
     /// <summary>
     /// Returns shorter side of given bounds.
     /// </summary>
-    private float GetLenghtOfShorterSide(Bounds bounds)
+    private float GetLengthOfShorterSide(Bounds bounds)
     {
         return MathF.Min(bounds.size.x, bounds.size.z);
     }

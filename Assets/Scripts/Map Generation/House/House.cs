@@ -101,8 +101,8 @@ public class House
             float laundryArea = totalArea * Random.Range(.07f, .1f);
             livingRoomArea -= laundryArea;
             float laundryHeightRatio = 1;
-            float laundyHeight = Mathf.Sqrt(laundryArea / laundryHeightRatio);
-            TreeMapNode laundry = new TreeMapNode(ERoomTypes.Laundry, laundyHeight * laundryHeightRatio, laundyHeight);
+            float laundryHeight = Mathf.Sqrt(laundryArea / laundryHeightRatio);
+            TreeMapNode laundry = new TreeMapNode(ERoomTypes.Laundry, laundryHeight * laundryHeightRatio, laundryHeight);
             root.Children.Add(laundry);
         }
 
@@ -182,7 +182,6 @@ public class House
 
     public void InstantiateHouse()
     {
-
         bool isLayoutValid = false;
 
         while (!isLayoutValid)
@@ -200,6 +199,8 @@ public class House
 
         }
 
+        Furniture exteriorWall = AssetManager.GetRandom(AssetManager.Instance.FindAssetByTag(ERoomTypes.Any, EObjectTag.Wall, EDescriptorTags.Exterior, ESearchMode.RequireOne));
+
         foreach (Room room in Rooms)
         {
             bool shouldContainOutsideDoor = room.containsOutsideFacingWalls() && (room.RoomType == ERoomTypes.Livingroom || room.RoomType == ERoomTypes.Connector);
@@ -209,7 +210,6 @@ public class House
             room.BuildFloor(floor.Prefab, _parentInstance);
 
             Furniture interiorWall = AssetManager.GetRandom(AssetManager.Instance.FindAssetByTag(room.RoomType, EObjectTag.Wall, EDescriptorTags.Interior, ESearchMode.RequireOne));
-            Furniture exteriorWall = AssetManager.GetRandom(AssetManager.Instance.FindAssetByTag(ERoomTypes.Any, EObjectTag.Wall, EDescriptorTags.Exterior, ESearchMode.RequireOne));
 
             Furniture doorFrame = AssetManager.GetRandom(AssetManager.Instance.FindAssetByTag(room.RoomType, EObjectTag.DoorFrame, EDescriptorTags.Interior, ESearchMode.RequireOne));
 
@@ -226,7 +226,7 @@ public class House
                 windowsPrefabs.Add(window.Prefab);
             }
 
-                room.BuildFacade(interiorWall.Prefab,
+            room.BuildFacade(interiorWall.Prefab,
                         exteriorWall.Prefab,
                         windowsPrefabs,
                         doorFrame.Prefab,
