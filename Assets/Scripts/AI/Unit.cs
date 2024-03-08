@@ -31,6 +31,8 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
 
     [SerializeField]
     private bool _isHostage;
+    [SerializeField]
+    private AudioClip[] _footstepSound;
 
 
     private void Start()
@@ -80,6 +82,13 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
     public void SetSelectionVisual(bool enabled)
     {
         _selectionVisual.SetActive(enabled);
+    }
+
+    //hooked up to animation event played by "Walk forward"clip 
+    public void PlayFootstep()
+    {
+        int rng = UnityEngine.Random.Range(0, _footstepSound.Length);
+        AudioManager.Instance.PlaySoundAtPoint(_footstepSound[rng], gameObject.transform.position - new Vector3(0, 1, 0));
     }
 
     public void RotateTowardPoint(Vector3 point)

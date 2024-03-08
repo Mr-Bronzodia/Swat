@@ -633,6 +633,12 @@ MonoBehaviour:
   _selectionVisual: {fileID: 5409563342477921662}
   _framesPerAIUpdate: 2
   _isHostage: 1
+  _footstepSound:
+  - {fileID: 8300000, guid: 61d844f1f58e1f443b16d4c50b52bd7d, type: 3}
+  - {fileID: 8300000, guid: 016cdd5b1fab1bf42966497b42fbaa90, type: 3}
+  - {fileID: 8300000, guid: e2680be486f4f914091c3ce45cc9e654, type: 3}
+  - {fileID: 8300000, guid: 99c9d0b705942644f90209390d4eb68a, type: 3}
+  - {fileID: 8300000, guid: 4bb57689abd5a7c4eb4177f9160fb198, type: 3}
 --- !u!95 &4881870575147720988
 Animator:
   serializedVersion: 5

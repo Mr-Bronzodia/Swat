@@ -170,6 +170,7 @@ public class UnitVision : MonoBehaviour
 
     }
 
+
     public Vector3 DirectionFromAngle(float angleInDegrees, bool isGlobal)
     {
         if (!isGlobal) angleInDegrees += transform.eulerAngles.y;
