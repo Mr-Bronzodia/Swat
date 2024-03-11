@@ -1,9 +1,5 @@
-using Codice.Client.BaseCommands.BranchExplorer;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 public class FurnitureGenerator : MonoBehaviour, ISubscriber

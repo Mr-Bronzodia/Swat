@@ -47,7 +47,7 @@ public class CameraMovement : MonoBehaviour
         _nextRotation = transform.rotation;
         _nextZoom = _cameraTransform.localPosition;
         _upPlane = new Plane(Vector3.up, Vector3.zero);
-        _followUnit = UnitManager.Instance.GetUnitAtIndex(0, GameManager.Instance.PlayerTeam);
+        //_followUnit = UnitManager.Instance.GetUnitAtIndex(0, GameManager.Instance.PlayerTeam);
     }
 
     // Update is called once per frame

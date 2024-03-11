@@ -1,11 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager.UI;
 using UnityEditor;
 using UnityEngine;
-using System.IO;
+
 
 public class PatternExtractor 
 {
@@ -71,15 +68,15 @@ public class PatternExtractor
                         break;
                 }
 
-                AssetDatabase.CreateAsset(rotationVariant, path);
+                //AssetDatabase.CreateAsset(rotationVariant, path);
                 newTiles.Add(rotationVariant);
             }
 
         }
 
         _protoTiles = _protoTiles.Concat(newTiles).ToList();
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
+        //AssetDatabase.SaveAssets();
+        //AssetDatabase.Refresh();
     }
 
     /// <summary>

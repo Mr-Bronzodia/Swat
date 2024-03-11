@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Plastic.Antlr3.Runtime.Debug;
 using UnityEngine;
 
 public class TemporaryEnemyStateManager : MonoBehaviour

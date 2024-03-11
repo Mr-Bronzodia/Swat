@@ -424,6 +424,11 @@ PrefabInstance:
       propertyPath: _shouldDrawViewMesh
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8484906896741351414, guid: a2db8f3ca9253874db205e243de70492,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7532533987470353538, guid: a2db8f3ca9253874db205e243de70492, type: 3}

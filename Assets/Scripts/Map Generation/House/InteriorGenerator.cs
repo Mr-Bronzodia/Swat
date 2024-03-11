@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
-using UnityEditor.TerrainTools;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
@@ -144,7 +141,7 @@ public class InteriorGenerator : MonoBehaviour, ISubscriber
             Gizmos.color = Color.white;
 
             Vector3 offset = new Vector3(-0.7f, 0, 0.5f);
-            if (_showRoomNames) Handles.Label(room.Bounds.center + offset, room.RoomType.ToString());
+            //if (_showRoomNames) Handles.Label(room.Bounds.center + offset, room.RoomType.ToString());
 
             Gizmos.color = Color.blue;
 

@@ -1,7 +1,3 @@
-using Codice.Client.BaseCommands.Merge;
-using Codice.CM.SEIDInfo;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class NeutralizeEnemyCommand : Command

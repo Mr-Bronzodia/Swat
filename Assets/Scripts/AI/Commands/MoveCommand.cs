@@ -1,9 +1,6 @@
-using Codice.CM.WorkspaceServer.Tree.GameUI.Checkin.Updater;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using static UnityEngine.UI.CanvasScaler;
+
 
 public class MoveCommand : Command
 {
