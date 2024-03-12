@@ -85,7 +85,24 @@ public class WorldStateManager : MonoBehaviour
 
      private void SpawnHostages()
      {
-        int hostagesCount = Random.Range(1, 3);
+        int upperBound = 0;
+        int lowerBound = 0; 
+
+        //normal
+        if (SettingsManager.Instance.Settings.Difficulty == 1)
+        {
+            upperBound = 2;
+            lowerBound = 1;
+        }
+        //hard
+        else
+        {
+            upperBound = 5;
+            lowerBound = 2;
+        }
+
+
+        int hostagesCount = Random.Range(lowerBound, upperBound);
         Bounds[] controlledAreas = GameManager.Instance.EnemyAreas;
 
         for (int i = 0; i < hostagesCount; i++)
@@ -108,7 +125,23 @@ public class WorldStateManager : MonoBehaviour
 
     private void SpawnEnemyUnits()
     {
-        int enemyCount = Random.Range(2, 5);
+        int upperBound = 0;
+        int lowerBound = 0;
+
+        //normal
+        if (SettingsManager.Instance.Settings.Difficulty == 1)
+        {
+            upperBound = 3;
+            lowerBound = 2;
+        }
+        //hard
+        else
+        {
+            upperBound = 5;
+            lowerBound = 3;
+        }
+
+        int enemyCount = Random.Range(lowerBound, upperBound);
         Bounds[] controlledAreas = GameManager.Instance.EnemyAreas;
 
         for (int i = 0; i < enemyCount; i++)

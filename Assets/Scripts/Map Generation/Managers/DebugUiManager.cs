@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.PlayerLoop;
 
 public class DebugUiManager : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class DebugUiManager : MonoBehaviour
         if (Instance == null) Instance = this;
         _text = new Dictionary<int, string>();
     }
+
+    
 
     private void Refresh()
     {
@@ -45,6 +48,7 @@ public class DebugUiManager : MonoBehaviour
     private void Update()
     {
         if (_RequiresRefresh) Refresh();
+        AddDebugText(GetHashCode(), "fps: " + (1f / Time.unscaledDeltaTime).ToString());
     }
 
 

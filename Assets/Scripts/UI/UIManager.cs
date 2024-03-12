@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 
 public class UIManager : MonoBehaviour
@@ -41,10 +42,20 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject _statisticScreenPrefab;
 
+    [SerializeField]
+    private GameObject _settingsScreen;
+
+    private GameObject _settingInstance;
+
+    private bool _isSettingsEnabled = false;
+
     private RectTransform _controlParentRect;
 
     private Dictionary<int, SelectedPanel> _unitUISlots;
     private int _enabledSlotsCount = 0;
+
+    private float _keyLockTime = .5f;
+    private float _sinceLastLock = 0f;
 
     public bool IsCommandMenuOpen {  get; private set; }
 
@@ -66,20 +77,26 @@ public class UIManager : MonoBehaviour
         _controlParentRect = _controlPanelParent.GetComponent<RectTransform>();
         _lastOpenPosition = Vector2.zero;
         _taskCount.text = "0/" + GameManager.Instance.HostageCount;
-       
+
+        ToggleHUD();
     }
 
     private void OnEnable()
     {
         GameManager.Instance.OnHostageRescued += UpdateRescuedCount;
         GameManager.Instance.OnGameEnd += DisplayStatScreen;
+        SettingsManager.Instance.OnSettingChanged += ToggleHUD;
     }
+
 
     private void OnDisable()
     {
         GameManager.Instance.OnHostageRescued -= UpdateRescuedCount;
         GameManager.Instance.OnGameEnd += DisplayStatScreen;
+        SettingsManager.Instance.OnSettingChanged -= ToggleHUD;
     }
+
+    private void ToggleHUD() => _controls.SetActive(SettingsManager.Instance.Settings.ShowHUD);
 
     private void Awake()
     {
@@ -111,6 +128,8 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (_sinceLastLock < _keyLockTime + 1f) _sinceLastLock += Time.deltaTime;
+
         if (!soy)
         {
             UpdateRescuedCount();
@@ -123,22 +142,50 @@ public class UIManager : MonoBehaviour
             //CloseCommandMenu();
         }
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && _isSettingsEnabled == false)
         {
             _selectorEndPosition = Input.mousePosition;
             UpdateSelectorBoxVisual();
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && _isSettingsEnabled == false)
         {
             _selectorStartPosition = Vector2.zero;
             _selectorEndPosition = Vector2.zero;
             UpdateSelectorBoxVisual();
         }
 
+        if (Input.GetKey(KeyCode.Escape) && _sinceLastLock >= _keyLockTime)
+        {
+            _sinceLastLock = 0;
+            _isSettingsEnabled = !_isSettingsEnabled;
+            ToggleSettings(_isSettingsEnabled);
+        }
+
         if (!IsCommandMenuOpen) return;
 
         if (Vector2.Distance(_lastOpenPosition, Input.mousePosition) > 200f) CloseCommandMenu();
+    }
+
+    private void ToggleSettings(bool toggle)
+    {
+        if (toggle)
+        {
+            _settingInstance = Instantiate(_settingsScreen, Camera.main.transform.position + new Vector3(0, 5f, 0f), Quaternion.identity);
+            PauseManager.Instance.Pause();
+        }
+        else
+        {
+            Destroy(_settingInstance);
+            PauseManager.Instance.UnPause();
+        }
+        
+        if (SettingsManager.Instance.Settings.ShowHUD)
+        {
+            _controls.SetActive(!toggle);
+        }
+
+        _taskText.transform.parent.gameObject.SetActive(!toggle);
     }
 
     private void UpdateSelectorBoxVisual()

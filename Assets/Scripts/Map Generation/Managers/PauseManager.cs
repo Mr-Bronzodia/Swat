@@ -49,7 +49,7 @@ public class PauseManager : MonoBehaviour
         GameManager.Instance.OnGameEnd -= FinalPause;
     }
 
-    private void Pause()
+    public void Pause()
     {
         OnPauseStart?.Invoke();
         _desiredVignetteAmount = .9f;
@@ -63,7 +63,7 @@ public class PauseManager : MonoBehaviour
         _processUpdates = false;
     }
 
-    private void UnPause()
+    public void UnPause()
     {
         OnPauseEnd?.Invoke();
         _desiredVignetteAmount = .1f;

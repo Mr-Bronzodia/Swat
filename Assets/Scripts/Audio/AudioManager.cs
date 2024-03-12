@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
@@ -8,6 +9,9 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField]
     private AudioSource _audioSourcePrefab;
+
+    [SerializeField]
+    private AudioMixer _audioMixer;
 
     private float _effectVolume = 1.0f;
 
@@ -20,9 +24,23 @@ public class AudioManager : MonoBehaviour
         else
         {
             Instance = this;
-
+            SetVolume();
+            Debug.Log(Mathf.Log(SettingsManager.Instance.Settings.Volume) * 20);
         }
     }
+
+    private void OnEnable()
+    {
+        SettingsManager.Instance.OnSettingChanged += SetVolume;
+    }
+
+    private void OnDisable()
+    {
+        SettingsManager.Instance.OnSettingChanged -= SetVolume;
+    }
+
+    private void SetVolume() => _audioMixer.SetFloat("MasterVolume", Mathf.Log(SettingsManager.Instance.Settings.Volume) * 20);
+
 
     public void PlaySoundAtPoint(AudioClip clip, Vector3 point)
     {

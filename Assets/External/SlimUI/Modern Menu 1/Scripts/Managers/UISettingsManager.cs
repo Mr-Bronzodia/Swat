@@ -155,12 +155,12 @@ namespace SlimUI.ModernMenu{
 			}
 
 			// check mouse inverse
-			if(PlayerPrefs.GetInt("Inverted")==0){
-				invertmousetext.GetComponent<TMP_Text>().text = "off";
-			}
-			else if(PlayerPrefs.GetInt("Inverted")==1){
-				invertmousetext.GetComponent<TMP_Text>().text = "on";
-			}
+			//if(PlayerPrefs.GetInt("Inverted")==0){
+			//	invertmousetext.GetComponent<TMP_Text>().text = "off";
+			//}
+			//else if(PlayerPrefs.GetInt("Inverted")==1){
+			//	invertmousetext.GetComponent<TMP_Text>().text = "on";
+			//}
 
 			// check motion blur
 			if(PlayerPrefs.GetInt("MotionBlur")==0){
@@ -408,6 +408,7 @@ namespace SlimUI.ModernMenu{
 		public void TexturesLow (){
 			PlayerPrefs.SetInt("Textures",0);
 			QualitySettings.globalTextureMipmapLimit = 2;
+			QualitySettings.SetQualityLevel(0);
 			texturelowtextLINE.gameObject.SetActive(true);
 			texturemedtextLINE.gameObject.SetActive(false);
 			texturehightextLINE.gameObject.SetActive(false);
@@ -416,7 +417,8 @@ namespace SlimUI.ModernMenu{
 		public void TexturesMed (){
 			PlayerPrefs.SetInt("Textures",1);
 			QualitySettings.globalTextureMipmapLimit = 1;
-			texturelowtextLINE.gameObject.SetActive(false);
+            QualitySettings.SetQualityLevel(1);
+            texturelowtextLINE.gameObject.SetActive(false);
 			texturemedtextLINE.gameObject.SetActive(true);
 			texturehightextLINE.gameObject.SetActive(false);
 		}
@@ -424,7 +426,8 @@ namespace SlimUI.ModernMenu{
 		public void TexturesHigh (){
 			PlayerPrefs.SetInt("Textures",2);
 			QualitySettings.globalTextureMipmapLimit = 0;
-			texturelowtextLINE.gameObject.SetActive(false);
+            QualitySettings.SetQualityLevel(2);
+            texturelowtextLINE.gameObject.SetActive(false);
 			texturemedtextLINE.gameObject.SetActive(false);
 			texturehightextLINE.gameObject.SetActive(true);
 		}
