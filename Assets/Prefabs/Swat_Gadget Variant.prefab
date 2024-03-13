@@ -291,6 +291,11 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 4f0541d4d40b6a541868bd3f49459868, type: 2}
     - target: {fileID: 8111484583747880791, guid: a2db8f3ca9253874db205e243de70492,
         type: 3}
+      propertyPath: _viewRadius
+      value: 23
+      objectReference: {fileID: 0}
+    - target: {fileID: 8111484583747880791, guid: a2db8f3ca9253874db205e243de70492,
+        type: 3}
       propertyPath: _shouldDrawViewMesh
       value: 1
       objectReference: {fileID: 0}

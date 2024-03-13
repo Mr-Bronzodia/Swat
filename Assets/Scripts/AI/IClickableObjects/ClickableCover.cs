@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using static UnityEngine.UI.CanvasScaler;
 
 public class ClickableCover : MonoBehaviour, IClickable
 {
@@ -8,7 +10,38 @@ public class ClickableCover : MonoBehaviour, IClickable
     public List<Command> GetAvailableCommands(Unit unit)
     {
 
-        return new List<Command>() { new TakeCoverCommand(unit, gameObject.transform.position) };
+        NavMeshHit hit;
+        Vector3 nearestPoint;
+
+        Vector3 toCoverDir = (gameObject.transform.position - unit.BlackBoard.Position).normalized;
+
+        if (NavMesh.SamplePosition(gameObject.transform.position - 1f * toCoverDir, out hit, .5f, NavMesh.AllAreas))
+        {
+            nearestPoint = hit.position;
+        }
+        else
+        {
+            Debug.Log("Cant find near point in take cover command terminating eraly");
+            nearestPoint = unit.BlackBoard.Position;
+        }
+
+
+        Vector3 nearsEdge;
+        if (NavMesh.FindClosestEdge(nearestPoint, out hit, NavMesh.AllAreas))
+        {
+            nearsEdge = hit.position;
+        }
+        else
+        {
+            Debug.Log("Cant find near edge in take cover terminating early");
+            nearsEdge = unit.BlackBoard.Position;
+        }
+
+        MoveCommand moveToCover = new MoveCommand(unit, nearsEdge);
+        TakeCoverCommand takeCover = new TakeCoverCommand(unit, nearsEdge);
+        SequencerCommand takeCoverSeq = new SequencerCommand(unit, "Take Cover",new List<Command> { moveToCover, takeCover});
+
+        return new List<Command>() { takeCoverSeq };
     }
 
     public List<Command> GetAvailableCommands(List<Unit> units)
@@ -37,14 +70,20 @@ public class ClickableCover : MonoBehaviour, IClickable
 
         Vector3 nextSpot = gameObject.transform.position - (units.Count / 2f) * directionVector;
         float i = 1;
+        List<Command> teamTakeCover = new List<Command>();
         foreach (Unit unit in units)
         {
             nextSpot = nextSpot + i * directionVector;
+            MoveCommand moveToCover = new MoveCommand(unit, nextSpot);
             TakeCoverCommand takeCover = new TakeCoverCommand(unit, nextSpot);
-
-            commands.Add(takeCover);
+            teamTakeCover.Add(moveToCover);
+            teamTakeCover.Add(takeCover);
             i += .1f;
         }
+
+        SequencerCommand takeCoverSeq = new SequencerCommand(units[0], "Take Cover", teamTakeCover);
+
+        commands.Add(takeCoverSeq);
 
         return commands;
     }

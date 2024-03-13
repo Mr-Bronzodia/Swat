@@ -19,7 +19,7 @@ public class ShootCommand : Command
     {
         if (_terminateEarly) return true; 
 
-        return Unit.BlackBoard.Weapon.RemainingBullets == 0;
+        return Unit.BlackBoard.Weapon.RemainingBullets == 0 || _other.BlackBoard.CurrentHealth <= 0;
     }
 
     public override string ToUIString()
@@ -34,6 +34,7 @@ public class ShootCommand : Command
         _currentSotDelay += Time.deltaTime;
         if (_currentSotDelay > _delayPerShot )
         {
+            Unit.RotateTowardPoint(_other.BlackBoard.Position);
             Unit.BlackBoard.Weapon.Shoot((_other.BlackBoard.Position - Unit.BlackBoard.Position).normalized, Unit.BlackBoard.Accuracy); 
             UIManager.Instance.UpdateAmmoUIAmmoCount(Unit.GetHashCode(), Unit.BlackBoard.Weapon.MagazineSize, Unit.BlackBoard.Weapon.RemainingBullets);
             _currentSotDelay = 0;

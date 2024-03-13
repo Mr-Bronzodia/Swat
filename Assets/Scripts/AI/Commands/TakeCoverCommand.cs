@@ -6,12 +6,12 @@ using static UnityEngine.GraphicsBuffer;
 
 public class TakeCoverCommand : Command
 {
-    Vector3 _initialPosition;
+    Vector3 _coverPoint;
     bool _terminateOnNextUpdate = false;
 
-    public TakeCoverCommand(Unit unit, Vector3 initialPosition) : base(unit)
+    public TakeCoverCommand(Unit unit, Vector3 _coverPoint) : base(unit)
     {
-        _initialPosition = initialPosition;
+        this._coverPoint = _coverPoint;
     }
 
     public override bool CheckCommandCompleted()
@@ -35,37 +35,10 @@ public class TakeCoverCommand : Command
 
     protected override void OnCommandBeginExecute()
     {
-
-        NavMeshHit hit;
-        Vector3 nearestPoint;
-
-        Vector3 toCoverDir = (_initialPosition - Unit.BlackBoard.Position).normalized;
-
-        if (NavMesh.SamplePosition(_initialPosition - 1f * toCoverDir, out hit, .5f, NavMesh.AllAreas))
-        {
-            nearestPoint = hit.position;
-        }
-        else
-        {
-            Debug.Log("Cant find near point in take cover command terminating eraly");
-            nearestPoint = Unit.BlackBoard.Position;
-            _terminateOnNextUpdate = true;
-        }
-
-        
-        Vector3 nearsEdge;
-        if (NavMesh.FindClosestEdge(nearestPoint, out hit, NavMesh.AllAreas))
-        {
-            nearsEdge = hit.position;
-        }
-        else
-        {
-            Debug.Log("Cant find near edge in take cover terminating early");
-            nearsEdge = Unit.BlackBoard.Position;
-            _terminateOnNextUpdate = true;
-        }
-
-        Unit.NavAgent.SetDestination(nearsEdge);
+        Vector3 unitToWallDir = Vector3.Cross(_coverPoint, Unit.transform.forward);
+        Debug.DrawRay(Unit.BlackBoard.Position, unitToWallDir * 2f);
+        Unit.transform.forward = unitToWallDir;
+        //Debug.Break();
     }
 
     protected override void OnCommandEndExecute()

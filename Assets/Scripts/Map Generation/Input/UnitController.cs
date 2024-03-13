@@ -165,7 +165,10 @@ public class UnitController : MonoBehaviour
 
             foreach (Command command in item.Value)
             {
-                if (item.Key == typeof(StopCommand)) button.onClick.AddListener(() => command.Unit.ScheduleHighCommand(command));
+                //Hardcoded which commands should be high priority. Bad but not enoguh time left
+                if (item.Key == typeof(StopCommand) || item.Key == typeof(ShootCommand)) { 
+                    button.onClick.AddListener(() => command.Unit.ScheduleHighCommand(command)); 
+                }
                 else button.onClick.AddListener(() => command.Unit.ScheduleNormalCommand(command));
             }
 

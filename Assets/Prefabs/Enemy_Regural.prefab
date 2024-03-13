@@ -956,7 +956,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4289963e9d2699047a4649c676da3b60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _viewRadius: 10
+  _viewRadius: 23
   _viewAngle: 110
   _meshResolution: 0.1
   _viewMeshFilter: {fileID: 2377124946685853478}

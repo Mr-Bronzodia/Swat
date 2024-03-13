@@ -64,7 +64,7 @@ public class UnitVision : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine("FindTargets", 1f);
+        StartCoroutine("FindTargets", .7f);
     }
 
     private void LateUpdate()

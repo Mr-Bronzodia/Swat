@@ -77,7 +77,11 @@ public class AnimationController : MonoBehaviour
         if (commandType == typeof(SurrenderCommand)) _animator.SetBool("Kneeling", true);
         if (commandType == typeof(IntimidateCommand)) _animator.SetBool("Intimidate", true);
         if (commandType == typeof(NeutralizeEnemyCommand)) _animator.SetTrigger("Neutralize");
-        if (commandType == typeof(NeutralizedCommand)) _animator.SetTrigger("Death");
+        if (commandType == typeof(NeutralizedCommand))
+        {
+            _animator.SetLayerWeight(1, 0f);
+            _animator.SetTrigger("Death");
+        }
         if (commandType == typeof(ReloadCommand)) _animator.SetTrigger("Reload");
         if (commandType == typeof(ShootCommand)) _animator.SetBool("Shooting", true);
     }
