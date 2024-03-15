@@ -58,6 +58,7 @@ public class UnitController : MonoBehaviour
     private void AddUnitToSelected(Unit unit)
     {
         if (_selectedUnit.Contains(unit)) return;
+        if (unit.BlackBoard.CurrentHealth <= 0) return;
 
         _selectedUnit.Add(unit);
         unit.SetSelectionVisual(true);

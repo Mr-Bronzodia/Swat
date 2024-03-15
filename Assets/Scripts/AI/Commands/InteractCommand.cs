@@ -37,7 +37,7 @@ public class InteractCommand : Command
 
     protected override void OnCommandBeginExecute()
     {
-        
+        Unit.RotateTowardPoint(_interactionLocation);
     }
 
     protected override void OnCommandEndExecute()

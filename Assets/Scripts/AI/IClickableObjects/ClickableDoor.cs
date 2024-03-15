@@ -75,14 +75,20 @@ public class ClickableDoor : MonoBehaviour, IClickable, Iinteract
 
         Vector3 nextSpot = gameObject.transform.position + 1.2f * directionVector;
 
+
         float margin = 1;
+        List<Command> teamMove = new List<Command>();
         for (int i = 1; i < units.Count; i++)
         {
             nextSpot = nextSpot + margin * directionVector;
+            MoveCommand unitMove = new MoveCommand(units[i], nextSpot);
             TakeCoverCommand takeCover = new TakeCoverCommand(units[i], nextSpot);
-            commands.Add(takeCover);
+            teamMove.Add(unitMove);
+            teamMove.Add(takeCover);
             margin += .5f;
         }
+        SequencerCommand teamMoveToCover = new SequencerCommand(lead,"Take Cover", teamMove);
+        commands.Add(teamMoveToCover);
 
         MoveCommand moveToDoor = new MoveCommand(lead, gameObject.transform.position);
         commands.Add(moveToDoor);

@@ -35,10 +35,8 @@ public class TakeCoverCommand : Command
 
     protected override void OnCommandBeginExecute()
     {
-        Vector3 unitToWallDir = Vector3.Cross(_coverPoint, Unit.transform.forward);
-        Debug.DrawRay(Unit.BlackBoard.Position, unitToWallDir * 2f);
-        Unit.transform.forward = unitToWallDir;
-        //Debug.Break();
+        Vector3 unitToWallDir = (_coverPoint - Unit.transform.forward).normalized;
+        Unit.RotateTowardPoint(unitToWallDir + unitToWallDir);
     }
 
     protected override void OnCommandEndExecute()
