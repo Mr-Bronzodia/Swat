@@ -189,7 +189,12 @@ public class UnitController : MonoBehaviour
 
             Cursor.visible = true;
             _colorLookupEffect.contribution.value = _defaultLUTContribution;
-            _revealAllInstance.SetActive(false);
+
+            for (int i = 0; i < UnitManager.Instance.GetTeamSize(ETeam.Red); i++)
+            {
+                UnitManager.Instance.GetUnitAtIndex(i, ETeam.Red).ToggleVisible(false);
+            }
+
             _droneInstance.SetActive(false);
         }
         else
@@ -199,7 +204,12 @@ public class UnitController : MonoBehaviour
             _colorLookupEffect.texture.value = _heatSignatureTex;
             _colorLookupEffect.contribution.value = 1f;
             Cursor.visible = false;
-            _revealAllInstance.SetActive(true);
+
+            for (int i = 0; i < UnitManager.Instance.GetTeamSize(ETeam.Red); i++)
+            {
+                UnitManager.Instance.GetUnitAtIndex(i, ETeam.Red).ToggleVisible(true);
+            }
+
             _droneInstance.SetActive(true);
         }
     }
