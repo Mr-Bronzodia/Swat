@@ -229,11 +229,11 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
         else if (BlackBoard.Team == ETeam.Hostage)
         {
             FollowCommand followTeam = new FollowCommand(this, other);
-            commands.Add(followTeam);
 
-            StopCommand stopHostage = new StopCommand(this, .1f);
-            commands.Add(stopHostage);
+            StopCommand stopHostage = new StopCommand(this, .1f, "Free");
 
+            if (BlackBoard.CurrentCommand.GetType() != typeof(SurrenderCommand)) commands.Add(followTeam);
+            else commands.Add(stopHostage);
         }
 
         return commands;

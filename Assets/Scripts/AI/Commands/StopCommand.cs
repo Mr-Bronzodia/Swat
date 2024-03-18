@@ -7,10 +7,12 @@ public class StopCommand : Command
     protected bool _isDone = false;
     protected float _timeToElapse;
     protected float _currentTimeElapsed = 0;
+    protected string _uiText = "Stop";
 
-    public StopCommand(Unit unit, float time) : base(unit)
+    public StopCommand(Unit unit, float time, string uiText = "Stop") : base(unit)
     {
         _timeToElapse = time;
+        _uiText = uiText;
     }
 
     public override bool CheckCommandCompleted()
@@ -20,7 +22,7 @@ public class StopCommand : Command
 
     public override string ToUIString()
     {
-        return "Stop";
+        return _uiText;
     }
 
     public override void Update()
