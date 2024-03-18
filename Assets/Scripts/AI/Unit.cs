@@ -32,11 +32,14 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
     [SerializeField]
     private AudioClip[] _footstepSound;
 
+    private SkinnedMeshRenderer _skinnedMeshRenderer;
+
 
     private void Start()
     {
         if (BlackBoard.Team == GameManager.Instance.PlayerTeam) UIManager.Instance.RegisterUISlot(GetHashCode());
         if (BlackBoard.Team == GameManager.Instance.PlayerTeam) UIManager.Instance.UpdateAmmoUIAmmoCount(GetHashCode(), BlackBoard.Weapon.MagazineSize, BlackBoard.Weapon.RemainingBullets);
+        if (BlackBoard.Team != GameManager.Instance.PlayerTeam) ToggleVisible(false);
 
         if (!_isHostage) return;
 
@@ -47,9 +50,10 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
 
     private void OnEnable()
     {
-
         BlackBoard = gameObject.GetComponent<UnitBlackBoard>();
         NavAgent = gameObject.GetComponent<NavMeshAgent>();
+
+        _skinnedMeshRenderer = gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
 
         UnitManager.Instance.AddUnit(this);
 
@@ -58,6 +62,11 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
 
         _sinceLastAIUpdate = 0;
     }
+
+    public void ToggleVisible(bool visible)
+    {
+        _skinnedMeshRenderer.enabled = visible;
+    } 
 
     private void OnDisable()
     {

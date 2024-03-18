@@ -137,12 +137,23 @@ public class CameraMovement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.F))
         {
-            
             if (_nextZoom.y - _zoomAmount.y < _maxZoomAmount.y && _nextZoom.z - _zoomAmount.z > _maxZoomAmount.z) _nextZoom -= (_zoomAmount * _zoomSpeed);
         }
 
+        if (Input.mouseScrollDelta.y != 0)
+        {
+            //if (_nextZoom.y + _zoomAmount.y < _maxZoomAmount.y && _nextZoom.z + _zoomAmount.z > _maxZoomAmount.z) _nextZoom += (((Input.mouseScrollDelta.y * _zoomAmount) * 10f) * _zoomSpeed);
+            //_nextZoom = Vector3.Max(_nextZoom += (((Input.mouseScrollDelta.y * _zoomAmount) * 10f) * _zoomSpeed), _maxZoomAmount);
+            //_nextZoom = Vector3.Min(_nextZoom += (((Input.mouseScrollDelta.y * _zoomAmount) * 10f) * _zoomSpeed), _minZoomAmount);
+
+            //Vector3 zoomDelta = _nextZoom + (((Input.mouseScrollDelta.y * _zoomAmount) * 10f) * _zoomSpeed);
+
+            //if ((zoomDelta.y > _minZoomAmount.y && zoomDelta.y < _maxZoomAmount.y) && (zoomDelta.z > _minZoomAmount.z && zoomDelta.z < _maxZoomAmount.z)) _nextZoom = zoomDelta;
+
+        }
+
         transform.position = Vector3.Lerp(transform.position, _nextPosition, Time.deltaTime * _movementTime);
-        transform.rotation = Quaternion.Lerp(transform.rotation, _nextRotation, Time.deltaTime * _movementTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, _nextRotation, Time.deltaTime * _movementTime);
         _cameraTransform.localPosition = Vector3.Lerp(_cameraTransform.localPosition, _nextZoom, Time.deltaTime * _movementTime);
     }
 }

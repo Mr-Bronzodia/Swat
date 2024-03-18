@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using static UnityEngine.UI.CanvasScaler;
 
 public class UnitVision : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class UnitVision : MonoBehaviour
     public float ViewRadius { get => _viewRadius; }
     public float ViewAngle { get => _viewAngle; }
     public List<Unit> _visibleTargetsList;
+    public List<Unit> _showTargetsList;
 
 
     private struct ViewCastInfo
@@ -59,12 +61,13 @@ public class UnitVision : MonoBehaviour
         _obstacleMask = LayerMask.GetMask("Obstacle");
 
         _visibleTargetsList = new List<Unit>();
+        _showTargetsList = new List<Unit>();
         _thisUnit = gameObject.GetComponent<Unit>();
     }
 
     private void Start()
     {
-        StartCoroutine("FindTargets", .7f);
+        StartCoroutine("FindTargets", .2f);
     }
 
     private void LateUpdate()
@@ -77,6 +80,7 @@ public class UnitVision : MonoBehaviour
     {
         while (true)
         {
+            if (_thisUnit.BlackBoard.CurrentHealth <= 0) yield return new WaitForSeconds(1000);
             yield return new WaitForSeconds(delay);
             FindTargetsInView();
         }
@@ -85,6 +89,16 @@ public class UnitVision : MonoBehaviour
     private void FindTargetsInView()
     {
         _visibleTargetsList.Clear();
+
+        ETeam playerTeam = GameManager.Instance.PlayerTeam;
+
+        foreach (Unit unit in _showTargetsList)
+        {
+            if (unit.IsHostage) continue;
+            if (unit.BlackBoard.Team != GameManager.Instance.PlayerTeam) unit.ToggleVisible(false);
+        }
+
+        _showTargetsList.Clear();
 
         Collider[] targetsInRadius = Physics.OverlapSphere(transform.position, _viewRadius, _characterMask);
 
@@ -100,14 +114,23 @@ public class UnitVision : MonoBehaviour
             if (Physics.Raycast(transform.position, directionToTarget, distanceToTarget, _obstacleMask)) continue;
 
             Unit t = targetsInRadius[i].GetComponent<Unit>();
-
             if (t == _thisUnit) continue;
+
+            if (_thisUnit.BlackBoard.Team == playerTeam && t.BlackBoard.Team != playerTeam) _showTargetsList.Add(t);
+
+            foreach (Unit unit in _showTargetsList)
+            {
+                unit.ToggleVisible(true);
+            }
 
             if (t.IsHostage) continue;
 
             if (_thisUnit.BlackBoard.Team == t.BlackBoard.Team) continue;
 
-            _visibleTargetsList.Add(targetsInRadius[i].GetComponent<Unit>());
+            _visibleTargetsList.Add(t);
+
+
+
         }
 
     }

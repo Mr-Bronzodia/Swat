@@ -204,6 +204,15 @@ public class UnitController : MonoBehaviour
         }
     }
 
+    private void SelectAllUnits()
+    {
+        for (int i = 0; i < UnitManager.Instance.GetTeamSize(GameManager.Instance.PlayerTeam); i++)
+        {
+            Unit unit = UnitManager.Instance.GetUnitAtIndex(i, GameManager.Instance.PlayerTeam);
+
+            AddUnitToSelected(unit);
+        }
+    }
     
 
     private void Update()
@@ -214,6 +223,12 @@ public class UnitController : MonoBehaviour
         {
             _sinceLastLock = 0;
             ToggleDroneView();
+        }
+
+        if (Input.GetKey(KeyCode.G) && _sinceLastLock >= _keyLockTime)
+        {
+            _sinceLastLock = 0;
+            SelectAllUnits();
         }
 
         if (_isUsingDrone) return;

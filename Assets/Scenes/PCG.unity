@@ -1708,6 +1708,7 @@ MonoBehaviour:
   - {fileID: 8293602647371863425, guid: 5827272fef1b6594d8451b18859e5b61, type: 3}
   _hostagePrefabs:
   - {fileID: 3130902449725478367, guid: 0cb10d1074c00b04e9a4263f5e7dea2d, type: 3}
+  _spawnEntities: 1
 --- !u!1 &796597073
 GameObject:
   m_ObjectHideFlags: 0

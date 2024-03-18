@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -23,6 +24,9 @@ public class WorldStateManager : MonoBehaviour
 
     public static WorldStateManager Instance;
     public Action<EWorldState> OnWorldStateChanged;
+
+    [SerializeField]
+    private bool _spawnEntities;
 
     private void Awake()
     {
@@ -159,7 +163,7 @@ public class WorldStateManager : MonoBehaviour
 
         if (_subscribersCompleted == _subscribers && _worldState == EWorldState.PlotsGenerated) UpdateWorldState(EWorldState.ReadyToGenerateNavMesh);
 
-        if (_worldState == EWorldState.NavMeshGenerated)
+        if (_worldState == EWorldState.NavMeshGenerated && _spawnEntities)
         {
             SpawnPlayerUnits();
             SpawnEnemyUnits();

@@ -225,7 +225,7 @@ PrefabInstance:
     - target: {fileID: 8111484583747880791, guid: a2db8f3ca9253874db205e243de70492,
         type: 3}
       propertyPath: _shouldDrawViewMesh
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8484906896741351414, guid: a2db8f3ca9253874db205e243de70492,
         type: 3}
