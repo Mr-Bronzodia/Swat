@@ -141,7 +141,9 @@ public class InteriorGenerator : MonoBehaviour, ISubscriber
             Gizmos.color = Color.white;
 
             Vector3 offset = new Vector3(-0.7f, 0, 0.5f);
-            //if (_showRoomNames) Handles.Label(room.Bounds.center + offset, room.RoomType.ToString());
+#if UNITY_EDITOR
+            if (_showRoomNames) Handles.Label(room.Bounds.center + offset, room.RoomType.ToString());
+#endif
 
             Gizmos.color = Color.blue;
 

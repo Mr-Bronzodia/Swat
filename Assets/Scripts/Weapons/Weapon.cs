@@ -41,6 +41,7 @@ public class Weapon : MonoBehaviour
     private ObjectPool<VisualEffect> _impactPool;
     private ObjectPool<VisualEffect> _flashPool;
     private ObjectPool<TrailRenderer> _trailPool;
+    private MeshRenderer _weaponMeshRenderer;
 
     public float Recoil { get => _recoil;  }
     public float EffectiveRange { get => _effectiveRange; }
@@ -77,6 +78,8 @@ public class Weapon : MonoBehaviour
             TrailRenderer instance = Instantiate(_trailEffect, _barrel);
             _trailPool.Release(instance);
         }
+
+        _weaponMeshRenderer = gameObject.GetComponent<MeshRenderer>();
     }
 
     private VisualEffect CreateImpactVFX()
@@ -131,6 +134,11 @@ public class Weapon : MonoBehaviour
     private void OnDestroyTrail(TrailRenderer trail)
     {
         Destroy(trail.gameObject);
+    }
+
+    public void SetVisible(bool visible)
+    {
+        _weaponMeshRenderer.enabled = visible;
     }
 
     private IEnumerator ReleaseVFX(float time, VisualEffect toReturn, bool isImpact)

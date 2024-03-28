@@ -80,7 +80,16 @@ public class UnitVision : MonoBehaviour
     {
         while (true)
         {
-            if (_thisUnit.BlackBoard.CurrentHealth <= 0) yield return new WaitForSeconds(1000);
+            if (_thisUnit.BlackBoard.CurrentHealth <= 0)
+            {
+                foreach (Unit target in _visibleTargetsList)
+                {
+                    if (target.BlackBoard.Team == GameManager.Instance.PlayerTeam) continue;
+
+                    target.ToggleVisible(false);
+                }
+                yield return new WaitForSeconds(1000);
+            }
             yield return new WaitForSeconds(delay);
             FindTargetsInView();
         }

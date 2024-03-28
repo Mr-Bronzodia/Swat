@@ -3045,7 +3045,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1512868479
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4346,6 +4346,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 540589792085500431, guid: f96ec8f35f0dd684eae7494d52cba514,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 540589792085500431, guid: f96ec8f35f0dd684eae7494d52cba514,
+        type: 3}
       propertyPath: _minPlotSize.x
       value: 2
       objectReference: {fileID: 0}
@@ -4353,6 +4358,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _minPlotSize.y
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1381359375739968101, guid: f96ec8f35f0dd684eae7494d52cba514,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1381359375739968101, guid: f96ec8f35f0dd684eae7494d52cba514,
         type: 3}
@@ -4428,6 +4438,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Map
+      objectReference: {fileID: 0}
+    - target: {fileID: 6627197770741746523, guid: f96ec8f35f0dd684eae7494d52cba514,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8795903819005131112, guid: f96ec8f35f0dd684eae7494d52cba514,
         type: 3}

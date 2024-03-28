@@ -66,6 +66,10 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
     public void ToggleVisible(bool visible)
     {
         _skinnedMeshRenderer.enabled = visible;
+
+        if (BlackBoard.Weapon == null) return;
+
+        BlackBoard.Weapon.SetVisible(visible);
     } 
 
     private void OnDisable()
@@ -196,7 +200,7 @@ public class Unit : MonoBehaviour, IClickable, IDamageable
         if (BlackBoard.Team == ETeam.Blue)
         {
             FollowCommand followCommand = new FollowCommand(other, this);
-            commands.Add(followCommand);
+            if (other != this) commands.Add(followCommand);
 
             if (other == this)
             {
