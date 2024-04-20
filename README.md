@@ -9,18 +9,17 @@ Covert Liberation is a real-time strategy (RTS) game that challenges players to 
 **Procedural Generation:** Experience unique missions with procedurally generated maps, ensuring each playthrough offers fresh challenges and opportunities for exploration.<br />
 **Fog of War:** Navigate through uncertainty with the fog of war mechanic, requiring players to rely on reconnaissance and intelligence gathering to uncover enemy movements and positions.<br />
 **Drone Vision:** Gain a tactical advantage with drone vision, allowing players to scout ahead, identify threats, and plan strategic entry points into enemy territory.<br />
-**Dynamic Environments:** Immerse yourself in dynamic environments filled with interactive elements, destructible objects, and strategic vantage points.<br />
 
 ## Implementation
 
 ### Wave Function Collapse 
-The Wave Function Collapse algorithm is seamlessly integrated into Covert Liberation to dynamically generate diverse environments. Implemented in C#, this algorithm constructs road networks, building layouts, and other environmental features, ensuring each playthrough offers unique and immersive terrain.
+The Wave Function Collapse algorithm is seamlessly integrated into Covert Liberation to dynamically generate diverse environments. Implemented in C#, this algorithm constructs road networks and other environmental features, ensuring each playthrough offers unique and immersive terrain.
 
 ### Squarified Treemap
-Covert Liberation utilizes the Squarified Treemap algorithm for generating detailed house interiors. Inspired by the paper "Constrained procedural floor plan generation for game environments," this algorithm dynamically creates realistic interior layouts based on predefined parameters and constraints, enriching the player's experience.
+Covert Liberation utilizes the Squarified Treemap algorithm for generating  house interiors. Inspired by the paper "Constrained procedural floor plan generation for game environments," this algorithm dynamically creates realistic interior layouts based on predefined parameters and constraints, enriching the player's experience.
 
 ### Command Pattern for Unit Control
-In Covert Liberation, the Command Pattern enhances unit control and interaction within the game. Implemented using C#, this design pattern decouples command senders from receivers, facilitating flexible and extensible command execution. By employing the Command Pattern, the game ensures smooth unit movement, action execution, and interaction with the game environment, enhancing gameplay dynamics and player agency.
+In Covert Liberation, the Command Pattern enhances unit control and interaction within the game.By employing the command pattern, the game ensures smooth unit movement, action execution, and interaction with the game environment, enhancing gameplay dynamics and player agency.
 
 ## Gameplay Demo
 Video demonstrations showcasing gameplay mechanics, mission scenarios, and strategic decision-making.
