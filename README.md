@@ -5,11 +5,11 @@ Welcome to the GitHub demonstration page for Covert Liberation!
 Covert Liberation is a real-time strategy (RTS) game that challenges players to lead a team of operatives through high-stakes covert missions. Set in a dynamic and immersive environment, players must navigate through enemy territory, gather intelligence, and execute strategic maneuvers to achieve mission objectives.
 
 ## Key Features
-**Tactical Gameplay:** Command a team of operatives with distinct abilities and roles, utilizing strategic planning and quick decision-making to outmaneuver enemy forces.
-**Procedural Generation:** Experience unique missions with procedurally generated maps, ensuring each playthrough offers fresh challenges and opportunities for exploration.
-**Fog of War:** Navigate through uncertainty with the fog of war mechanic, requiring players to rely on reconnaissance and intelligence gathering to uncover enemy movements and positions.
-**Drone Vision:** Gain a tactical advantage with drone vision, allowing players to scout ahead, identify threats, and plan strategic entry points into enemy territory.
-**Dynamic Environments:** Immerse yourself in dynamic environments filled with interactive elements, destructible objects, and strategic vantage points.
+**Tactical Gameplay:** Command a team of operatives with distinct abilities and roles, utilizing strategic planning and quick decision-making to outmaneuver enemy forces.<br />
+**Procedural Generation:** Experience unique missions with procedurally generated maps, ensuring each playthrough offers fresh challenges and opportunities for exploration.<br />
+**Fog of War:** Navigate through uncertainty with the fog of war mechanic, requiring players to rely on reconnaissance and intelligence gathering to uncover enemy movements and positions.<br />
+**Drone Vision:** Gain a tactical advantage with drone vision, allowing players to scout ahead, identify threats, and plan strategic entry points into enemy territory.<br />
+**Dynamic Environments:** Immerse yourself in dynamic environments filled with interactive elements, destructible objects, and strategic vantage points.<br />
 
 ## Implementation
 
