@@ -14,17 +14,17 @@ Covert Liberation is a real-time strategy (RTS) game that challenges players to 
 
 ### Wave Function Collapse 
 The Wave Function Collapse algorithm is seamlessly integrated into Covert Liberation to dynamically generate diverse environments. Implemented in C#, this algorithm constructs road networks and other environmental features, ensuring each playthrough offers unique and immersive terrain.
+![map](https://github.com/Mr-Bronzodia/Swat/assets/81040884/799105b1-63f5-4df1-86e5-503a854d25ab)
 
 ### Squarified Treemap
 Covert Liberation utilizes the Squarified Treemap algorithm for generating  house interiors. Inspired by the paper "Constrained procedural floor plan generation for game environments," this algorithm dynamically creates realistic interior layouts based on predefined parameters and constraints, enriching the player's experience.
+![house](https://github.com/Mr-Bronzodia/Swat/assets/81040884/856b5801-f813-4dce-866c-2eb5fbc323ab)
 
 ### Command Pattern for Unit Control
 In Covert Liberation, the Command Pattern enhances unit control and interaction within the game.By employing the command pattern, the game ensures smooth unit movement, action execution, and interaction with the game environment, enhancing gameplay dynamics and player agency.
 
 ## Gameplay Demo
 Video demonstrations showcasing gameplay mechanics, mission scenarios, and strategic decision-making.
-![house](https://github.com/Mr-Bronzodia/Swat/assets/81040884/856b5801-f813-4dce-866c-2eb5fbc323ab)
-![map](https://github.com/Mr-Bronzodia/Swat/assets/81040884/799105b1-63f5-4df1-86e5-503a854d25ab)
 [![gameplay demo](https://img.youtube.com/vi/8iJdV0dyp34/0.jpg)](https://www.youtube.com/watch?v=8iJdV0dyp34)
 
 
